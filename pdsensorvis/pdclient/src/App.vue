@@ -16,18 +16,18 @@
     </v-toolbar>
 
     <v-content>
-      <HelloWorld/>
+      <Splash/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import Splash from './components/Splash'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Splash
   },
   data () {
     return {

@@ -1,0 +1,13 @@
+{% block content %}
+  <h1>PD Sensors Home</h1>
+  <p>Splash Page for PD Sensors <em>Bristol Sphere</em>!</p>
+  <h2>Lists</h2>
+  <p>The sensors have the following record counts:</p>
+  <ul>
+    <li><strong>Patients:</strong> {{ num_patients }}</li>
+    <li><strong>Wearables:</strong> {{ num_wearables }}</li>
+    <li><strong>Cameras:</strong> {{ num_cameras }}</li>
+    <li><strong>Wearable Annotations:</strong> {{ num_wearable_annotations }}</li>
+    <li><strong>Camera Annotations:</strong> {{ num_camera_annotations }}</li>
+  </ul>
+{% endblock %}

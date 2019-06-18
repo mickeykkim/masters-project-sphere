@@ -15,8 +15,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Add Vue integration mapping
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
+# Add Vue integration mapping
 FRONTEND_DIR = os.path.join(BASE_DIR, 'pdclient')
 
 # Quick-start development settings - unsuitable for production
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'admin_reorder',
+    'rest_framework',
+    'rest_framework_jwt',
     'webpack_loader',
     'sensors'
 ]
@@ -146,6 +149,15 @@ ADMIN_REORDER = (
             )
     },
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+}
 
 WEBPACK_LOADER = {
     'DEFAULT': {
