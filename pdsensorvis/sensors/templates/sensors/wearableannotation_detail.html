@@ -3,7 +3,8 @@
 {% block content %}
   <h1>{{ wearableannotation.wearable }}</h1>
   <hr>
-  <p><strong>Timestamp:</strong> {{ wearableannotation.timestamp }}</p>
+  <p><strong>Timestamp:</strong> {{ wearableannotation.timestamp|date:"c" }}</p>
   <p><strong>Annotation:</strong> {{ wearableannotation.get_annotation_display }}</p>
+  <p><strong>Annotator:</strong> {{ wearableannotation.annotator }}</p>
   </div>
 {% endblock %}

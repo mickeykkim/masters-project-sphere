@@ -3,7 +3,8 @@
 {% block content %}
   <h1>{{ cameraannotation.camera }}</h1>
   <hr>
-  <p><strong>Timestamp:</strong> {{ cameraannotation.timestamp }}</p>
+  <p><strong>Timestamp:</strong> {{ cameraannotation.timestamp|date:"c"  }}</p>
   <p><strong>Annotation:</strong> {{ cameraannotation.get_annotation_display }}</p>
+  <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
   </div>
 {% endblock %}
