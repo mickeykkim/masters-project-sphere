@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ wearableannotation.wearable }}</h1>
+  <hr>
+  <p><strong>Timestamp:</strong> {{ wearableannotation.timestamp }}</p>
+  <p><strong>Annotation:</strong> {{ wearableannotation.get_annotation_display }}</p>
+  </div>
+{% endblock %}

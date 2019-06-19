@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ cameraannotation.camera }}</h1>
+  <hr>
+  <p><strong>Timestamp:</strong> {{ cameraannotation.timestamp }}</p>
+  <p><strong>Annotation:</strong> {{ cameraannotation.get_annotation_display }}</p>
+  </div>
+{% endblock %}
