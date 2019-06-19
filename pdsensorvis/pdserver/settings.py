@@ -14,11 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
-
-# Add Vue integration mapping
-FRONTEND_DIR = os.path.join(BASE_DIR, 'pdclient')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -42,9 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'admin_reorder',
-    'rest_framework',
-    'rest_framework_jwt',
-    'webpack_loader',
     'sensors'
 ]
 
@@ -127,8 +120,10 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# The URL to use when referring to static files (where they will be served from)
 STATIC_URL = '/static/'
 
 
@@ -149,20 +144,3 @@ ADMIN_REORDER = (
             )
     },
 )
-
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-       'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ),
-}
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'CACHE': DEBUG,
-        'BUNDLE_DIR_NAME': '/bundles/',  # must end with slash
-        'STATS_FILE': os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
-    }
-}

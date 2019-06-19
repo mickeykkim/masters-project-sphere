@@ -9,22 +9,7 @@
 </template>
 
 <script>
-export default {
-
-}
+  export default {
+    name: 'main'
+ }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #c8e2fc;
-  background: #191a1f;
-  margin-top: 60px;
-}
-.danger-alert {
-  color: red;
-}
-</style>

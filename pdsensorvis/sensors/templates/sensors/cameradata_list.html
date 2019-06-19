@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Camera Data</h1>
+  {% if cameradata_list %}
+  <ul>
+    {% for cameradata in cameradata_list %}
+      <li>
+        <a href="{{ cameradata.get_absolute_url }}">
+          {{ cameradata.patient }} ({{ cameradata.time }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no camera data in the database.</p>
+  {% endif %}       
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from sensors.models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
+from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
 
 # Register your models here.
 @admin.register(PatientData)
@@ -18,11 +18,13 @@ class WearableDataAdmin(admin.ModelAdmin):
 
 class CameraAnnotationInline(admin.TabularInline):
    model = CameraAnnotation
+   extra = 0
 
 @admin.register(CameraData)
 class CameraDataAdmin(admin.ModelAdmin):
    list_display = ('patient', 'time', 'id')
    inlines = [CameraAnnotationInline]
+   extra = 0
 
 @admin.register(WearableAnnotation)
 class WearableAnnotationAdmin(admin.ModelAdmin):

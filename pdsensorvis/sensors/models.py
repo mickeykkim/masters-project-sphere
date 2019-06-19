@@ -10,6 +10,7 @@ class PatientData(models.Model):
    id = models.AutoField(primary_key=True)
    first_name = models.CharField(max_length=50, help_text='Patient first name')
    last_name = models.CharField(max_length=50, help_text='Patient last name')
+   date_of_birth = models.DateField()
    notes = models.CharField(max_length=500, help_text='Notes regarding patient')
 
    # Metadata
@@ -18,7 +19,7 @@ class PatientData(models.Model):
 
    # Methods
    def get_absolute_url(self):
-      return reverse('model-detail-view', args=[str(self.id)])
+      return reverse('patientdata-detail', args=[str(self.id)])
    
    def __str__(self):
       return f'{self.last_name}, {self.first_name}'
@@ -39,7 +40,7 @@ class WearableData(models.Model):
 
    # Methods
    def get_absolute_url(self):
-      return reverse('model-detail-view', args=[str(self.id)])
+      return reverse('wearabledata-detail', args=[str(self.id)])
    
    def __str__(self):
       return f'{self.patient} - {self.time}'
@@ -51,7 +52,7 @@ class CameraData(models.Model):
    # Fields
    id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
    patient = models.ForeignKey('PatientData', on_delete=models.SET_NULL, null=True)
-   filename = models.FileField(upload_to='wearable/')
+   filename = models.FileField(upload_to='camera/')
    time = models.DateTimeField()
 
    # Metadata
@@ -60,7 +61,7 @@ class CameraData(models.Model):
 
    # Methods
    def get_absolute_url(self):
-      return reverse('model-detail-view', args=[str(self.id)])
+      return reverse('cameradata-detail', args=[str(self.id)])
    
    def __str__(self):
       return f'{self.patient} - {self.time}'

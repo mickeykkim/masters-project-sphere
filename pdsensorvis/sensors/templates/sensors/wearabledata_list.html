@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Wearable Data</h1>
+  {% if wearabledata_list %}
+  <ul>
+    {% for wearabledata in wearabledata_list %}
+      <li>
+        <a href="{{ wearabledata.get_absolute_url }}">
+          {{ wearabledata.patient }} ({{ wearabledata.time }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no wearable data in the database.</p>
+  {% endif %}       
+{% endblock %}

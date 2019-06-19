@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Patient Data</h1>
+  {% if patientdata_list %}
+  <ul>
+    {% for patientdata in patientdata_list %}
+      <li>
+        <a href="{{ patientdata.get_absolute_url }}">
+          {{ patientdata.last_name }}, {{ patientdata.first_name }} ({{ patientdata.date_of_birth }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no patient data in the database.</p>
+  {% endif %}       
+{% endblock %}

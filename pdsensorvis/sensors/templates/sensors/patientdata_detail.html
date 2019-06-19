@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Patient: {{ patientdata }}</h1>
+
+  <p><strong>Last Name:</strong> <a href="">{{ patientdata.last_name }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>First Name:</strong> {{ patientdata.first_name }}</p>
+  <p><strong>Date of Birth:</strong> {{ patientdata.date_of_birth }}</p> 
+  <p><strong>Notes:</strong> {{ patientdata.notes }}</p> 
+
+  <div style="margin-left:20px;margin-top:40px">
+    <h4>Wearable Data History</h4>
+
+    {% for wearable in patientdata.wearabledata_set.all %}
+      <hr>
+      <p><strong>Time:</strong> <a href="{% url 'wearabledata-detail' wearable.id %}">{{wearable.time}}</a></p>
+      <p><strong>File:</strong> {{wearable.filename}}</p>
+      <p class='text-muted'><strong>Id:</strong> {{wearable.id}}</p>
+    {% endfor %}
+  </div>
+
+  <div style="margin-left:20px;margin-top:40px">
+    <h4>Camera Data History</h4>
+
+    {% for camera in patientdata.cameradata_set.all %}
+      <hr>
+      <p><strong>Time:</strong> <a href="{% url 'cameradata-detail' camera.id %}">{{camera.time}}</a></p>
+      <p><strong>File:</strong> {{camera.filename}}</p>
+      <p class='text-muted'><strong>Id:</strong> {{camera.id}}</p>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Patient: {{ wearabledata.patient }} </h1>
+<p>Session Time: {{wearabledata.time}}</p>
+
+<div style="margin-left:20px;margin-top:20px">
+   <h4>Wearable Annotations</h4>
+   <ul>
+      {% for annotation in wearabledata.wearableannotation_set.all %}
+      <li><a href="{% url 'wearabledata-detail' annotation.id %}">{{annotation.timestamp}} - {{annotation.get_annotation_display}}</a></li>
+      {% endfor %}
+   </ul>
+</div>
+{% endblock %}

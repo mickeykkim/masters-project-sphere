@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Patient: {{ cameradata.patient }} </h1>
+<p>Session Time: {{cameradata.time}}</p>
+
+<div style="margin-left:20px;margin-top:20px">
+   <h4>Camera Annotations</h4>
+   <ul>
+      {% for annotation in cameradata.cameraannotation_set.all %}
+      <li><a href="{% url 'cameradata-detail' annotation.id %}">{{annotation.timestamp}} - {{annotation.get_annotation_display}}</a></li>
+      {% endfor %}
+   </ul>
+</div>
+{% endblock %}

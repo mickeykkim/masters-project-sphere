@@ -1,13 +1,13 @@
+{% extends "base.html" %}
+
 {% block content %}
   <h1>PD Sensors Home</h1>
-  <p>Splash Page for PD Sensors <em>Bristol Sphere</em>!</p>
-  <h2>Lists</h2>
-  <p>The sensors have the following record counts:</p>
+  <p>PD Sensors for Bristol Sphere</p>
+  <h2>Data Overview</h2>
+  <p>The database has the following records:</p>
   <ul>
     <li><strong>Patients:</strong> {{ num_patients }}</li>
-    <li><strong>Wearables:</strong> {{ num_wearables }}</li>
-    <li><strong>Cameras:</strong> {{ num_cameras }}</li>
-    <li><strong>Wearable Annotations:</strong> {{ num_wearable_annotations }}</li>
-    <li><strong>Camera Annotations:</strong> {{ num_camera_annotations }}</li>
+    <li><strong>Wearables:</strong> {{ num_wearables }} <em>(number of total annotations: {{ num_wearable_annotations }})</em></li>
+    <li><strong>Cameras:</strong> {{ num_cameras }} <em>(number of total annotations: {{ num_camera_annotations }})</em></li>
   </ul>
 {% endblock %}
