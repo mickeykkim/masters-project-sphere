@@ -1,6 +1,10 @@
 from django.db import models
 from django.urls import reverse
 import uuid
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .preprocess_data import Preprocess
 
 # Create your models here.
 class PatientData(models.Model):
@@ -44,6 +48,14 @@ class WearableData(models.Model):
    
    def __str__(self):
       return f'{self.patient} - {self.time}'
+
+   def chart(request, *args):
+      time_stamp = []
+      list_magnitude = []
+      Preprocess(WearableData.filename, args[0], args[1])
+      time_stamp = Preprocess.get_times
+      list_magnitude = Preprocess.get_magnitudes
+      return JsonResponse(time_stamp), JsonResponse(list_magnitude)
 
 
 class CameraData(models.Model):

@@ -1,9 +1,65 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block title %}<title>Bristol Sphere PD Sensors - Wearable Data</title>{% endblock %}
 
+{% block jquery %}
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+   type: 'line',
+   data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+         label: '',
+         data: [12, 19, 3, 5, 2, 3],
+         backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+         ],
+         borderColor: [
+            'rgba(255, 99, 132, 1)',
+         ],
+         borderWidth: 1
+      }]
+   },
+   options: {
+      responsive: true,
+      title: {
+         display: true,
+         text: 'Wearable Data Graph'
+      },
+      tooltips: {
+         mode: 'index',
+         intersect: false,
+      },
+      hover: {
+         mode: 'nearest',
+         intersect: true
+      },
+      scales: {
+         xAxes: [{
+            display: true,
+            scaleLabel: {
+               display: true,
+               labelString: 'Frame'
+            }
+         }],
+         yAxes: [{
+            display: true,
+            scaleLabel: {
+               display: true,
+               labelString: 'Average Magnitude'
+            }
+         }]
+      }
+   }
+});
+{% endblock %}
+
+{% block content %}
 <h1>Patient: {{ wearabledata.patient }} </h1>
-<p>Session Time: {{wearabledata.time}}</p>
+<p>Session Time: {{ wearabledata.time }}</p>
+<hr>
+<h1>Wearable Data Visualization</h1>
+<canvas id="myChart" width="500" height="400"></canvas>
 
 <div style="margin-left:20px;margin-top:20px">
    <h4>Wearable Annotations</h4>
