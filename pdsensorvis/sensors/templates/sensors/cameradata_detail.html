@@ -4,6 +4,7 @@
 <h1>Patient: {{ cameradata.patient }} </h1>
 <p>Session Time: {{ cameradata.time }}</p>
 
+<!-- VideoFrame Object -->
 <script src="https://rawgit.com/allensarkisyan/VideoFrame/master/VideoFrame.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
@@ -14,16 +15,22 @@
   id="video" 
   src="{{ media_url }}{{ cameradata.filename }}" 
   type="video/mp4"
-></video> 
+></video>
 
 <div id="controls">
-  <button id="play-pause">Play</button>
+  <button type="button" id="play-pause" style="height:30px;width:60px;border-radius:4px">Play</button>
+  <input type="range" id="seek-bar" value="0" style="width:50%">
+  <button type="button" id="mute" style="height:30px;width:70px;border-radius:4px">Mute</button>
+  <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1" style="width:7%"></input>
 </div>
 
-<div class="frame">  
+<div class="frame">
   Current Frame: <span id="currentFrame">0</span>
+  <br>
+  Current Time (hh:mm:ss:ff): <span id="currentTime">00:00:00:00</span>
 </div>
 
+<!-- Camera Annotation List -->
 <div style="margin-left:20px;margin-top:20px">
   <h4>Camera Annotations</h4>
   <ul>
@@ -35,28 +42,103 @@
 {% endblock %}
 
 {% block jquery %}
+
+  var FrameRates = {
+    film: 24,
+    NTSC: 29.97,
+    NTSC_Film: 23.98,
+    NTSC_HD: 59.94,
+    PAL: 25,
+    PAL_HD: 50,
+    web: 30,
+    high: 60
+  };
+
   var currentFrame = $('#currentFrame');
+  var currentTime = $('#currentTime');
+  
+  // Video
   var video = VideoFrame({
     id : 'video',
-    frameRate: 29.97,
+    frameRate: FrameRates.NTSC,
     callback : function(frame) {
-      currentFrame.html(frame);
+      currentFrame.html(video.get());
+      currentTime.html(video.toSMPTE())
     }
   });
 
-  $('#play-pause').click(function(){
-    ChangeButtonText();
-  });
+  // Buttons
+  var playButton = document.getElementById("play-pause");
+  var muteButton = document.getElementById("mute");
+  var fullScreenButton = document.getElementById("full-screen");
 
-  function ChangeButtonText(){
-    if(video.video.paused){
-      video.video.play();
-      video.listen('frame');
-      $("#play-pause").html('Pause');
-    } else {
-      video.video.pause();
-      video.stopListen();
-      $("#play-pause").html('Play');
-    }
+  // Sliders
+  var seekBar = document.getElementById("seek-bar");
+  var volumeBar = document.getElementById("volume-bar");
+
+  function playVideo() {
+    video.video.play();
+    video.listen('frame');
   }
+
+  function pauseVideo() {
+    video.video.pause();
+    video.stopListen();
+  }
+
+  // Event listener for the play/pause button
+  playButton.addEventListener("click", function() {
+    if (video.video.paused == true) {
+      playVideo();
+      playButton.innerHTML = "Pause";
+    } else {
+      pauseVideo();
+      playButton.innerHTML = "Play";
+    }
+  });
+
+  // Event listener for the mute button
+  muteButton.addEventListener("click", function() {
+    if (video.video.muted == false) {
+      video.video.muted = true;
+      muteButton.innerHTML = "Unmute";
+    } else {
+      video.video.muted = false;
+      muteButton.innerHTML = "Mute";
+    }
+  });
+
+  // Event listener for the seek bar
+  seekBar.addEventListener("change", function() {
+    // Calculate the new time
+    var time = video.video.duration * (seekBar.value / 100);
+    // Update the video time
+    video.video.currentTime = time;
+  });
+
+  // Update the seek bar as the video plays
+  video.video.addEventListener("timeupdate", function() {
+    // Calculate the slider value
+    var value = (100 / video.video.duration) * video.video.currentTime;
+    // Update the slider value
+    seekBar.value = value;
+  });
+
+  // Pause the video when the slider handle is being dragged
+  seekBar.addEventListener("mousedown", function() {
+    pauseVideo();
+  });
+
+  // Play the video when the slider handle is dropped
+  seekBar.addEventListener("mouseup", function() {
+    if (playButton.innerHTML === "Pause") {
+      playVideo();
+    }
+  });
+
+  // Event listener for the volume bar
+  volumeBar.addEventListener("change", function() {
+    video.video.volume = volumeBar.value;
+  });
+
 {% endblock %}
