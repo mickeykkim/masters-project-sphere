@@ -17,6 +17,13 @@
   height:21px;
   width:60px;
   border-radius:6px;
+  margin: -10px 5px 5px 5px; 
+}
+.otherText {
+	border: 1px solid #6297BC;
+	border-radius:3px;
+	height: 22px;
+	width: 15%;
 }
 input[type=range] {
   -webkit-appearance: none;
@@ -82,21 +89,36 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     <div class="seekControls" style="margin:10px 0px 0px 0px">
       <button id="rewind-video" class="controlButton"><i class="material-icons">replay</i></button>
       <button id="seek-backward" class="controlButton"><i class="material-icons">skip_previous</i></button>
-      <select id="backward-increment" class="dropDown">
-        <option value="f1">1</option>
-        <option value="f5">5</option>
-        <option value="f10">10</option>
-        <option value="f25">25</option>
-        <option value="f50">50</option>
-      </select>
+      <span class="selectBox">
+        <select id="backward-increment" class="dropDown">
+          <option value="f1">1</option>
+          <option value="f5">5</option>
+          <option value="f10">10</option>
+          <option value="f25">25</option>
+          <option value="f50">50</option>
+        </select>
+      </span>
       <button id="seek-forward" class="controlButton"><i class="material-icons">skip_next</i></button>
-      <select id="forward-increment"class="dropDown">
-        <option value="b1">1</option>
-        <option value="b5">5</option>
-        <option value="b10">10</option>
-        <option value="b25">25</option>
-        <option value="b50">50</option>
-      </select>
+      <span class="selectBox">
+        <select id="forward-increment" class="dropDown">
+          <option value="b1">1</option>
+          <option value="b5">5</option>
+          <option value="b10">10</option>
+          <option value="b25">25</option>
+          <option value="b50">50</option>
+        </select>
+      </span>
+      <button id="annotate" class="controlButton"><i class="material-icons">edit_location</i></button>
+      <span class="selectBox">
+        <select id="annotation-list" class="dropDown" style="width:110px">
+          <option value="a1">prone sup</option>
+          <option value="a2">b</option>
+          <option value="a3">c</option>
+          <option value="a4">d</option>
+          <option value="a5">e</option>
+        </select>
+      </span>
+      <input type="text" name="other-annotation" class="otherText">
     </div>
   </div>
 </div>
@@ -195,9 +217,6 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     var time = video.video.duration * (seekBar.value / 100);
     // Update the video time
     video.video.currentTime = time;
-    // Update frame and time display
-    currentFrame.html(video.get());
-    currentTime.html(video.toSMPTE())
   }
 
   function updateSeekBar() {
