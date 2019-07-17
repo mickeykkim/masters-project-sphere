@@ -114,6 +114,9 @@
     var time = video.video.duration * (seekBar.value / 100);
     // Update the video time
     video.video.currentTime = time;
+    // Update frame and time display
+    currentFrame.html(video.get());
+    currentTime.html(video.toSMPTE())
   });
 
   // Update the seek bar as the video plays
