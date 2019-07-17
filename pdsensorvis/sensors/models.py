@@ -49,15 +49,6 @@ class WearableData(models.Model):
    def __str__(self):
       return f'{self.patient} - {self.time}'
 
-   def chart(request, *args):
-      time_stamp = []
-      list_magnitude = []
-      Preprocess(WearableData.filename, args[0], args[1])
-      time_stamp = Preprocess.get_times
-      list_magnitude = Preprocess.get_magnitudes
-      return JsonResponse(time_stamp), JsonResponse(list_magnitude)
-
-
 class CameraData(models.Model):
    """Data related to silhouette camera"""
 
@@ -77,6 +68,9 @@ class CameraData(models.Model):
    
    def __str__(self):
       return f'{self.patient} - {self.time}'
+
+   def media_path(self):
+      return settings.MEDIA_ROOT
 
 
 class WearableAnnotation(models.Model):

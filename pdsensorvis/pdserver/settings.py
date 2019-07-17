@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+BASE_URL = 'http://127.0.0.1:8000'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
@@ -69,6 +71,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Additional
+                'sensors.context_processors.extra_context',
             ],
         },
     },
@@ -132,6 +136,8 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'data')
 
 MEDIA_URL = '/data/'
+
+BASE_MEDIA_URL = BASE_URL + MEDIA_URL
 
 ADMIN_REORDER = (
     'sites',

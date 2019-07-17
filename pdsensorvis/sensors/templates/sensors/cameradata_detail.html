@@ -1,20 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <h1>Patient: {{ cameradata.patient }} </h1>
-<p>Session Time: {{cameradata.time}}</p>
+<p>Session Time: {{ cameradata.time }}</p>
 
-<video name='demo' controls autoplay width='100%' height='100%'></video>
-<source src="{{ cameradata.filename }}" type="video/mp4"></source>
-</video>
+<script src="https://rawgit.com/allensarkisyan/VideoFrame/master/VideoFrame.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<video
+  name="{{ cameradata.patient }}" 
+  height="70%" 
+  width="80%" 
+  id="video" 
+  src="{{ media_url }}{{ cameradata.filename }}" 
+  type="video/mp4"
+></video> 
+
+<div id="controls">
+  <button id="play-pause">Play</button>
+</div>
+
+<div class="frame">  
+  Current Frame: <span id="currentFrame">0</span>
+</div>
 
 <div style="margin-left:20px;margin-top:20px">
-   <h4>Camera Annotations</h4>
-   <ul>
-      {% for annotation in cameradata.cameraannotation_set.all %}
-      <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">{{annotation.timestamp}} - {{annotation.get_annotation_display}}</a></li>
-      {% endfor %}
-   </ul>
+  <h4>Camera Annotations</h4>
+  <ul>
+    {% for annotation in cameradata.cameraannotation_set.all %}
+    <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">{{annotation.timestamp}} - {{annotation.get_annotation_display}}</a></li>
+    {% endfor %}
+  </ul>
 </div>
+{% endblock %}
+
+{% block jquery %}
+  var currentFrame = $('#currentFrame');
+  var video = VideoFrame({
+    id : 'video',
+    frameRate: 29.97,
+    callback : function(frame) {
+      currentFrame.html(frame);
+    }
+  });
+
+  $('#play-pause').click(function(){
+    ChangeButtonText();
+  });
+
+  function ChangeButtonText(){
+    if(video.video.paused){
+      video.video.play();
+      video.listen('frame');
+      $("#play-pause").html('Pause');
+    } else {
+      video.video.pause();
+      video.stopListen();
+      $("#play-pause").html('Play');
+    }
+  }
 {% endblock %}

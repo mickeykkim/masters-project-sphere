@@ -1,5 +1,7 @@
 from django.urls import path, re_path
+from django.conf import settings
 from django.conf.urls import url
+from django.views.static import serve
 from . import views
 
 urlpatterns = [
@@ -12,4 +14,6 @@ urlpatterns = [
    path('cameradata/', views.CameraDataListView.as_view(), name='cameradata'),
    re_path(r'^cameradata/(?P<pk>[-\w]+)$', views.CameraDataDetailView.as_view(), name='cameradata-detail'),
    re_path(r'^cameradata/(?P<uuid>[-\w]+)/(?P<pk>\d+)$', views.CameraAnnotationDetailView.as_view(), name='cameraannotation-detail'),
+   url(r'^data/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+   url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 ]
