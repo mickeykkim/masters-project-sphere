@@ -8,9 +8,6 @@
   display: block;
   margin: 0 auto 10 10;
 }
-.videoControls {
-  margin: 10 0 0 0
-}
 .controlButton {
   height:30px;
   width:70px;
@@ -42,8 +39,8 @@ input[type=range]::-webkit-slider-runnable-track {
 input[type=range]::-webkit-slider-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
-  height: 30px;
-  width: 10px;
+  height: 26px;
+  width: 8px;
   border-radius: 3px;
   background: #ffffff;
   cursor: pointer;
@@ -75,28 +72,32 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   ></video>
 
   <div id="controls" class="videoControls">
-    <button id="play-pause" class="controlButton">Play</button>
-    <input type="range" id="seek-bar" min="0" step="1" max="100" value="0" style="width:50%">
-    <span id="videoTime">00:00</span> / <span id="videoDuration">00:00</span>
-    <button id="mute"  class="controlButton">Mute</button>
-    <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1" style="width:10%"></input>
-    <br></br>
-    <button id="seekBackward" class="controlButton"><i class="material-icons">skip_previous</i></button>
-    <select class="dropDown">
-      <option value="f1">1</option>
-      <option value="f5">5</option>
-      <option value="f10">10</option>
-      <option value="f25">25</option>
-      <option value="f50">50</option>
-    </select>		
-    <button id="seekForward" class="controlButton"><i class="material-icons">skip_next</i></button>
-    <select class="dropDown">
-      <option value="b1">1</option>
-      <option value="b5">5</option>
-      <option value="b10">10</option>
-      <option value="b25">25</option>
-      <option value="b50">50</option>
-    </select>		
+    <div class="playControls" style="margin:10px 0px 0px 0px">
+      <button id="play-pause" class="controlButton">Play</button>
+      <input type="range" id="seek-bar" min="0" step="1" max="100" value="0" style="width:50%">
+      <span id="videoTime">00:00</span> / <span id="videoDuration">00:00</span>
+      <button id="mute"  class="controlButton">Mute</button>
+      <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1" style="width:10%"></input>
+    </div>
+    <div class="seekControls" style="margin:10px 0px 0px 0px">
+      <button id="rewind-video" class="controlButton"><i class="material-icons">replay</i></button>
+      <button id="seek-backward" class="controlButton"><i class="material-icons">skip_previous</i></button>
+      <select id="backward-increment" class="dropDown">
+        <option value="f1">1</option>
+        <option value="f5">5</option>
+        <option value="f10">10</option>
+        <option value="f25">25</option>
+        <option value="f50">50</option>
+      </select>
+      <button id="seek-forward" class="controlButton"><i class="material-icons">skip_next</i></button>
+      <select id="forward-increment"class="dropDown">
+        <option value="b1">1</option>
+        <option value="b5">5</option>
+        <option value="b10">10</option>
+        <option value="b25">25</option>
+        <option value="b50">50</option>
+      </select>
+    </div>
   </div>
 </div>
 
@@ -149,7 +150,9 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   // Buttons
   var playButton = document.getElementById("play-pause");
   var muteButton = document.getElementById("mute");
-  var fullScreenButton = document.getElementById("full-screen");
+  var rewindButton = document.getElementById("rewind-button");
+  var seekBackward = document.getElementById("seek-backward");
+  var seekForward = document.getElementById("seek-forward");
 
   // Sliders
   var seekBar = document.getElementById("seek-bar");
@@ -223,7 +226,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   });
 
   // Pause the video when the slider handle is being dragged
-  seekBar.addEventListener("mousedown", function() {
+  seekBar.addEventListener("input", function() {
     if (playButton.innerHTML === "Pause") {
       pauseVideo();
     }
@@ -237,7 +240,11 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     }
   });
 
-  // Event listener for the volume bar
+  // Event listeners for the volume bar
+  volumeBar.addEventListener("input", function() {
+    video.video.volume = volumeBar.value;
+  });
+
   volumeBar.addEventListener("change", function() {
     video.video.volume = volumeBar.value;
   });
