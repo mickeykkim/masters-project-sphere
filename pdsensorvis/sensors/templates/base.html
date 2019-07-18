@@ -10,9 +10,8 @@
   <!-- Add additional CSS in static file -->
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  <style>
-    {% block style %}{% endblock %}
-  </style>
+  <!-- Add additional CSS in templates -->
+  {% block style %}{% endblock %}
 </head>
 
 <body>
@@ -88,6 +87,7 @@
     </div>
   </div>
   <!-- Dynamic javascript/jquery -->
+  {% block javascript %} {% endblock %}
   <script>
     $(document).ready(function () {
       {% block jquery %} {% endblock %}

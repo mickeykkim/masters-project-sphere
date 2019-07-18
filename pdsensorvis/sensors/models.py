@@ -49,6 +49,7 @@ class WearableData(models.Model):
    def __str__(self):
       return f'{self.patient} - {self.time}'
 
+
 class CameraData(models.Model):
    """Data related to silhouette camera"""
 
@@ -68,9 +69,6 @@ class CameraData(models.Model):
    
    def __str__(self):
       return f'{self.patient} - {self.time}'
-
-   def media_path(self):
-      return settings.MEDIA_ROOT
 
 
 class WearableAnnotation(models.Model):

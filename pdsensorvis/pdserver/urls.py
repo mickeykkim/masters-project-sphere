@@ -27,5 +27,5 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/sensors/', permanent=False)),
     path('sensors/', include('sensors.urls')),
     url(r'^data/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
-    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
