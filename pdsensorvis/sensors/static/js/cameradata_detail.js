@@ -144,9 +144,9 @@ muteButton.addEventListener("click", function() {
 rewindButton.addEventListener("click", function() {
    var seekPosition = parseInt(rewindTextBox.value);
    video.video.currentTime = 0;
-   video.seekForward(seekPosition);
-   updateVideoTime();
-   updateSeekBar();
+   video.seekForward(seekPosition, updateSeekBar());
+   currentFrame.html(video.get());
+   currentTime.html(video.toSMPTE());
    playButton.innerHTML = "Play";
 });
 
