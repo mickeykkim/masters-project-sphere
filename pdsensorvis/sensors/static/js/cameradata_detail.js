@@ -22,8 +22,8 @@ var currentFramerate = FrameRates.NTSC;
 var playButton = document.getElementById("play-pause");
 var muteButton = document.getElementById("mute");
 var rewindButton = document.getElementById("rewind-video");
-var seekBackward = document.getElementById("seek-backward");
-var seekForward = document.getElementById("seek-forward");
+var seekBackwardButton = document.getElementById("seek-backward");
+var seekForwardButton = document.getElementById("seek-forward");
 
 // Range Sliders
 var seekBar = document.getElementById("seek-bar");
@@ -33,8 +33,6 @@ var volumeBar = document.getElementById("volume-bar");
 var rewindTextBox = document.getElementById("rewind-value");
 var stepBackwardBox = document.getElementById("backward-increment");
 var stepForwardBox = document.getElementById("forward-increment");
-var backwardStepValue = stepBackwardBox.options[stepBackwardBox.selectedIndex].value;
-var forwardStepValue = stepForwardBox.options[stepForwardBox.selectedIndex].value;
 
 var video = VideoFrame({
    id : 'video',
@@ -149,5 +147,23 @@ rewindButton.addEventListener("click", function() {
    video.seekForward(seekPosition);
    updateVideoTime();
    updateSeekBar();
+   playButton.innerHTML = "Play";
+});
+
+seekBackwardButton.addEventListener("click", function() {
+   var backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].value;
+   console.log(backwardStep);
+   video.seekBackward(backwardStep, updateSeekBar());
+   currentFrame.html(video.get());
+   currentTime.html(video.toSMPTE());
+   playButton.innerHTML = "Play";
+});
+
+seekForwardButton.addEventListener("click", function() {
+   var forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].value;
+   console.log(forwardStep);
+   video.seekForward(forwardStep, updateSeekBar());
+   currentFrame.html(video.get());
+   currentTime.html(video.toSMPTE());
    playButton.innerHTML = "Play";
 });
