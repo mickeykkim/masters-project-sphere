@@ -5,9 +5,14 @@
   display: block;
   margin: 0 auto 10 10;
 }
-.controlButton {
+.controlButtonL {
   height:30px;
   width:70px;
+  border-radius:6px;
+}
+.controlButton {
+  height:30px;
+  width:60px;
   border-radius:6px;
 }
 .timestamp {
@@ -15,11 +20,18 @@
   font-size: 16px;
   margin: 0px 5px 5px 5px;
 }
+.vert-divider {
+  font-family: 'Roboto Mono';
+  font-size: 40px;
+  color: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
 .dropDown {
   height:21px;
   width:60px;
   border-radius:6px;
-  margin: -10px 5px 5px 5px; 
+  margin: -10px 0px 0px 5px; 
 }
 .rewindTextValue {
 	border: 1px solid #6297BC;

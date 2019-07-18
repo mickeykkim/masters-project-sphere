@@ -54,14 +54,16 @@ function pauseVideo() {
 }
 
 function updateVideoTime() {
+   video.video.currentTime = seekBar.value / currentFramerate;
    currentFrame.html(video.get());
    currentTime.html(video.toSMPTE());
-   video.video.currentTime = seekBar.value / currentFramerate;
 }
 
 function updateSeekBar() {
    seekBar.value = video.video.currentTime * currentFramerate;
    refreshVideoTimes();
+   currentFrame.html(video.get());
+   currentTime.html(video.toSMPTE());
 }
 
 function refreshVideoTimes() {
@@ -144,9 +146,9 @@ muteButton.addEventListener("click", function() {
 rewindButton.addEventListener("click", function() {
    var seekPosition = parseInt(rewindTextBox.value);
    video.video.currentTime = 0;
-   video.seekForward(seekPosition, updateSeekBar());
-   currentFrame.html(video.get());
-   currentTime.html(video.toSMPTE());
+   if (seekPosition > 0) {
+      video.seekForward(seekPosition, updateSeekBar());
+   }
    playButton.innerHTML = "Play";
 });
 
@@ -154,8 +156,6 @@ seekBackwardButton.addEventListener("click", function() {
    var backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].value;
    console.log(backwardStep);
    video.seekBackward(backwardStep, updateSeekBar());
-   currentFrame.html(video.get());
-   currentTime.html(video.toSMPTE());
    playButton.innerHTML = "Play";
 });
 
@@ -163,7 +163,5 @@ seekForwardButton.addEventListener("click", function() {
    var forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].value;
    console.log(forwardStep);
    video.seekForward(forwardStep, updateSeekBar());
-   currentFrame.html(video.get());
-   currentTime.html(video.toSMPTE());
    playButton.innerHTML = "Play";
 });

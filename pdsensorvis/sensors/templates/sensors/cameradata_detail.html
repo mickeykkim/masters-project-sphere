@@ -9,7 +9,7 @@
 {% block content %}
 <h1>Patient: {{ cameradata.patient }} </h1>
 <p>Session Time: {{ cameradata.time }}</p>
-
+<hr>
 <!-- VideoFrame Object -->
 <script src="https://rawgit.com/allensarkisyan/VideoFrame/master/VideoFrame.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -27,16 +27,16 @@
 
   <div id="controls" class="videoControls">
     <div class="playControls" style="margin:10px 0px 0px 0px">
-      <button id="play-pause" class="controlButton">Play</button>
+      <button id="play-pause" class="controlButtonL">Play</button>
       <input type="range" id="seek-bar" min="0" value="0" step="1" style="width:50%">
       <span id="videoTime" class="timestamp">00:00</span> / <span id="videoDuration" class="timestamp">00:00</span>
-      <button id="mute" class="controlButton">Mute</button>
-      <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1" style="width:10%"></input>
+      <button id="mute" class="controlButtonL">Mute</button>
+      <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1" style="width:12%"></input>
     </div>
     <div class="seekControls" style="margin:10px 0px 0px 0px">
-      <button id="rewind-video" class="controlButton"><i class="material-icons">skip_previous</i></button>
       <input type="text" id="rewind-value" class="rewindTextValue" value=0>
-      <button id="seek-backward" class="controlButton"><i class="material-icons">fast_rewind</i></button>
+      <button id="rewind-video" class="controlButton"><i class="material-icons">skip_previous</i></button>
+      <span class="vert-divider">|</span>
       <span class="selectBox">
         <select id="backward-increment" class="dropDown">
           <option value="1">1</option>
@@ -46,7 +46,8 @@
           <option value="50">50</option>
         </select>
       </span>
-      <button id="seek-forward" class="controlButton"><i class="material-icons">fast_forward</i></button>
+      <button id="seek-backward" class="controlButton"><i class="material-icons">fast_rewind</i></button>
+      <span class="vert-divider">|</span>
       <span class="selectBox">
         <select id="forward-increment" class="dropDown">
           <option value="1">1</option>
@@ -56,7 +57,8 @@
           <option value="50">50</option>
         </select>
       </span>
-      <button id="annotate" class="controlButton"><i class="material-icons">edit</i></button>
+      <button id="seek-forward" class="controlButton"><i class="material-icons">fast_forward</i></button>
+      <span class="vert-divider">|</span>
       <span class="selectBox">
         <select id="annotation-list" class="dropDown" style="width:110px">
           {% for label in cameraannotation_list %}
@@ -74,6 +76,7 @@
         </select>
       </span>
       <input type="text" name="other-annotation" class="otherText">
+      <button id="annotate" class="controlButton"><i class="material-icons">edit</i></button>
     </div>
   </div>
 </div>
@@ -84,7 +87,7 @@
   <br>
   Current Time (hh:mm:ss:ff): <span id="currentTime" class="timestamp">00:00:00:00</span>
 </div>
-
+<hr>
 <!-- Camera Annotation List -->
 <div style="margin-left:20px;margin-top:20px">
   <h4>Camera Annotations</h4>
