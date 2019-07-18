@@ -1,3 +1,5 @@
+"use strict";
+
 var FrameRates = {
    film: 24,
    NTSC: 29.97,
@@ -28,26 +30,24 @@ var seekBar = document.getElementById("seek-bar");
 var volumeBar = document.getElementById("volume-bar");
 
 // Seek Value Elements
-/*
-var rewindValue = document.getElementById("rewind-value").value;
+var rewindTextBox = document.getElementById("rewind-value");
 var stepBackwardBox = document.getElementById("backward-increment");
 var stepForwardBox = document.getElementById("forward-increment");
 var backwardStepValue = stepBackwardBox.options[stepBackwardBox.selectedIndex].value;
 var forwardStepValue = stepForwardBox.options[stepForwardBox.selectedIndex].value;
-*/
 
 var video = VideoFrame({
    id : 'video',
    frameRate: currentFramerate,
    callback : function(frame) {
       currentFrame.html(video.get());
-      currentTime.html(video.toSMPTE());
+      currentTime.html(frame);
    }
 });
 
 function playVideo() {
    video.video.play();
-   video.listen('frame');
+   video.listen('SMPTE');
 }
 
 function pauseVideo() {
@@ -56,9 +56,9 @@ function pauseVideo() {
 }
 
 function updateVideoTime() {
-   video.video.currentTime = seekBar.value / currentFramerate;
    currentFrame.html(video.get());
-   currentTime.html(video.toSMPTE())
+   currentTime.html(video.toSMPTE());
+   video.video.currentTime = seekBar.value / currentFramerate;
 }
 
 function updateSeekBar() {
@@ -144,8 +144,10 @@ muteButton.addEventListener("click", function() {
 });
 
 rewindButton.addEventListener("click", function() {
+   var seekPosition = parseInt(rewindTextBox.value);
    video.video.currentTime = 0;
-   updateSeekBar();
+   video.seekForward(seekPosition);
    updateVideoTime();
+   updateSeekBar();
+   playButton.innerHTML = "Play";
 });
-
