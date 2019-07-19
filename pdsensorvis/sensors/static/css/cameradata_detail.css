@@ -10,9 +10,13 @@
   width:70px;
   border-radius:6px;
 }
+.controlButton, .dropDown, .rewindTextValue, .otherText {
+  display:table-cell;
+  vertical-align:top;
+}
 .controlButton {
   height:30px;
-  width:60px;
+  width:7%;
   border-radius:6px;
 }
 .timestamp {
@@ -22,28 +26,29 @@
 }
 .vert-divider {
   font-family: 'Roboto Mono';
-  font-size: 40px;
+  font-size: 18px;
   color: #3071a9;
   border-radius: 1.3px;
   border: 0.2px solid #010101;
 }
 .dropDown {
-  height:21px;
-  width:60px;
+  height:30px;
+  width:7%;
   border-radius:6px;
-  margin: -10px 0px 0px 5px; 
+  font-size:16px;
+  line-height: 30px;
+}
+.rewindTextValue, .otherText {
+	border: 1px solid #6297BC;
+	border-radius:3px;
+	height: 30px;
+  line-height: 30px;
 }
 .rewindTextValue {
-	border: 1px solid #6297BC;
-	border-radius:3px;
-	height: 22px;
-	width: 6%;
+  width: 7%;
 }
 .otherText {
-	border: 1px solid #6297BC;
-	border-radius:3px;
-	height: 22px;
-	width: 15%;
+	width: 16%;
 }
 input[type=range] {
   -webkit-appearance: none;

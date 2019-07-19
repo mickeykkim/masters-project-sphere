@@ -79,10 +79,36 @@ function refreshVideoTimes() {
    videoDuration.innerHTML = durMins + ":" + durSecs;
 }
 
+function toggleVideoPlayback() {
+   if (video.video.paused == true) {
+      playVideo();
+      playButton.innerHTML = "Pause";
+   } else {
+      pauseVideo();
+      playButton.innerHTML = "Play";
+   }
+}
+
 function endVideo() {
    pauseVideo();
    playButton.innerHTML = "Play";
    updateSeekBar();
+}
+
+function stepBack() {
+   var backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].text;
+   video.seekBackward(backwardStep, updateSeekBar());
+   playButton.innerHTML = "Play";
+}
+
+function stepForward() {
+   var forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].text;
+   video.seekForward(forwardStep, updateSeekBar());
+   playButton.innerHTML = "Play";
+}
+
+function setSelectedIndex(s, i) {
+   s.options[i - 1].selected = true;
 }
 
 video.video.addEventListener("loadedmetadata", function() {
@@ -124,13 +150,7 @@ volumeBar.addEventListener("change", function() {
 });
 
 playButton.addEventListener("click", function() {
-   if (video.video.paused == true) {
-      playVideo();
-      playButton.innerHTML = "Pause";
-   } else {
-      pauseVideo();
-      playButton.innerHTML = "Play";
-   }
+   toggleVideoPlayback();
 });
 
 muteButton.addEventListener("click", function() {
@@ -153,15 +173,45 @@ rewindButton.addEventListener("click", function() {
 });
 
 seekBackwardButton.addEventListener("click", function() {
-   var backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].value;
-   console.log(backwardStep);
-   video.seekBackward(backwardStep, updateSeekBar());
-   playButton.innerHTML = "Play";
+   stepBack();
 });
 
 seekForwardButton.addEventListener("click", function() {
-   var forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].value;
-   console.log(forwardStep);
-   video.seekForward(forwardStep, updateSeekBar());
-   playButton.innerHTML = "Play";
+   stepForward();
+});
+
+// 32 = space, 16 = shift, 37 = left arrow, 38 = up, 39 = right, 40 = down
+var map = {
+   32: false, 
+   16: false, 
+   37: false, 
+   38: false, 
+   39: false,
+   40: false
+};
+
+// check for keypress and fire appropriate shortcut functions
+$(document).keydown(function(e) {
+   if (e.keyCode in map) {
+      map[e.keyCode] = true;
+      var backOption = stepBackwardBox.selectedIndex;
+      var forwardOption = stepForwardBox.selectedIndex;
+      if (e.which == 32) {
+         toggleVideoPlayback();
+      } else if (map[16] && map[37]) {
+         stepBack();
+      } else if (map[16] && map[39]) {
+         stepForward();
+      } else if (map[16] && map[38]) {
+         stepBackwardBox.options[parseInt(backOption) + 1].selected = true;
+         stepForwardBox.options[parseInt(forwardOption) + 1].selected = true;
+      } else if (map[16] && map[40]) {
+         stepBackwardBox.options[parseInt(backOption) - 1].selected = true;
+         stepForwardBox.options[parseInt(forwardOption) - 1].selected = true;
+      }
+   }
+}).keyup(function(e) {
+   if (e.keyCode in map) {
+      map[e.keyCode] = false;
+   }
 });
