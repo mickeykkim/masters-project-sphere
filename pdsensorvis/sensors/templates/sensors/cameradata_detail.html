@@ -35,7 +35,7 @@
     </div>
     <div class="seekControls">
       <input type="text" id="rewind-value" class="rewindTextValue" value=0>
-      <button id="rewind-video" class="controlButton"><i class="material-icons">skip_previous</i></button>
+      <button id="rewind-video" class="controlButtonM"><i class="material-icons">skip_previous</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
         <select id="backward-increment" class="dropDown">
@@ -46,7 +46,7 @@
           <option value="5">50</option>
         </select>
       </span>
-      <button id="seek-backward" class="controlButton"><i class="material-icons">fast_rewind</i></button>
+      <button id="seek-backward" class="controlButtonM"><i class="material-icons">fast_rewind</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
         <select id="forward-increment" class="dropDown">
@@ -57,7 +57,7 @@
           <option value="5">50</option>
         </select>
       </span>
-      <button id="seek-forward" class="controlButton"><i class="material-icons">fast_forward</i></button>
+      <button id="seek-forward" class="controlButtonM"><i class="material-icons">fast_forward</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
         <select id="annotation-list" class="annotationDropDown">
@@ -75,20 +75,35 @@
 
         </select>
       </span>
-      <input type="text" name="other-annotation" class="otherText">
-      <button id="annotate" class="controlButton"><i class="material-icons">edit</i></button>
+      <input type="text" name="other-annotation" class="otherText" value="(other)" disabled=true>
+      <button id="annotate" class="controlButtonM"><i class="material-icons">edit</i></button>
       <span class="vert-divider">|</span>
-      <button id="help" class="controlButton"><i class="material-icons">help</i></button>
+      <button id="help" class="controlButtonM"><i class="material-icons">help</i></button>
     </div>
   </div>
 </div>
 
-<div class="frame">
-  <br>
-  Current Frame: <span id="currentFrame" class="timestamp">0</span>
-  <br>
-  Current Time (hh:mm:ss:ff): <span id="currentTime" class="timestamp">00:00:00:00</span>
+<div class="frameDetails">
+  <span class="frameStatusText">Framerate:</span> 
+  <span class="selectBox">
+    <select id="framerate" class="fpsDropDown">
+      <option value="1">24</option>
+      <option value="2">25</option>
+      <option value="3" selected=true>29.97</option>
+      <option value="4">30</option>
+      <option value="5">60</option>
+    </select>
+  </span>
+  <span class="vert-divider">|</span>
+  <span class="frameStatusText">
+    Current Frame: <span id="currentFrame" class="timestamp">0</span>
+    <button id="copy-frame" class="controlButtonS"><i class="material-icons">note_add</i></button>
+    <span class="vert-divider">|</span>
+    Current Time (hh:mm:ss:ff): <span id="currentTime" class="timestamp">00:00:00:00</span>
+    <button id="copy-time" class="controlButtonS"><i class="material-icons">note_add</i></button>
+  </span>
 </div>
+
 <hr>
 <!-- Camera Annotation List -->
 <div style="margin-left:20px;margin-top:20px">
