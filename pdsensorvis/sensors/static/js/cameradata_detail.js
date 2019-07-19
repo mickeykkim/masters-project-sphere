@@ -196,8 +196,7 @@ var map = {
 };
 
 // check for keypress and fire appropriate shortcut functions
-$(window).keypress(function(e) {
-   var video = document.getElementById("vid");
+$(document).keypress(function(e) {
    if (e.which == 32) {
       toggleVideoPlayback();
    }
