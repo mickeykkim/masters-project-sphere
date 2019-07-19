@@ -95,6 +95,15 @@ function endVideo() {
    updateSeekBar();
 }
 
+function rewindVideo() {
+   var seekPosition = parseInt(rewindTextBox.value);
+   video.video.currentTime = 0;
+   if (seekPosition > 0) {
+      video.seekForward(seekPosition, updateSeekBar());
+   }
+   playButton.innerHTML = "Play";
+}
+
 function stepBack() {
    var backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].text;
    video.seekBackward(backwardStep, updateSeekBar());
@@ -164,12 +173,7 @@ muteButton.addEventListener("click", function() {
 });
 
 rewindButton.addEventListener("click", function() {
-   var seekPosition = parseInt(rewindTextBox.value);
-   video.video.currentTime = 0;
-   if (seekPosition > 0) {
-      video.seekForward(seekPosition, updateSeekBar());
-   }
-   playButton.innerHTML = "Play";
+   rewindVideo();
 });
 
 seekBackwardButton.addEventListener("click", function() {
@@ -180,24 +184,33 @@ seekForwardButton.addEventListener("click", function() {
    stepForward();
 });
 
-// 32 = space, 16 = shift, 37 = left arrow, 38 = up, 39 = right, 40 = down
+// 32 = space, 16 = shift, 37 = left arrow, 38 = up, 39 = right, 40 = down, 191 = /
 var map = {
-   32: false, 
+   32: false,
    16: false, 
    37: false, 
    38: false, 
    39: false,
-   40: false
+   40: false,
+   191: false
 };
 
 // check for keypress and fire appropriate shortcut functions
+$(window).keypress(function(e) {
+   var video = document.getElementById("vid");
+   if (e.which == 32) {
+      toggleVideoPlayback();
+   }
+});
+
+// multiple key presses
 $(document).keydown(function(e) {
    if (e.keyCode in map) {
       map[e.keyCode] = true;
       var backOption = stepBackwardBox.selectedIndex;
       var forwardOption = stepForwardBox.selectedIndex;
-      if (e.which == 32) {
-         toggleVideoPlayback();
+      if (map[16] && map[191]) {
+         rewindVideo();
       } else if (map[16] && map[37]) {
          stepBack();
       } else if (map[16] && map[39]) {

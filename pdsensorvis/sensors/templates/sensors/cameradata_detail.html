@@ -26,14 +26,14 @@
   ></video>
 
   <div id="controls" class="videoControls">
-    <div class="playControls" style="margin:10px 0px 0px 0px">
+    <div class="playControls">
       <button id="play-pause" class="controlButtonL">Play</button>
-      <input type="range" id="seek-bar" min="0" value="0" step="1" style="width:50%">
-      <span id="videoTime" class="timestamp">00:00</span> / <span id="videoDuration" class="timestamp">00:00</span>
+      <input type="range" id="seek-bar" class="seekBar" style="width:50%;" min="0" value="0" step="1">
+      <span id="videoTime" class="timestamp">00:00</span><span class="timestamp">/</span><span id="videoDuration" class="timestamp">00:00</span>
       <button id="mute" class="controlButtonL">Mute</button>
-      <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1" style="width:12%"></input>
+      <input type="range" id="volume-bar" class="volumeBar" style="width:11%;" min="0" max="1" step="0.1" value="1"></input>
     </div>
-    <div class="seekControls" style="margin:10px 0px 0px 0px">
+    <div class="seekControls">
       <input type="text" id="rewind-value" class="rewindTextValue" value=0>
       <button id="rewind-video" class="controlButton"><i class="material-icons">skip_previous</i></button>
       <span class="vert-divider">|</span>
@@ -60,7 +60,7 @@
       <button id="seek-forward" class="controlButton"><i class="material-icons">fast_forward</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
-        <select id="annotation-list" class="dropDown" style="width:110px">
+        <select id="annotation-list" class="annotationDropDown">
           {% for label in cameraannotation_list %}
           print(label)
           {% endfor %}
