@@ -184,10 +184,10 @@ seekForwardButton.addEventListener("click", function() {
    stepForward();
 });
 
-// 32 = space, 16 = shift, 37 = left arrow, 38 = up, 39 = right, 40 = down, 191 = /
+// 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right, 40 = down, 191 = f slash
 var map = {
+   16: false,  
    32: false,
-   16: false, 
    37: false, 
    38: false, 
    39: false,
