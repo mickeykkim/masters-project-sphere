@@ -40,10 +40,10 @@
   font-size: 18px;
   color: #3071a9;
 }
-.dropDown, .annotationDropDown {
+.dropDown, .annotationDropDown, .fpsDropDown {
   height:30px;
   border-radius:6px;
-  font-size:16px;
+  font-size:15px;
   line-height: 30px;
 }
 .dropDown {
@@ -55,7 +55,7 @@
   min-width: 100px;
 }
 .fpsDropDown {
-  width: 10%;
+  width: 9%;
   min-width: 70px;
 }
 .rewindTextValue, .otherText {

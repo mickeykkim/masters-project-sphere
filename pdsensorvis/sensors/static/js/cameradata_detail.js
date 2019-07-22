@@ -144,7 +144,7 @@ function copyToClipboard(selection) {
 }
 
 function displayHelpAlert() {
-   alert("Shortcuts:\nSpacebar: Play/Pause Video\nShift + Right Arrow to step frames forward by selected amount.\nShift + Left Arrow to step frames backward by selected amount.\nShift + Up Arrow to increase frame step rate.\nShift + Down Arrow to decrease frame step rate.\nShift + / to reset video to specified frame.");
+   alert("Shortcuts:\n\nSpacebar : Play/pause video.\nShift + Right Arrow : Step frames forward by selected amount.\nShift + Left Arrow : Step frames backward by selected amount.\nShift + Up Arrow : Increase frame step amount.\nShift + Down Arrow : Decrease frame step amount.\nShift + / : Reset video to specified frame.");
 }
 
 // --- Event Listeners ---
