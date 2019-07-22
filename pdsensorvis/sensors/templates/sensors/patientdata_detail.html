@@ -15,6 +15,7 @@
       <hr>
       <p><strong>Time:</strong> <a href="{% url 'wearabledata-detail' wearable.id %}">{{ wearable.time }}</a></p>
       <p><strong>File:</strong> <a href="{{ media_url }}{{ wearable.filename }}">{{ wearable.filename }}</a></p>
+      <p><strong>Note:</strong> {{wearable.note}}</p>
       <p class='text-muted'><strong>Id:</strong> {{wearable.id}}</p>
     {% endfor %}
   </div>
@@ -26,6 +27,7 @@
       <hr>
       <p><strong>Time:</strong> <a href="{% url 'cameradata-detail' camera.id %}">{{ camera.time }}</a></p>
       <p><strong>File:</strong> <a href="{{ media_url }}{{ camera.filename }}">{{ camera.filename }}</a></p>
+      <p><strong>Note:</strong> {{camera.note}}</p>
       <p class='text-muted'><strong>Id:</strong> {{camera.id}}</p>
     {% endfor %}
   </div>

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}<title>Bristol Sphere PD Sensors - Camera Data</title>{% endblock %}
+
 {% load static %}
 
 {% block style %}
@@ -8,7 +10,7 @@
 
 {% block content %}
 <h1>Patient: {{ cameradata.patient }} </h1>
-<p>Session Time: {{ cameradata.time }}</p>
+<p>Session Time: {{ cameradata.time }}; Note: {{ cameradata.note }}</p>
 <hr>
 <!-- VideoFrame Object -->
 <script src="https://rawgit.com/allensarkisyan/VideoFrame/master/VideoFrame.min.js"></script>

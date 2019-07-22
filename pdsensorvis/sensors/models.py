@@ -37,6 +37,7 @@ class WearableData(models.Model):
    patient = models.ForeignKey('PatientData', on_delete=models.SET_NULL, null=True)
    filename = models.FileField(upload_to='wearable/')
    time = models.DateTimeField()
+   note = models.CharField(max_length=500, help_text='Note regarding wearable')
 
    # Metadata
    class Meta: 
@@ -58,6 +59,7 @@ class CameraData(models.Model):
    patient = models.ForeignKey('PatientData', on_delete=models.SET_NULL, null=True)
    filename = models.FileField(upload_to='camera/')
    time = models.DateTimeField()
+   note = models.CharField(max_length=500, help_text='Note regarding camera')
 
    # Metadata
    class Meta: 
@@ -94,6 +96,7 @@ class WearableAnnotation(models.Model):
       default='prs',
       help_text='UPDRS Task',
    )
+   note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
    class Meta:
       ordering = ['-timestamp']
@@ -116,6 +119,7 @@ class CameraAnnotation(models.Model):
       default='prs',
       help_text='UPDRS Task',
    )
+   note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
    class Meta:
       ordering = ['-timestamp']

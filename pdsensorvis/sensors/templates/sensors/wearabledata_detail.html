@@ -56,17 +56,18 @@ var myChart = new Chart(ctx, {
 
 {% block content %}
 <h1>Patient: {{ wearabledata.patient }} </h1>
-<p>Session Time: {{ wearabledata.time }}</p>
+<p>Session Time: {{ wearabledata.time }}; Note: {{ wearabledata.note }}</p>
 <hr>
 <h1>Wearable Data Visualization</h1>
 <canvas id="myChart" width="500" height="400"></canvas>
 <hr>
 <div style="margin-left:20px;margin-top:20px">
-   <h4>Wearable Annotations</h4>
-   <ul>
-      {% for annotation in wearabledata.wearableannotation_set.all %}
+  <h4>Wearable Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">publish</i></button>
+  </h4>
+  <ul>
+    {% for annotation in wearabledata.wearableannotation_set.all %}
       <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">{{annotation.timestamp}} - {{annotation.get_annotation_display}}</a></li>
-      {% endfor %}
-   </ul>
+    {% endfor %}
+  </ul>
 </div>
 {% endblock %}
