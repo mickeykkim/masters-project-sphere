@@ -76,7 +76,7 @@
         </select>
       </span>
       <input type="text" name="other-annotation" class="otherText" value="(other)" disabled=true>
-      <button id="annotate" class="controlButtonM"><i class="material-icons">edit</i></button>
+      <button id="annotate" class="controlButtonM"><i class="material-icons">note_add</i></button>
       <span class="vert-divider">|</span>
       <button id="help" class="controlButtonM"><i class="material-icons">help</i></button>
     </div>
@@ -97,17 +97,18 @@
   <span class="vert-divider">|</span>
   <span class="frameStatusText">
     Current Frame: <span id="currentFrame" class="timestamp">0</span>
-    <button id="copy-frame" class="controlButtonS"><i class="material-icons">note_add</i></button>
+    <button id="copy-frame" class="controlButtonS"><i class="material-icons">assignment_returned</i></button>
     <span class="vert-divider">|</span>
     Current Time (hh:mm:ss:ff): <span id="currentTime" class="timestamp">00:00:00:00</span>
-    <button id="copy-time" class="controlButtonS"><i class="material-icons">note_add</i></button>
+    <button id="copy-time" class="controlButtonS"><i class="material-icons">assignment_returned</i></button>
   </span>
 </div>
 
 <hr>
 <!-- Camera Annotation List -->
 <div style="margin-left:20px;margin-top:20px">
-  <h4>Camera Annotations</h4>
+  <h4>Camera Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">publish</i></button>
+  </h4>
   <ul>
     {% for annotation in cameradata.cameraannotation_set.all %}
     <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">{{annotation.timestamp}} - {{annotation.get_annotation_display}}</a></li>

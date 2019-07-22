@@ -70,27 +70,23 @@ class CameraData(models.Model):
    def __str__(self):
       return f'{self.patient} - {self.time}'
 
+UPDRS_TASK = (
+   ('prs', 'prone sup'),
+   ('toe', 'toe tapping'),
+   ('leg', 'leg agility'),
+   ('afc', 'arising from chair'),
+   ('tug', 'timed up and go'),
+   ('nmp', 'normal pace'),
+   ('slp', 'slow pace'),
+   ('fsp', 'fast pace'),
+)
 
 class WearableAnnotation(models.Model):
    """Fields and Functions related to wearable annotations"""
-
-   # Fields
    id = models.AutoField(primary_key=True)
    wearable = models.ForeignKey('WearableData', on_delete=models.SET_NULL, null=True)
    timestamp = models.TimeField()
    annotator = models.CharField(max_length=50, help_text='Annotator of data')
-
-   UPDRS_TASK = (
-      ('prs', 'prone sup'),
-      ('toe', 'toe tapping'),
-      ('leg', 'leg agility'),
-      ('afc', 'arising from chair'),
-      ('tug', 'timed up and go'),
-      ('nmp', 'normal pace'),
-      ('slp', 'slow pace'),
-      ('fsp', 'fast pace'),
-   )
-
    annotation = models.CharField(
       max_length=3,
       choices=UPDRS_TASK,
@@ -109,24 +105,10 @@ class WearableAnnotation(models.Model):
 
 class CameraAnnotation(models.Model):
    """Fields and Functions related to camera annotations"""
-
-   # Fields
    id = models.AutoField(primary_key=True)
    camera = models.ForeignKey('CameraData', on_delete=models.SET_NULL, null=True)
    timestamp = models.TimeField()
    annotator = models.CharField(max_length=50, help_text='Annotator of data')
-
-   UPDRS_TASK = (
-      ('prs', 'prone sup'),
-      ('toe', 'toe tapping'),
-      ('leg', 'leg agility'),
-      ('afc', 'arising from chair'),
-      ('tug', 'timed up and go'),
-      ('nmp', 'normal pace'),
-      ('slp', 'slow pace'),
-      ('fsp', 'fast pace'),
-   )
-
    annotation = models.CharField(
       max_length=3,
       choices=UPDRS_TASK,
