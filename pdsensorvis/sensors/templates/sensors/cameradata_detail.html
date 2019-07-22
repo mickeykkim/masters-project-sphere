@@ -88,7 +88,7 @@
 <div class="frameDetails">
   <span class="frameStatusText">Framerate:</span> 
   <span class="selectBox">
-    <select id="framerate" class="fpsDropDown">
+    <select id="framerate-list" class="fpsDropDown">
       <option value="1">24</option>
       <option value="2">25</option>
       <option value="3" selected=true>29.97</option>
@@ -109,7 +109,7 @@
 <hr>
 <!-- Camera Annotation List -->
 <div style="margin-left:20px;margin-top:20px">
-  <h4>Camera Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">publish</i></button>
+  <h4>Camera Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">save_alt</i></button>
   </h4>
   <ul>
     {% for annotation in cameradata.cameraannotation_set.all %}

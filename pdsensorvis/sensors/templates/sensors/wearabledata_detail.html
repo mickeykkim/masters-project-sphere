@@ -2,12 +2,18 @@
 
 {% block title %}<title>Bristol Sphere PD Sensors - Wearable Data</title>{% endblock %}
 
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/wearabledata_detail.css' %}">
+{% endblock %}
+
 {% block jquery %}
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
    type: 'line',
    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: ['1', '2', '3', '4', '5', '6'],
       datasets: [{
          label: '',
          data: [12, 19, 3, 5, 2, 3],
@@ -62,7 +68,7 @@ var myChart = new Chart(ctx, {
 <canvas id="myChart" width="500" height="400"></canvas>
 <hr>
 <div style="margin-left:20px;margin-top:20px">
-  <h4>Wearable Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">publish</i></button>
+  <h4>Wearable Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">save_alt</i></button>
   </h4>
   <ul>
     {% for annotation in wearabledata.wearableannotation_set.all %}
