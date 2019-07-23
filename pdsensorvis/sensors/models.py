@@ -1,77 +1,12 @@
 from django.db import models
 from django.urls import reverse
-import uuid
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .preprocess_data import Preprocess
+import uuid
 
-# Create your models here.
-class PatientData(models.Model):
-   """Fields and Functions related to each patient"""
-
-   # Fields
-   id = models.AutoField(primary_key=True)
-   first_name = models.CharField(max_length=50, help_text='Patient first name')
-   last_name = models.CharField(max_length=50, help_text='Patient last name')
-   date_of_birth = models.DateField()
-   notes = models.CharField(max_length=500, help_text='Notes regarding patient')
-
-   # Metadata
-   class Meta: 
-      ordering = ['last_name']
-
-   # Methods
-   def get_absolute_url(self):
-      return reverse('patientdata-detail', args=[str(self.id)])
-   
-   def __str__(self):
-      return f'{self.last_name}, {self.first_name}'
-
-
-class WearableData(models.Model):
-   """Data related to wristworn wearable"""
-
-   # Fields
-   id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
-   patient = models.ForeignKey('PatientData', on_delete=models.SET_NULL, null=True)
-   filename = models.FileField(upload_to='wearable/')
-   time = models.DateTimeField()
-   note = models.CharField(max_length=500, help_text='Note regarding wearable')
-
-   # Metadata
-   class Meta: 
-      ordering = ['patient', '-time']
-
-   # Methods
-   def get_absolute_url(self):
-      return reverse('wearabledata-detail', args=[str(self.id)])
-   
-   def __str__(self):
-      return f'{self.patient} - {self.time}'
-
-
-class CameraData(models.Model):
-   """Data related to silhouette camera"""
-
-   # Fields
-   id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
-   patient = models.ForeignKey('PatientData', on_delete=models.SET_NULL, null=True)
-   filename = models.FileField(upload_to='camera/')
-   time = models.DateTimeField()
-   note = models.CharField(max_length=500, help_text='Note regarding camera')
-
-   # Metadata
-   class Meta: 
-      ordering = ['patient', '-time']
-
-   # Methods
-   def get_absolute_url(self):
-      return reverse('cameradata-detail', args=[str(self.id)])
-   
-   def __str__(self):
-      return f'{self.patient} - {self.time}'
-
+# User-defined UPDRS tasks
 UPDRS_TASK = (
    ('prs', 'prone sup'),
    ('toe', 'toe tapping'),
@@ -83,11 +18,69 @@ UPDRS_TASK = (
    ('fsp', 'fast pace'),
 )
 
+
+class PatientData(models.Model):
+   """Fields and Functions related to each patient"""
+
+   id = models.AutoField(primary_key=True)
+   first_name = models.CharField(max_length=50, help_text='Patient first name')
+   last_name = models.CharField(max_length=50, help_text='Patient last name')
+   date_of_birth = models.DateField()
+   notes = models.CharField(max_length=500, help_text='Notes regarding patient')
+
+   class Meta: 
+      ordering = ['last_name']
+
+   def get_absolute_url(self):
+      return reverse('patientdata-detail', args=[str(self.id)])
+   
+   def __str__(self):
+      return f'{self.last_name}, {self.first_name}'
+
+
+class WearableData(models.Model):
+   """Data related to wristworn wearable"""
+
+   id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
+   patient = models.ForeignKey('PatientData', on_delete=models.SET_NULL, null=True)
+   filename = models.FileField(upload_to='wearable/')
+   time = models.DateTimeField()
+   note = models.CharField(max_length=500, help_text='Note regarding wearable')
+
+   class Meta: 
+      ordering = ['patient', '-time']
+
+   def get_absolute_url(self):
+      return reverse('wearabledata-detail', args=[str(self.id)])
+   
+   def __str__(self):
+      return f'{self.patient} ({self.time})'
+
+
+class CameraData(models.Model):
+   """Data related to silhouette camera"""
+
+   id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
+   patient = models.ForeignKey('PatientData', on_delete=models.SET_NULL, null=True)
+   filename = models.FileField(upload_to='camera/')
+   time = models.DateTimeField()
+   note = models.CharField(max_length=500, help_text='Note regarding camera')
+
+   class Meta: 
+      ordering = ['patient', '-time']
+
+   def get_absolute_url(self):
+      return reverse('cameradata-detail', args=[str(self.id)])
+   
+   def __str__(self):
+      return f'{self.patient} ({self.time})'
+
+
 class WearableAnnotation(models.Model):
    """Fields and Functions related to wearable annotations"""
    id = models.AutoField(primary_key=True)
    wearable = models.ForeignKey('WearableData', on_delete=models.SET_NULL, null=True)
-   timestamp = models.TimeField()
+   timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
    annotator = models.CharField(max_length=50, help_text='Annotator of data')
    annotation = models.CharField(
       max_length=3,
@@ -99,7 +92,10 @@ class WearableAnnotation(models.Model):
    note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
    class Meta:
-      ordering = ['-timestamp']
+      ordering = ['id']
+
+   def get_absolute_url(self):
+      return reverse('wearableannotation-detail', args=[str(self.id)])
 
    def __str__(self):
       """String for representing the Model object."""
@@ -110,7 +106,7 @@ class CameraAnnotation(models.Model):
    """Fields and Functions related to camera annotations"""
    id = models.AutoField(primary_key=True)
    camera = models.ForeignKey('CameraData', on_delete=models.SET_NULL, null=True)
-   timestamp = models.TimeField()
+   timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
    annotator = models.CharField(max_length=50, help_text='Annotator of data')
    annotation = models.CharField(
       max_length=3,
@@ -122,7 +118,10 @@ class CameraAnnotation(models.Model):
    note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
    class Meta:
-      ordering = ['-timestamp']
+      ordering = ['id']
+
+   def get_absolute_url(self):
+      return reverse('cameraannotation-detail', args=[str(self.id)])
 
    def __str__(self):
       """String for representing the Model object."""

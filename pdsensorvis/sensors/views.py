@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.views import generic
+from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
-
+from .forms import WearableAnnotationForm, CameraAnnotationForm
 
 def index(request):
    """View function for sensor index site."""
@@ -59,3 +60,17 @@ class CameraDataDetailView(generic.DetailView):
 
 class CameraAnnotationDetailView(generic.DetailView):
    model = CameraAnnotation
+
+
+class CreateWearableAnnotationView(generic.CreateView):
+   model = WearableAnnotation
+   form_class = WearableAnnotationForm
+   template_name = 'sensors/wearabledata_detail.html'
+   success_url = 'sensors/wearabledata_detail.html'
+
+
+class CreateAnnotationView(generic.CreateView):
+   model = CameraAnnotation
+   form_class = CameraAnnotationForm
+   template_name = 'sensors/cameradata_detail.html'
+   success_url = 'sensors/cameradata_detail.html'

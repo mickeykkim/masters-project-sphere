@@ -62,7 +62,7 @@ var myChart = new Chart(ctx, {
 
 {% block content %}
 <h1>Patient: {{ wearabledata.patient }} </h1>
-<p>Session Time: {{ wearabledata.time }}; Note: {{ wearabledata.note }}</p>
+<p>Session Time: <em>{{ wearabledata.time }}</em> | Note: <em>{{ wearabledata.note }}</em></p>
 <hr>
 <h1>Wearable Data Visualization</h1>
 <canvas id="myChart" width="500" height="400"></canvas>

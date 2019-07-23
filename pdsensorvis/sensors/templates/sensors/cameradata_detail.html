@@ -12,15 +12,14 @@
 
 {% block content %}
 <h1>Patient: {{ cameradata.patient }} </h1>
-<p>Session Time: {{ cameradata.time }}; Note: {{ cameradata.note }}</p>
+<p>Session Time: <em>{{ cameradata.time }}</em> | Note: <em>{{ cameradata.note }}</em></p>
 <hr>
 <!-- VideoFrame Object -->
-<script src="https://rawgit.com/allensarkisyan/VideoFrame/master/VideoFrame.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="{% static 'js/VideoFrame.min.js' %}"></script>
 
 <div class="videoFrame">
   <video name="{{ cameradata.patient }} - {{ cameradata.time }}" align="left" height="50%" width="100%" id="video"
-    src="{{ media_url }}{{ cameradata.filename }}" type="video/mp4"></video>
+    src="{{ media_url }}{{ cameradata.filename }}" type="video/mp4" playsinline></video>
 
   <div id="controls" class="videoControls">
     <div class="playControls">
@@ -58,21 +57,17 @@
       </span>
       <button id="seek-forward" class="controlButtonM"><i class="material-icons">fast_forward</i></button>
       <span class="vert-divider">|</span>
-      <span class="selectBox">
+      <span class="selectBox annotationDropDown">
+        {{ form.annotation }}
+        {% comment %}
         <select id="annotation-list" class="annotationDropDown">
-          {% for label in cameraannotation_list %}
-          print(label)
-          {% endfor %}
-
-          {% comment %}
           <option value="a1">prone sup</option>
           <option value="a2">b</option>
           <option value="a3">c</option>
           <option value="a4">d</option>
           <option value="a5">e</option>
-          {% endcomment %}
-
         </select>
+        {% endcomment %}
       </span>
       <input type="text" name="other-annotation" class="otherText" value="(other)" disabled=true>
       <button id="annotate" class="controlButtonM"><i class="material-icons">create</i></button>
