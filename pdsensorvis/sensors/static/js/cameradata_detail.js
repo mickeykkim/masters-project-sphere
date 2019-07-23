@@ -42,9 +42,9 @@ var framerate = document.getElementById("framerate-list");
 var currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
 
 var video = VideoFrame({
-   id : 'video',
+   id: 'video',
    frameRate: currentFramerate,
-   callback : function(frame) {
+   callback: function (frame) {
       currentFrame.html(video.get());
       currentTime.html(frame);
    }
@@ -78,10 +78,18 @@ function refreshVideoTimes() {
    var curSecs = Math.floor(video.video.currentTime - curMins * 60);
    var durMins = Math.floor(video.video.duration / 60);
    var durSecs = Math.floor(video.video.duration - durMins * 60);
-   if(curSecs < 10){ curSecs = "0" + curSecs; }
-   if(durSecs < 10){ durSecs = "0" + durSecs; }
-   if(curMins < 10){ curMins = "0" + curMins; }
-   if(durMins < 10){ durMins = "0" + durMins; }
+   if (curSecs < 10) {
+      curSecs = "0" + curSecs;
+   }
+   if (durSecs < 10) {
+      durSecs = "0" + durSecs;
+   }
+   if (curMins < 10) {
+      curMins = "0" + curMins;
+   }
+   if (durMins < 10) {
+      durMins = "0" + durMins;
+   }
    videoTime.innerHTML = curMins + ":" + curSecs;
    videoDuration.innerHTML = durMins + ":" + durSecs;
 }
@@ -144,58 +152,73 @@ function copyToClipboard(selection) {
 }
 
 function displayHelpAlert() {
-   alert("Shortcuts:\n\nSpacebar : Play/pause video.\nShift + Right Arrow : Step frames forward by selected amount.\nShift + Left Arrow : Step frames backward by selected amount.\nShift + Up Arrow : Increase frame step amount.\nShift + Down Arrow : Decrease frame step amount.\nShift + / : Reset video to specified frame.");
+   var newLine = "\r\n";
+   var helpMessage = "Shortcuts:";
+   helpMessage += newLine;
+   helpMessage += newLine;
+   helpMessage += "Spacebar : Play/pause video.";
+   helpMessage += newLine;
+   helpMessage += "Shift + Right Arrow : Step frames forward by selected amount.";
+   helpMessage += newLine;
+   helpMessage += "Shift + Left Arrow : Step frames backward by selected amount.";
+   helpMessage += newLine;
+   helpMessage += "Shift + Up Arrow : Increase frame step amount.";
+   helpMessage += newLine;
+   helpMessage += "Shift + Down Arrow : Decrease frame step amount.";
+   helpMessage += newLine;
+   helpMessage += "Shift + / : Reset video to specified frame."
+   alert(helpMessage);
 }
 
 // --- Event Listeners ---
-video.video.addEventListener("loadedmetadata", function() {
+video.video.addEventListener("loadedmetadata", function () {
    refreshVideoTimes();
    seekBar.max = video.video.duration * currentFramerate;
 });
 
-video.video.addEventListener("timeupdate", function() {
+video.video.addEventListener("timeupdate", function () {
    updateSeekBar();
 });
 
-video.video.addEventListener("ended", function() {
+video.video.addEventListener("ended", function () {
    endVideo();
 });
 
-seekBar.addEventListener("change", function() {
+seekBar.addEventListener("change", function () {
    updateVideoTime();
    if (playButton.innerHTML === "Pause") {
       playVideo();
    }
 });
 
-seekBar.addEventListener("input", function() {
+seekBar.addEventListener("input", function () {
    updateVideoTime();
    if (playButton.innerHTML === "Pause") {
       pauseVideo();
    }
 });
 
-volumeBar.addEventListener("input", function() {
+volumeBar.addEventListener("input", function () {
    video.video.volume = volumeBar.value;
 });
 
-volumeBar.addEventListener("change", function() {
+volumeBar.addEventListener("change", function () {
    video.video.volume = volumeBar.value;
 });
 
-playButton.addEventListener("click", function() {
+playButton.addEventListener("click", function () {
    toggleVideoPlayback();
 });
 
-helpButton.addEventListener("click", function() {
+helpButton.addEventListener("click", function () {
    displayHelpAlert();
 });
 
-video.video.addEventListener("click", function() {
+video.video.addEventListener("click", function () {
    toggleVideoPlayback();
 });
 
-muteButton.addEventListener("click", function() {
+muteButton.addEventListener("click", function () {
    if (video.video.muted == false) {
       video.video.muted = true;
       muteButton.innerHTML = "Unmute";
@@ -205,47 +228,47 @@ muteButton.addEventListener("click", function() {
    }
 });
 
-rewindButton.addEventListener("click", function() {
+rewindButton.addEventListener("click", function () {
    rewindVideo();
 });
 
-seekBackwardButton.addEventListener("click", function() {
+seekBackwardButton.addEventListener("click", function () {
    stepBack();
 });
 
-seekForwardButton.addEventListener("click", function() {
+seekForwardButton.addEventListener("click", function () {
    stepForward();
 });
 
-copyFrameNumber.addEventListener("click", function() {
+copyFrameNumber.addEventListener("click", function () {
    copyToClipboard("frames");
 })
 
-copyTimeStamp.addEventListener("click", function() {
+copyTimeStamp.addEventListener("click", function () {
    copyToClipboard("time");
 })
 
 // Keycodes for keypress event listeners
 // 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right, 40 = down, 191 = forward slash
 var map = {
-   16: false,  
+   16: false,
    32: false,
-   37: false, 
-   38: false, 
+   37: false,
+   38: false,
    39: false,
    40: false,
    191: false
 };
 
 // Check for keypress and fire appropriate shortcut functions
-$(document).keypress(function(e) {
+$(document).keypress(function (e) {
    if (e.which == 32) {
       toggleVideoPlayback();
    }
 });
 
 // Listener for multiple key presses
-$(document).keydown(function(e) {
+$(document).keydown(function (e) {
    if (e.keyCode in map) {
       map[e.keyCode] = true;
       var backOption = stepBackwardBox.selectedIndex;
@@ -264,7 +287,7 @@ $(document).keydown(function(e) {
          stepForwardBox.options[parseInt(forwardOption) - 1].selected = true;
       }
    }
-}).keyup(function(e) {
+}).keyup(function (e) {
    if (e.keyCode in map) {
       map[e.keyCode] = false;
    }
