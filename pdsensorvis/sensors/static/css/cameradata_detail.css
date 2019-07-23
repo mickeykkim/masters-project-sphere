@@ -33,7 +33,7 @@
 }
 
 .controlButtonL {
-  width: 9%;
+  width: 8%;
   min-width: 70px;
 }
 
@@ -84,7 +84,7 @@
 }
 
 .annotationDropDown {
-  width: 15%;
+  width: 14%;
   min-width: 100px;
 }
 
@@ -106,7 +106,7 @@
 }
 
 .otherText {
-  width: 16%;
+  width: 14%;
 }
 
 input[type=range] {

@@ -39,7 +39,7 @@ var FrameRates = {
 };
 */
 var framerate = document.getElementById("framerate-list");
-var currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
+var currentFramerate;
 
 var video = VideoFrame({
    id: 'video',
@@ -172,8 +172,9 @@ function displayHelpAlert() {
 
 // --- Event Listeners ---
 video.video.addEventListener("loadedmetadata", function () {
-   refreshVideoTimes();
+   currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
    seekBar.max = video.video.duration * currentFramerate;
+   refreshVideoTimes();
 });
 
 video.video.addEventListener("timeupdate", function () {
