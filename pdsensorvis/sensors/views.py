@@ -27,49 +27,49 @@ def index(request):
    return render(request, 'index.html', context=context)
 
 
-class PatientDataListView(generic.ListView):
+class PatientDataListView(LoginRequiredMixin,generic.ListView):
    model = PatientData
    paginate_by = 10
 
 
-class PatientDataDetailView(generic.DetailView):
+class PatientDataDetailView(LoginRequiredMixin,generic.DetailView):
    model = PatientData
 
 
-class WearableDataListView(generic.ListView):
+class WearableDataListView(LoginRequiredMixin,generic.ListView):
    model = WearableData
    paginate_by = 10
 
 
-class WearableDataDetailView(generic.DetailView):
+class WearableDataDetailView(LoginRequiredMixin,generic.DetailView):
    model = WearableData
 
 
-class WearableAnnotationDetailView(generic.DetailView):
+class WearableAnnotationDetailView(LoginRequiredMixin,generic.DetailView):
    model = WearableAnnotation
 
 
-class CameraDataListView(generic.ListView):
+class CameraDataListView(LoginRequiredMixin,generic.ListView):
    model = CameraData
    paginate_by = 10
 
 
-class CameraDataDetailView(generic.DetailView):
+class CameraDataDetailView(LoginRequiredMixin,generic.DetailView):
    model = CameraData
 
 
-class CameraAnnotationDetailView(generic.DetailView):
+class CameraAnnotationDetailView(LoginRequiredMixin,generic.DetailView):
    model = CameraAnnotation
 
 
-class CreateWearableAnnotationView(generic.CreateView):
+class CreateWearableAnnotationView(LoginRequiredMixin,generic.CreateView):
    model = WearableAnnotation
    form_class = WearableAnnotationForm
    template_name = 'sensors/wearabledata_detail.html'
    success_url = 'sensors/wearabledata_detail.html'
 
 
-class CreateAnnotationView(generic.CreateView):
+class CreateAnnotationView(LoginRequiredMixin,generic.CreateView):
    model = CameraAnnotation
    form_class = CameraAnnotationForm
    template_name = 'sensors/cameradata_detail.html'

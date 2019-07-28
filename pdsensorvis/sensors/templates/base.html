@@ -31,7 +31,7 @@
     href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link 
     rel='stylesheet' 
-    href="https://fonts.googleapis.com/css?family=Roboto Mono">
+    href="https://fonts.googleapis.com/css?family=Roboto+Mono">
   <!-- Add additional CSS in static file -->
   {% load static %}
   <link 
@@ -52,23 +52,7 @@
     {% block nav-style %}{% endblock %}">
       <div class="container p-none">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
           <a class="navbar-brand" href="{% url 'index' %}">PD Sensors Home</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %}
-            <li><a href="">Logout</a></li>
-            <li><a href="" class="p-r-none">Accounts</a></li>
-            {% else %}
-            <li><a href="">Login</a></li>
-            <li><a href="" class="p-r-none">Sign Up</a></li>
-            {% endif %}
-          </ul>
         </div>
       </div>
     </div>
@@ -80,10 +64,17 @@
       <div class="col-sm-2">
         {% block sidebar %}
         <ul class="sidebar-nav">
+        {% if user.is_authenticated %}
           <li><a href="{% url 'patientdata' %}">Patient Data</a></li>
           <li><a href="{% url 'wearabledata' %}">Wearable Data</a></li>
           <li><a href="{% url 'cameradata' %}">Camera Data</a></li>
-        </ul>
+          <hr>
+          <li>User: {{ user.get_username }}</li>
+          <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+        {% else %}
+          <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+        {% endif %} 
+      </ul>
         {% endblock %}
       </div>
       <!-- Dynamic content templates (right) -->
@@ -91,21 +82,21 @@
         {% block content %}{% endblock %}
       </div>
       {% block pagination %}
-      {% if is_paginated %}
-      <div class="pagination">
-        <span class="page-links">
-          {% if page_obj.has_previous %}
-          <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
-          {% endif %}
-          <span class="page-current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        {% if is_paginated %}
+        <div class="pagination">
+          <span class="page-links">
+            {% if page_obj.has_previous %}
+            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="page-current">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
           </span>
-          {% if page_obj.has_next %}
-          <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
-          {% endif %}
-        </span>
-      </div>
-      {% endif %}
+        </div>
+        {% endif %}
       {% endblock %}
     </div>
   </div>

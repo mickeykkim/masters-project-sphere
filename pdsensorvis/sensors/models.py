@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .preprocess_data import Preprocess
@@ -79,9 +80,10 @@ class CameraData(models.Model):
 class WearableAnnotation(models.Model):
    """Fields and Functions related to wearable annotations"""
    id = models.AutoField(primary_key=True)
+   note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
    wearable = models.ForeignKey('WearableData', on_delete=models.SET_NULL, null=True)
    timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
-   annotator = models.CharField(max_length=50, help_text='Annotator of data')
+   annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
    annotation = models.CharField(
       max_length=3,
       choices=UPDRS_TASK,
@@ -89,7 +91,6 @@ class WearableAnnotation(models.Model):
       default='prs',
       help_text='UPDRS Task',
    )
-   note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
    class Meta:
       ordering = ['id']
@@ -105,9 +106,10 @@ class WearableAnnotation(models.Model):
 class CameraAnnotation(models.Model):
    """Fields and Functions related to camera annotations"""
    id = models.AutoField(primary_key=True)
+   note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
    camera = models.ForeignKey('CameraData', on_delete=models.SET_NULL, null=True)
    timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
-   annotator = models.CharField(max_length=50, help_text='Annotator of data')
+   annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
    annotation = models.CharField(
       max_length=3,
       choices=UPDRS_TASK,
@@ -115,7 +117,6 @@ class CameraAnnotation(models.Model):
       default='prs',
       help_text='UPDRS Task',
    )
-   note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
    class Meta:
       ordering = ['id']
