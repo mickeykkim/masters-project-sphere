@@ -1,0 +1,9 @@
+Django==2.2.2
+django-chartjs==1.4.0
+django-filter==2.1.0
+django-modeladmin-reorder==0.3.1
+django-nvd3==0.9.7
+django-webpack-loader==0.6.0
+djangorestframework==3.9.4
+djangorestframework-jwt==1.11.0
+virtualenv==16.6.1
