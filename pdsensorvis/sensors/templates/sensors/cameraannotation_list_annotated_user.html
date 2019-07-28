@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>My Camera Annotations</h1>
+
+    {% if cameraannotation_list %}
+    <ul>
+      {% for annotation in cameraannotation_list %} 
+      <li>
+        ({{ annotation }})        
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>You have no annotations.</p>
+    {% endif %}       
+{% endblock %}

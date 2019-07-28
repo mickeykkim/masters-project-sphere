@@ -62,6 +62,17 @@ class CameraAnnotationDetailView(LoginRequiredMixin,generic.DetailView):
    model = CameraAnnotation
 
 
+
+class CameraAnnotationByUserListView(LoginRequiredMixin,generic.ListView):
+   """Generic class-based view listing books on loan to current user."""
+   model = CameraAnnotation
+   template_name ='sensors/cameraannotation_list_annotated_user.html'
+   paginate_by = 10
+   
+   def get_queryset(self):
+      return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('id')
+
+
 class CreateWearableAnnotationView(LoginRequiredMixin,generic.CreateView):
    model = WearableAnnotation
    form_class = WearableAnnotationForm
