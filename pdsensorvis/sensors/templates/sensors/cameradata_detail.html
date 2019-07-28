@@ -36,7 +36,7 @@
       <button id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Jump back to frame"><i class="material-icons">skip_previous</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
-        <select id="backward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom" title="# of frames to skip back">
+        <select id="backward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom" title="# of frames to step back">
           <option value="1">1</option>
           <option value="2">5</option>
           <option value="3">10</option>
@@ -44,10 +44,10 @@
           <option value="5">50</option>
         </select>
       </span>
-      <button id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Skip backwards"><i class="material-icons">fast_rewind</i></button>
+      <button id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Step backwards"><i class="material-icons">fast_rewind</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
-        <select id="forward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom" title="# of frames to skip foreward">
+        <select id="forward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom" title="# of frames to step forward">
           <option value="1">1</option>
           <option value="2">5</option>
           <option value="3">10</option>
@@ -55,7 +55,7 @@
           <option value="5">50</option>
         </select>
       </span>
-      <button id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Skip forwards"><i class="material-icons">fast_forward</i></button>
+      <button id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Step forwards"><i class="material-icons">fast_forward</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox annotationDropDown">
         {{ form.annotation }}
@@ -69,10 +69,10 @@
         </select>
         {% endcomment %}
       </span>
-      <input type="text" name="other-annotation" class="otherText" value="(other)" disabled=true>
-      <button id="annotate" class="controlButtonM"><i class="material-icons">create</i></button>
+      <input type="text" name="other-annotation" class="otherText" value="(other)" disabled=true data-toggle="tooltip" data-placement="bottom" title="Other annotation">
+      <button id="annotate" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Save annotation"><i class="material-icons">create</i></button>
       <span class="vert-divider">|</span>
-      <button id="help" class="controlButtonM"><i class="material-icons">live_help</i></button>
+      <button id="help" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Display shortcut keys"><i class="material-icons">live_help</i></button>
     </div>
   </div>
 </div>
@@ -91,24 +91,24 @@
   <span class="vert-divider">|</span>
   <span class="frameStatusText">
     Frame: <span id="current-frame" class="timestamp">0</span>
-    <button id="copy-frame" class="controlButtonS"><i class="material-icons">assignment_returned</i></button>
+    <button id="copy-frame" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" title="Copy frame to clipboard"><i class="material-icons">assignment_returned</i></button>
     <span class="vert-divider">|</span>
     Time (hh:mm:ss:ff): <span id="current-time" class="timestamp">00:00:00:00</span>
-    <button id="copy-time" class="controlButtonS"><i class="material-icons">assignment_returned</i></button>
+    <button id="copy-time" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" title="Copy time to clipboard"><i class="material-icons">assignment_returned</i></button>
   </span>
 </div>
 <hr>
 
 <!-- Camera Annotation List -->
 <div style="margin-left:20px;margin-top:20px">
-  <h4>Camera Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">save_alt</i></button>
+  <h4>Camera Annotations <button id="export_all" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" title="Download annotations"><i class="material-icons">save_alt</i></button>
   </h4>
   <ul>
     {% for annotation in cameradata.cameraannotation_set.all %}
     <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">
         {{annotation.timestamp}} - {{annotation.get_annotation_display}}</a>
       <button id="annotation_{{ annotation.id }}" class="controlButtonXS"><i
-          class="material-icons">skip_previous</i></button>
+          class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Jump to annotation">skip_previous</i></button>
     </li>
     {% endfor %}
   </ul>

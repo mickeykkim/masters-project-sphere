@@ -138,9 +138,9 @@ function setSelectedIndex(s, i) {
 function copyToClipboard(selection) {
    var textToCopy;
    if (selection === "frames") {
-      textToCopy = document.getElementById("currentFrame");
+      textToCopy = document.getElementById("current-frame");
    } else if (selection === "time") {
-      textToCopy = document.getElementById("currentTime")
+      textToCopy = document.getElementById("current-time")
    }
    var textArea = document.createElement("textarea");
    textArea.value = textToCopy.textContent;
