@@ -1,10 +1,10 @@
 "use strict";
 
 // Video Elements
-var currentFrame = $('#currentFrame');
-var currentTime = $('#currentTime');
-var videoTime = document.getElementById("videoTime");
-var videoDuration = document.getElementById("videoDuration");
+var currentFrame = $('#current-frame');
+var currentTime = $('#current-time');
+var videoTime = document.getElementById("video-time");
+var videoDuration = document.getElementById("video-duration");
 
 // Buttons
 var playButton = document.getElementById("play-pause");

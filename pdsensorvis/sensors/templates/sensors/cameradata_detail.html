@@ -25,18 +25,18 @@
     <div class="playControls">
       <button id="play-pause" class="controlButtonL">Play</button>
       <input type="range" id="seek-bar" class="seekBar" style="width:46%;" min="0" value="0" step="1">
-      <span id="videoTime" class="timestamp">00:00</span><span class="timestamp">/</span><span id="videoDuration"
+      <span id="video-time" class="timestamp">00:00</span><span class="timestamp">/</span><span id="video-duration"
         class="timestamp">00:00</span>
       <button id="mute" class="controlButtonL">Mute</button>
       <input type="range" id="volume-bar" class="volumeBar" style="width:9%;" min="0" max="1" step="0.1"
         value="1"></input>
     </div>
     <div class="seekControls">
-      <input type="text" id="rewind-value" class="rewindTextValue" value=0>
-      <button id="rewind-video" class="controlButtonM"><i class="material-icons">skip_previous</i></button>
+      <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip" data-placement="bottom" title="Frame to jump back to">
+      <button id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Jump back to frame"><i class="material-icons">skip_previous</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
-        <select id="backward-increment" class="dropDown">
+        <select id="backward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom" title="# of frames to skip back">
           <option value="1">1</option>
           <option value="2">5</option>
           <option value="3">10</option>
@@ -44,10 +44,10 @@
           <option value="5">50</option>
         </select>
       </span>
-      <button id="seek-backward" class="controlButtonM"><i class="material-icons">fast_rewind</i></button>
+      <button id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Skip backwards"><i class="material-icons">fast_rewind</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox">
-        <select id="forward-increment" class="dropDown">
+        <select id="forward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom" title="# of frames to skip foreward">
           <option value="1">1</option>
           <option value="2">5</option>
           <option value="3">10</option>
@@ -55,7 +55,7 @@
           <option value="5">50</option>
         </select>
       </span>
-      <button id="seek-forward" class="controlButtonM"><i class="material-icons">fast_forward</i></button>
+      <button id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" title="Skip forwards"><i class="material-icons">fast_forward</i></button>
       <span class="vert-divider">|</span>
       <span class="selectBox annotationDropDown">
         {{ form.annotation }}
@@ -90,10 +90,10 @@
   </span>
   <span class="vert-divider">|</span>
   <span class="frameStatusText">
-    Frame: <span id="currentFrame" class="timestamp">0</span>
+    Frame: <span id="current-frame" class="timestamp">0</span>
     <button id="copy-frame" class="controlButtonS"><i class="material-icons">assignment_returned</i></button>
     <span class="vert-divider">|</span>
-    Time (hh:mm:ss:ff): <span id="currentTime" class="timestamp">00:00:00:00</span>
+    Time (hh:mm:ss:ff): <span id="current-time" class="timestamp">00:00:00:00</span>
     <button id="copy-time" class="controlButtonS"><i class="material-icons">assignment_returned</i></button>
   </span>
 </div>
@@ -117,4 +117,8 @@
 
 {% block javascript %}
 <script type="text/javascript" src="{% static 'js/cameradata_detail.js' %}"></script>
+{% endblock %}
+
+{% block jquery %}
+$('[data-toggle="tooltip"]').tooltip(); 
 {% endblock %}
