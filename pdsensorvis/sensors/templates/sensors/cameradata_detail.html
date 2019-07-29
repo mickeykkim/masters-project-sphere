@@ -6,13 +6,9 @@
 
 {% load static %}
 
-{% block style %}
-<link rel="stylesheet" href="{% static 'css/data_detail.css' %}">
-{% endblock %}
-
 {% block content %}
 <h1>Patient: {{ cameradata.patient }} </h1>
-<p>Session Time: <em>{{ cameradata.time }}</em> | Note: <em>{{ cameradata.note }}</em></p>
+<p><em>Session Time:</em> {{ cameradata.time }} <span class="vert-divider">|</span> <em>Note:</em> {{ cameradata.note }}</p>
 <hr>
 <!-- VideoFrame Object -->
 <script src="{% static 'js/VideoFrame.min.js' %}"></script>
@@ -28,8 +24,9 @@
       <span id="video-time" class="timestamp">00:00</span><span class="timestamp">/</span><span id="video-duration"
         class="timestamp">00:00</span>
       <button id="mute" class="controlButtonL">Mute</button>
-      <input type="range" id="volume-bar" class="volumeBar" style="width:7%;margin:5px 0px 0px 5px;" min="0" max="1" step="0.1"
-        value="1"></input>
+        <input type="range" id="volume-bar" class="volumeBar" style="width:10%;margin:5px 0px 0px 5px;" min="0" max="1"
+               step="0.1"
+               value="1"/>
     </div>
     <div class="seekControls">
       <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip" data-placement="bottom"

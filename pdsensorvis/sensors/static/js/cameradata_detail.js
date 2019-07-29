@@ -1,33 +1,33 @@
 "use strict";
 
 // Video Elements
-var currentFrame = $('#current-frame');
-var currentTime = $('#current-time');
-var videoTime = document.getElementById("video-time");
-var videoDuration = document.getElementById("video-duration");
+let currentFrame = $('#current-frame');
+let currentTime = $('#current-time');
+let videoTime = document.getElementById("video-time");
+let videoDuration = document.getElementById("video-duration");
 
 // Buttons
-var playButton = document.getElementById("play-pause");
-var muteButton = document.getElementById("mute");
-var rewindButton = document.getElementById("rewind-video");
-var seekBackwardButton = document.getElementById("seek-backward");
-var seekForwardButton = document.getElementById("seek-forward");
-var helpButton = document.getElementById("help");
+let playButton = document.getElementById("play-pause");
+let muteButton = document.getElementById("mute");
+let rewindButton = document.getElementById("rewind-video");
+let seekBackwardButton = document.getElementById("seek-backward");
+let seekForwardButton = document.getElementById("seek-forward");
+let helpButton = document.getElementById("help");
 
 // Range Sliders
-var seekBar = document.getElementById("seek-bar");
-var volumeBar = document.getElementById("volume-bar");
+let seekBar = document.getElementById("seek-bar");
+let volumeBar = document.getElementById("volume-bar");
 
 // Seek Value Elements
-var rewindTextBox = document.getElementById("rewind-value");
-var stepBackwardBox = document.getElementById("backward-increment");
-var stepForwardBox = document.getElementById("forward-increment");
-var copyFrameNumber = document.getElementById("copy-frame");
-var copyTimeStamp = document.getElementById("copy-time");
+let rewindTextBox = document.getElementById("rewind-value");
+let stepBackwardBox = document.getElementById("backward-increment");
+let stepForwardBox = document.getElementById("forward-increment");
+let copyFrameNumber = document.getElementById("copy-frame");
+let copyTimeStamp = document.getElementById("copy-time");
 
 // Framerate and Export Elements
 /*
-var FrameRates = {
+let FrameRates = {
    film: 24,
    NTSC: 29.97,
    NTSC_Film: 23.98,
@@ -38,10 +38,10 @@ var FrameRates = {
    high: 60
 };
 */
-var framerate = document.getElementById("framerate-list");
-var currentFramerate;
+let framerate = document.getElementById("framerate-list");
+let currentFramerate;
 
-var video = VideoFrame({
+let video = VideoFrame({
    id: 'video',
    frameRate: currentFramerate,
    callback: function (frame) {
@@ -74,10 +74,10 @@ function updateSeekBar() {
 }
 
 function refreshVideoTimes() {
-   var curMins = Math.floor(video.video.currentTime / 60);
-   var curSecs = Math.floor(video.video.currentTime - curMins * 60);
-   var durMins = Math.floor(video.video.duration / 60);
-   var durSecs = Math.floor(video.video.duration - durMins * 60);
+   let curMins = Math.floor(video.video.currentTime / 60);
+   let curSecs = Math.floor(video.video.currentTime - curMins * 60);
+   let durMins = Math.floor(video.video.duration / 60);
+   let durSecs = Math.floor(video.video.duration - durMins * 60);
    if (curSecs < 10) {
       curSecs = "0" + curSecs;
    }
@@ -95,7 +95,7 @@ function refreshVideoTimes() {
 }
 
 function toggleVideoPlayback() {
-   if (video.video.paused == true) {
+   if (video.video.paused === true) {
       playVideo();
       playButton.innerHTML = "Pause";
    } else {
@@ -111,7 +111,7 @@ function endVideo() {
 }
 
 function rewindVideo() {
-   var seekPosition = parseInt(rewindTextBox.value);
+   let seekPosition = parseInt(rewindTextBox.value);
    video.video.currentTime = 0;
    if (seekPosition > 0) {
       video.seekForward(seekPosition, updateSeekBar());
@@ -120,13 +120,13 @@ function rewindVideo() {
 }
 
 function stepBack() {
-   var backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].text;
+   let backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].text;
    video.seekBackward(backwardStep, updateSeekBar());
    playButton.innerHTML = "Play";
 }
 
 function stepForward() {
-   var forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].text;
+   let forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].text;
    video.seekForward(forwardStep, updateSeekBar());
    playButton.innerHTML = "Play";
 }
@@ -136,13 +136,13 @@ function setSelectedIndex(s, i) {
 }
 
 function copyToClipboard(selection) {
-   var textToCopy;
+   let textToCopy;
    if (selection === "frames") {
       textToCopy = document.getElementById("current-frame");
    } else if (selection === "time") {
       textToCopy = document.getElementById("current-time")
    }
-   var textArea = document.createElement("textarea");
+   let textArea = document.createElement("textarea");
    textArea.value = textToCopy.textContent;
    document.body.appendChild(textArea);
    textArea.select();
@@ -152,8 +152,8 @@ function copyToClipboard(selection) {
 }
 
 function displayHelpAlert() {
-   var newLine = "\r\n";
-   var helpMessage = "Shortcuts:";
+   const newLine = "\r\n";
+   let helpMessage = "Shortcuts:";
    helpMessage += newLine;
    helpMessage += newLine;
    helpMessage += "Spacebar : Play/pause video.";
@@ -251,7 +251,7 @@ copyTimeStamp.addEventListener("click", function () {
 
 // Keycodes for keypress event listeners
 // 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right, 40 = down, 191 = forward slash
-var map = {
+let map = {
    16: false,
    32: false,
    37: false,
@@ -272,8 +272,8 @@ $(document).keypress(function (e) {
 $(document).keydown(function (e) {
    if (e.keyCode in map) {
       map[e.keyCode] = true;
-      var backOption = stepBackwardBox.selectedIndex;
-      var forwardOption = stepForwardBox.selectedIndex;
+      let backOption = stepBackwardBox.selectedIndex;
+      let forwardOption = stepForwardBox.selectedIndex;
       if (map[16] && map[191]) {
          rewindVideo();
       } else if (map[16] && map[37]) {

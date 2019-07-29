@@ -2,12 +2,6 @@
 
 {% block title %}<title>Bristol Sphere PD Sensors - Wearable Data</title>{% endblock %}
 
-{% load static %}
-
-{% block style %}
-<link rel="stylesheet" href="{% static 'css/data_detail.css' %}">
-{% endblock %}
-
 {% block jquery %}
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
@@ -62,7 +56,7 @@ var myChart = new Chart(ctx, {
 
 {% block content %}
 <h1>Patient: {{ wearabledata.patient }} </h1>
-<p>Session Time: <em>{{ wearabledata.time }}</em> | Note: <em>{{ wearabledata.note }}</em></p>
+<p><em>Session Time:</em> {{ wearabledata.time }} <span class="vert-divider">|</span> <em>Note:</em> {{ wearabledata.note }}</p>
 <hr>
 <h1>Wearable Data Visualization</h1>
 <canvas id="myChart" width="500" height="400"></canvas>
