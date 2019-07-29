@@ -46,10 +46,11 @@
 </head>
 
 <body>
-  <!-- Header -->
+  <!-- TODO: Header Navbar -->
+
+  <!--
   <header>
-    <div class="navbar navbar-default navbar-static-top 
-    {% block nav-style %}{% endblock %}">
+    <div class="navbar navbar-default navbar-static-top {% block nav-style %}{% endblock %}">
       <div class="container p-none">
         <div class="navbar-header">
           <a class="navbar-brand" href="{% url 'index' %}">PD Sensors Home</a>
@@ -57,6 +58,8 @@
       </div>
     </div>
   </header>
+  -->
+
   <!-- Body -->
   <div class="container-fluid">
     <div class="row">
@@ -64,6 +67,7 @@
       <div class="col-sm-2">
         {% block sidebar %}
         <ul class="sidebar-nav">
+          <li><a href="{% url 'index' %}">Sensors Home</a></li>
         {% if user.is_authenticated %}
           <li><a href="{% url 'patientdata' %}">Patient Data</a></li>
           <li><a href="{% url 'wearabledata' %}">Wearable Data</a></li>

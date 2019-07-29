@@ -5,6 +5,11 @@
   <hr>
   <p><strong>Timestamp:</strong> {{ wearableannotation.timestamp }}</p>
   <p><strong>Annotation:</strong> {{ wearableannotation.get_annotation_display }}</p>
+    {% if wearableannotation.get_status_display == '+' %} (begin)
+    {% elif wearableannotation.get_status_display == '-' %} (end)
+    {% endif %}
   <p><strong>Annotator:</strong> {{ wearableannotation.annotator }}</p>
-  </div>
+  {% if wearableannotation.note %}
+  <p><strong>Note:</strong> {{ wearableannotation.note }}</p>
+  {% endif %}
 {% endblock %}

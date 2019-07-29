@@ -1,10 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from django.http import JsonResponse
 from django.contrib.auth.models import User
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .preprocess_data import Preprocess
 import uuid
 
 # User-defined UPDRS tasks
@@ -17,6 +13,24 @@ UPDRS_TASK = (
     ('nmp', 'normal pace'),
     ('slp', 'slow pace'),
     ('fsp', 'fast pace'),
+)
+
+# Indicators for annotation status (begin or end)
+ANNOTATION_STATUS = (
+    ('b', '+'),
+    ('e', '-'),
+)
+
+# Standard Frame Rate Options
+FRAME_RATES = (
+    ('NTSC_Film', 23.98),
+    ('Film', 24),
+    ('PAL', 25),
+    ('NTSC', 29.97),
+    ('Web', 30),
+    ('PAL_HD', 50),
+    ('NTSC_HD', 59.94),
+    ('High', 60),
 )
 
 
@@ -80,17 +94,17 @@ class CameraData(models.Model):
 class WearableAnnotation(models.Model):
     """Fields and Functions related to wearable annotations"""
     id = models.AutoField(primary_key=True)
-    note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
     wearable = models.ForeignKey('WearableData', on_delete=models.CASCADE, null=True)
     timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
-    annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
         choices=UPDRS_TASK,
-        blank=True,
         default='prs',
         help_text='UPDRS Task',
     )
+    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default='b')
+    note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
         ordering = ['timestamp']
@@ -106,17 +120,17 @@ class WearableAnnotation(models.Model):
 class CameraAnnotation(models.Model):
     """Fields and Functions related to camera annotations"""
     id = models.AutoField(primary_key=True)
-    note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
     camera = models.ForeignKey('CameraData', on_delete=models.CASCADE, null=True)
     timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
-    annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
         choices=UPDRS_TASK,
-        blank=True,
         default='prs',
         help_text='UPDRS Task',
     )
+    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default='b')
+    note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
         ordering = ['timestamp']

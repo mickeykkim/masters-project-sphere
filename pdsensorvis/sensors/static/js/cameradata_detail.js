@@ -85,9 +85,9 @@ function updateVideoTime() {
 
 function updateSeekBar() {
    seekBar.value = video.video.currentTime * currentFramerate;
-   refreshVideoTimes();
    currentFrame.html(video.get());
    currentTime.html(video.toSMPTE());
+   refreshVideoTimes();
 }
 
 function refreshVideoTimes() {
