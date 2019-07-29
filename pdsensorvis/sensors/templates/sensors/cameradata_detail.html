@@ -14,19 +14,16 @@
 <script src="{% static 'js/VideoFrame.min.js' %}"></script>
 
 <div class="videoFrame">
-  <video name="{{ cameradata.patient }} - {{ cameradata.time }}" align="left" height="50%" width="100%" id="video"
-    src="{{ media_url }}{{ cameradata.filename }}" type="video/mp4" playsinline></video>
+  <video height="50%" width="100%" id="video" src="{{ media_url }}{{ cameradata.filename }}" type="video/mp4" playsinline></video>
 
   <div id="controls" class="videoControls">
     <div class="playControls">
-      <button id="play-pause" class="controlButtonL">Play</button>
+      <button id="play-pause" class="controlButtonL"><i class="material-icons">play_arrow</i></button>
       <input type="range" id="seek-bar" class="seekBar" style="width:50%;margin:5px 0px 0px 5px;" min="0" value="0" step="1">
       <span id="video-time" class="timestamp">00:00</span><span class="timestamp">/</span><span id="video-duration"
         class="timestamp">00:00</span>
-      <button id="mute" class="controlButtonL">Mute</button>
-        <input type="range" id="volume-bar" class="volumeBar" style="width:10%;margin:5px 0px 0px 5px;" min="0" max="1"
-               step="0.1"
-               value="1"/>
+      <button id="mute" class="controlButtonL"><i class="material-icons">volume_up</i></button>
+        <input type="range" id="volume-bar" class="volumeBar" style="width:10%;margin:5px 0px 0px 5px;" min="0" max="1" step="0.1" value="1"/>
     </div>
     <div class="seekControls">
       <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip" data-placement="bottom"

@@ -27,7 +27,7 @@ let copyTimeStamp = document.getElementById("copy-time");
 
 // Framerate and Export Elements
 /*
-let StdFrameRates = {
+let stdFrameRates = {
    film: 24,
    NTSC: 29.97,
    NTSC_Film: 23.98,
@@ -39,7 +39,8 @@ let StdFrameRates = {
 };
 */
 let framerate = document.getElementById("framerate-list");
-let currentFramerate;
+let currentFramerate; // assigned on page load of metadata
+let currentVolume;
 
 let video = VideoFrame({
    id: 'video',
@@ -49,6 +50,22 @@ let video = VideoFrame({
       currentTime.html(frame);
    }
 });
+
+function updatePlayButton(text) {
+   if (text === "play") {
+      playButton.innerHTML = "<i class=\"material-icons\">play_arrow</i>";
+   } else if (text === "pause") {
+      playButton.innerHTML = "<i class=\"material-icons\">pause</i>";
+   }
+}
+
+function updateVolumeButton(text) {
+   if (text === "mute") {
+      muteButton.innerHTML = "<i class=\"material-icons\">volume_off</i>";
+   } else if (text === "unmute") {
+      muteButton.innerHTML = "<i class=\"material-icons\">volume_up</i>";
+   }
+}
 
 function playVideo() {
    video.video.play();
@@ -97,16 +114,16 @@ function refreshVideoTimes() {
 function toggleVideoPlayback() {
    if (video.video.paused === true) {
       playVideo();
-      playButton.innerHTML = "Pause";
+      updatePlayButton("pause");
    } else {
       pauseVideo();
-      playButton.innerHTML = "Play";
+      updatePlayButton("play");
    }
 }
 
 function endVideo() {
    pauseVideo();
-   playButton.innerHTML = "Play";
+   updatePlayButton("play");
    updateSeekBar();
 }
 
@@ -117,19 +134,19 @@ function rewindVideo() {
       video.seekForward(seekPosition, updateSeekBar());
    }
    pauseVideo();
-   playButton.innerHTML = "Play";
+   updatePlayButton("play");
 }
 
 function stepBack() {
    let backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].text;
    video.seekBackward(backwardStep, updateSeekBar());
-   playButton.innerHTML = "Play";
+   updatePlayButton("play");
 }
 
 function stepForward() {
    let forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].text;
    video.seekForward(forwardStep, updateSeekBar());
-   playButton.innerHTML = "Play";
+   updatePlayButton("play");
 }
 
 function copyToClipboard(selection) {
@@ -167,6 +184,11 @@ function displayHelpAlert() {
    alert(helpMessage);
 }
 
+function updateVolume(level) {
+   currentVolume = level;
+   video.video.volume = level;
+}
+
 // --- Event Listeners ---
 video.video.addEventListener("loadedmetadata", function () {
    currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
@@ -197,11 +219,11 @@ seekBar.addEventListener("input", function () {
 });
 
 volumeBar.addEventListener("input", function () {
-   video.video.volume = volumeBar.value;
+   updateVolume(volumeBar.level);
 });
 
 volumeBar.addEventListener("change", function () {
-   video.video.volume = volumeBar.value;
+   updateVolume(volumeBar.level);
 });
 
 playButton.addEventListener("click", function () {
@@ -219,10 +241,10 @@ video.video.addEventListener("click", function () {
 muteButton.addEventListener("click", function () {
    if (video.video.muted === false) {
       video.video.muted = true;
-      muteButton.innerHTML = "Unmute";
+      updateVolumeButton("mute");
    } else {
       video.video.muted = false;
-      muteButton.innerHTML = "Mute";
+      updateVolumeButton("unmute");
    }
 });
 
@@ -240,11 +262,11 @@ seekForwardButton.addEventListener("click", function () {
 
 copyFrameNumber.addEventListener("click", function () {
    copyToClipboard("frames");
-})
+});
 
 copyTimeStamp.addEventListener("click", function () {
    copyToClipboard("time");
-})
+});
 
 // Keycodes for keypress event listeners
 // 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right, 40 = down, 191 = forward slash
