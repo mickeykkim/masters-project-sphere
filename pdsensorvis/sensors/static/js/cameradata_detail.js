@@ -220,7 +220,7 @@ video.video.addEventListener("click", function () {
 });
 
 muteButton.addEventListener("click", function () {
-   if (video.video.muted == false) {
+   if (video.video.muted === false) {
       video.video.muted = true;
       muteButton.innerHTML = "Unmute";
    } else {
@@ -263,7 +263,7 @@ let map = {
 
 // Check for keypress and fire appropriate shortcut functions
 $(document).keypress(function (e) {
-   if (e.which == 32) {
+   if (e.which === 32) {
       toggleVideoPlayback();
    }
 });
