@@ -27,7 +27,7 @@ let copyTimeStamp = document.getElementById("copy-time");
 
 // Framerate and Export Elements
 /*
-let FrameRates = {
+let StdFrameRates = {
    film: 24,
    NTSC: 29.97,
    NTSC_Film: 23.98,
@@ -116,6 +116,7 @@ function rewindVideo() {
    if (seekPosition > 0) {
       video.seekForward(seekPosition, updateSeekBar());
    }
+   pauseVideo();
    playButton.innerHTML = "Play";
 }
 
@@ -129,10 +130,6 @@ function stepForward() {
    let forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].text;
    video.seekForward(forwardStep, updateSeekBar());
    playButton.innerHTML = "Play";
-}
-
-function setSelectedIndex(s, i) {
-   s.options[i - 1].selected = true;
 }
 
 function copyToClipboard(selection) {
@@ -195,7 +192,7 @@ seekBar.addEventListener("change", function () {
 seekBar.addEventListener("input", function () {
    updateVideoTime();
    if (playButton.innerHTML === "Pause") {
-      pauseVideo();
+      playVideo();
    }
 });
 
