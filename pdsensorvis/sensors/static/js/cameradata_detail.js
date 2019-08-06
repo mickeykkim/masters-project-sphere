@@ -129,8 +129,9 @@ function endVideo() {
 
 function rewindFromInput() {
    let desiredFrame = parseInt(rewindTextBox.value);
-   let desiredSMPTE = video.toSMPTE(desiredFrame);
-   rewindVideo(desiredSMPTE);
+   let convertedSMPTE = video.toSMPTE(desiredFrame);
+   if (desiredFrame === 0) convertedSMPTE = '00:00:00:00';
+   rewindVideo(convertedSMPTE);
 }
 
 function rewindVideo(SMPTE) {
@@ -268,11 +269,13 @@ seekForwardButton.addEventListener("click", function () {
 });
 
 copyFrameNumber.addEventListener("click", function () {
+   pauseVideo();
    copyToClipboard("frames");
    copyFrameNumber.blur();
 });
 
 copyTimeStamp.addEventListener("click", function () {
+   pauseVideo();
    copyToClipboard("time");
    copyTimeStamp.blur();
 });
@@ -294,28 +297,30 @@ let keyIsDown = false;
 
 // Check for keypress and fire appropriate shortcut functions
 $(document).keydown(function (e) {
-   if (e.keyCode in keyCodeMap) {
-      keyCodeMap[e.keyCode] = true;
-      let backOption = stepBackwardBox.selectedIndex;
-      let forwardOption = stepForwardBox.selectedIndex;
-      if (keyCodeMap[16] && keyCodeMap[191]) {
-         rewindFromInput();
-      } else if (keyCodeMap[16] && keyCodeMap[37]) {
-         stepBack();
-      } else if (keyCodeMap[16] && keyCodeMap[39]) {
-         stepForward();
-      } else if (keyCodeMap[16] && keyCodeMap[38]) {
-         stepBackwardBox.options[parseInt(backOption) + 1].selected = true;
-         stepForwardBox.options[parseInt(forwardOption) + 1].selected = true;
-      } else if (keyCodeMap[16] && keyCodeMap[40]) {
-         stepBackwardBox.options[parseInt(backOption) - 1].selected = true;
-         stepForwardBox.options[parseInt(forwardOption) - 1].selected = true;
+   if (!$("#rewind-value").is(':focus') && !$("#other-annotation").is(':focus')) {
+      if (e.keyCode in keyCodeMap) {
+         keyCodeMap[e.keyCode] = true;
+         let backOption = stepBackwardBox.selectedIndex;
+         let forwardOption = stepForwardBox.selectedIndex;
+         if (keyCodeMap[16] && keyCodeMap[191]) {
+            rewindFromInput();
+         } else if (keyCodeMap[16] && keyCodeMap[37]) {
+            stepBack();
+         } else if (keyCodeMap[16] && keyCodeMap[39]) {
+            stepForward();
+         } else if (keyCodeMap[16] && keyCodeMap[38]) {
+            stepBackwardBox.options[parseInt(backOption) + 1].selected = true;
+            stepForwardBox.options[parseInt(forwardOption) + 1].selected = true;
+         } else if (keyCodeMap[16] && keyCodeMap[40]) {
+            stepBackwardBox.options[parseInt(backOption) - 1].selected = true;
+            stepForwardBox.options[parseInt(forwardOption) - 1].selected = true;
+         }
       }
-   }
-   if (keyIsDown) return;
-   keyIsDown = true;
-   if (e.which === 32) {
-      toggleVideoPlayback();
+      if (keyIsDown) return;
+      keyIsDown = true;
+      if (e.which === 32) {
+         toggleVideoPlayback();
+      }
    }
 }).keyup(function (e) {
    keyIsDown = false;
