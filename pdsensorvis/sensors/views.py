@@ -1,9 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
+
 from django.http import HttpResponse
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
-from .forms import WearableAnnotationForm, CameraAnnotationForm
+from .forms import AnnotationForm
+
+
+def wearable_annotation_register(request):
+    # other view code
+    wearable_annotation = WearableAnnotation.objects.create(annotator=user, studio_name=name)
 
 
 def index(request):
@@ -73,15 +80,17 @@ class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
         return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('id')
 
 
+"""
 class CreateWearableAnnotationView(LoginRequiredMixin, generic.CreateView):
     model = WearableAnnotation
-    form_class = WearableAnnotationForm
+    form_class = AnnotationForm
     template_name = 'sensors/wearabledata_detail.html'
     success_url = 'sensors/wearabledata_detail.html'
 
 
 class CreateAnnotationView(LoginRequiredMixin, generic.CreateView):
     model = CameraAnnotation
-    form_class = CameraAnnotationForm
+    form_class = AnnotationForm
     template_name = 'sensors/cameradata_detail.html'
     success_url = 'sensors/cameradata_detail.html'
+"""

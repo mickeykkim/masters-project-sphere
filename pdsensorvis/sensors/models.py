@@ -13,12 +13,15 @@ UPDRS_TASK = (
     ('nmp', 'normal pace'),
     ('slp', 'slow pace'),
     ('fsp', 'fast pace'),
+    ('oth', '(other)'),
 )
 
 # Indicators for annotation status (begin or end)
+BEGIN = 'b'
+END = 'e'
 ANNOTATION_STATUS = (
-    ('b', '+'),
-    ('e', '-'),
+    (BEGIN, '+'),
+    (END, '-'),
 )
 
 # Standard Frame Rate Options
@@ -103,7 +106,7 @@ class WearableAnnotation(models.Model):
         default='prs',
         help_text='UPDRS Task',
     )
-    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default='b')
+    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN)
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
@@ -129,7 +132,7 @@ class CameraAnnotation(models.Model):
         default='prs',
         help_text='UPDRS Task',
     )
-    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default='b')
+    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN)
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:

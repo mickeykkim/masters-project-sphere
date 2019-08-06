@@ -51,7 +51,7 @@ let video = VideoFrame({
    }
 });
 
-function updatePlayButton(text) {
+function togglePlayButton(text) {
    if (text === "play") {
       playButton.innerHTML = "<i class=\"material-icons\">play_arrow</i>";
    } else if (text === "pause") {
@@ -59,7 +59,7 @@ function updatePlayButton(text) {
    }
 }
 
-function updateVolumeButton(text) {
+function toggleVolumeButton(text) {
    if (text === "mute") {
       muteButton.innerHTML = "<i class=\"material-icons\">volume_off</i>";
    } else if (text === "unmute") {
@@ -114,39 +114,33 @@ function refreshVideoTimes() {
 function toggleVideoPlayback() {
    if (video.video.paused === true) {
       playVideo();
-      updatePlayButton("pause");
+      togglePlayButton("pause");
    } else {
       pauseVideo();
-      updatePlayButton("play");
+      togglePlayButton("play");
    }
 }
 
 function endVideo() {
    pauseVideo();
-   updatePlayButton("play");
+   togglePlayButton("play");
    updateSeekBar();
 }
 
-function rewindVideo() {
-   let seekPosition = parseInt(rewindTextBox.value);
-   video.video.currentTime = 0;
-   if (seekPosition > 0) {
-      video.seekForward(seekPosition, updateSeekBar());
-   }
-   pauseVideo();
-   updatePlayButton("play");
+function rewindVideo(SMPTE) {
+   video.video.currentTime = video.toMilliseconds(SMPTE)/1000;
 }
 
 function stepBack() {
    let backwardStep = stepBackwardBox.options[stepBackwardBox.selectedIndex].text;
    video.seekBackward(backwardStep, updateSeekBar());
-   updatePlayButton("play");
+   togglePlayButton("play");
 }
 
 function stepForward() {
    let forwardStep = stepForwardBox.options[stepForwardBox.selectedIndex].text;
    video.seekForward(forwardStep, updateSeekBar());
-   updatePlayButton("play");
+   togglePlayButton("play");
 }
 
 function copyToClipboard(selection) {
@@ -161,7 +155,7 @@ function copyToClipboard(selection) {
    document.body.appendChild(textArea);
    textArea.select();
    document.execCommand("Copy");
-   alert("Copied to clipboard: " + textArea.value)
+   alert("Copied to clipboard: " + textArea.value);
    textArea.remove();
 }
 
@@ -170,7 +164,7 @@ function displayHelpAlert() {
    let helpMessage = "Shortcuts:";
    helpMessage += newLine;
    helpMessage += newLine;
-   helpMessage += "Spacebar : Play/pause video.";
+   helpMessage += "Space bar : Play/pause video.";
    helpMessage += newLine;
    helpMessage += "Shift + Right Arrow : Step frames forward by selected amount.";
    helpMessage += newLine;
@@ -180,7 +174,7 @@ function displayHelpAlert() {
    helpMessage += newLine;
    helpMessage += "Shift + Down Arrow : Decrease frame step amount.";
    helpMessage += newLine;
-   helpMessage += "Shift + / : Reset video to specified frame."
+   helpMessage += "Shift + / : Reset video to specified frame.";
    alert(helpMessage);
 }
 
@@ -241,15 +235,17 @@ video.video.addEventListener("click", function () {
 muteButton.addEventListener("click", function () {
    if (video.video.muted === false) {
       video.video.muted = true;
-      updateVolumeButton("mute");
+      toggleVolumeButton("mute");
    } else {
       video.video.muted = false;
-      updateVolumeButton("unmute");
+      toggleVolumeButton("unmute");
    }
 });
 
 rewindButton.addEventListener("click", function () {
-   rewindVideo();
+   let desiredFrame = parseInt(rewindTextBox.value);
+   let desiredSMPTE = video.toSMPTE(desiredFrame);
+   rewindVideo(desiredSMPTE);
 });
 
 seekBackwardButton.addEventListener("click", function () {
@@ -269,8 +265,9 @@ copyTimeStamp.addEventListener("click", function () {
 });
 
 // Keycodes for keypress event listeners
-// 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right, 40 = down, 191 = forward slash
-let map = {
+// 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right,
+// 40 = down, 191 = forward slash
+let keyCodeMap = {
    16: false,
    32: false,
    37: false,
@@ -279,36 +276,37 @@ let map = {
    40: false,
    191: false
 };
+// Variable to track key press status (Video play toggle should not repeat on key hold)
+let keyIsDown = false;
 
 // Check for keypress and fire appropriate shortcut functions
-$(document).keypress(function (e) {
-   if (e.which === 32) {
-      toggleVideoPlayback();
-   }
-});
-
-// Listener for multiple key presses
 $(document).keydown(function (e) {
-   if (e.keyCode in map) {
-      map[e.keyCode] = true;
+   if (e.keyCode in keyCodeMap) {
+      keyCodeMap[e.keyCode] = true;
       let backOption = stepBackwardBox.selectedIndex;
       let forwardOption = stepForwardBox.selectedIndex;
-      if (map[16] && map[191]) {
+      if (keyCodeMap[16] && keyCodeMap[191]) {
          rewindVideo();
-      } else if (map[16] && map[37]) {
+      } else if (keyCodeMap[16] && keyCodeMap[37]) {
          stepBack();
-      } else if (map[16] && map[39]) {
+      } else if (keyCodeMap[16] && keyCodeMap[39]) {
          stepForward();
-      } else if (map[16] && map[38]) {
+      } else if (keyCodeMap[16] && keyCodeMap[38]) {
          stepBackwardBox.options[parseInt(backOption) + 1].selected = true;
          stepForwardBox.options[parseInt(forwardOption) + 1].selected = true;
-      } else if (map[16] && map[40]) {
+      } else if (keyCodeMap[16] && keyCodeMap[40]) {
          stepBackwardBox.options[parseInt(backOption) - 1].selected = true;
          stepForwardBox.options[parseInt(forwardOption) - 1].selected = true;
       }
    }
+   if (keyIsDown) return;
+   keyIsDown = true;
+   if (e.which === 32) {
+      toggleVideoPlayback();
+   }
 }).keyup(function (e) {
-   if (e.keyCode in map) {
-      map[e.keyCode] = false;
+   keyIsDown = false;
+   if (e.keyCode in keyCodeMap) {
+      keyCodeMap[e.keyCode] = false;
    }
 });

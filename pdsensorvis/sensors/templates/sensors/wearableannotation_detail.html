@@ -4,10 +4,11 @@
   <h1>{{ wearableannotation.wearable }}</h1>
   <hr>
   <p><strong>Timestamp:</strong> {{ wearableannotation.timestamp }}</p>
-  <p><strong>Annotation:</strong> {{ wearableannotation.get_annotation_display }}</p>
+  <p><strong>Annotation:</strong> {{ wearableannotation.get_annotation_display }}
     {% if wearableannotation.get_status_display == '+' %} (begin)
     {% elif wearableannotation.get_status_display == '-' %} (end)
     {% endif %}
+  </p>
   <p><strong>Annotator:</strong> {{ wearableannotation.annotator }}</p>
   {% if wearableannotation.note %}
   <p><strong>Note:</strong> {{ wearableannotation.note }}</p>

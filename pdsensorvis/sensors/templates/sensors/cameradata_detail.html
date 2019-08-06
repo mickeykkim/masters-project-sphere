@@ -40,6 +40,7 @@
           <option value="3">10</option>
           <option value="4">25</option>
           <option value="5">50</option>
+          <option value="6">100</option>
         </select>
       </span>
       <button id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
@@ -53,6 +54,7 @@
           <option value="3">10</option>
           <option value="4">25</option>
           <option value="5">50</option>
+          <option value="6">100</option>
         </select>
       </span>
       <button id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
@@ -69,6 +71,8 @@
           <option value="5">other</option>
         </select>
       </span>
+      <input type="text" name="other-annotation" class="otherText" value="(other)" disabled=true data-toggle="tooltip"
+        data-placement="bottom" title="Other annotation">
       <span class="selectBox">
         <select id="select-start-stop" class="dropDownS" data-toggle="tooltip" data-placement="bottom"
           data-trigger="hover" title="Activity begin (+) or end (-)">
@@ -76,8 +80,6 @@
           <option value="2">-</option>
         </select>
       </span>
-      <input type="text" name="other-annotation" class="otherText" value="(other)" disabled=true data-toggle="tooltip"
-        data-placement="bottom" title="Other annotation">
       <button id="annotate" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
         title="Save annotation"><i class="material-icons">create</i></button>
       <span class="vert-divider">|</span>
@@ -91,7 +93,7 @@
   <span class="frameStatusText">Framerate:</span>
   <span class="selectBox">
     <select id="framerate-list" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-        title="Framerate options" class="fpsDropDown">
+      title="Framerate options" class="fpsDropDown">
       <option value="1">24</option>
       <option value="2">25</option>
       <option value="3" selected=true>29.97</option>
@@ -129,8 +131,11 @@
     <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">
         {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}}) </a>
       <button id="annotation_{{ annotation.id }}" class="controlButtonXS"><i class="material-icons"
-          data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-          title="Jump to annotation">skip_previous</i></button>
+        data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
+        title="Jump to annotation">skip_previous</i></button>
+      <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"><i class="material-icons"
+        data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
+        title="Edit annotation">edit</i></button>
     </li>
     {% endfor %}
   </ul>
