@@ -5,6 +5,7 @@ let currentFrame = $('#current-frame');
 let currentTime = $('#current-time');
 let videoTime = document.getElementById("video-time");
 let videoDuration = document.getElementById("video-duration");
+let framerateSelect = document.getElementById("framerate-list");
 
 // Buttons
 let playButton = document.getElementById("play-pause");
@@ -136,7 +137,8 @@ function rewindFromInput() {
 
 function rewindVideo(SMPTE) {
    video.video.currentTime = video.toMilliseconds(SMPTE)/1000;
-   updateSeekBar();
+   // seems to be a bug in the toMilliseconds library conversion to be off by one frame
+   video.seekForward(1, updateSeekBar());
 }
 
 function stepBack() {
@@ -204,6 +206,11 @@ video.video.addEventListener("timeupdate", function () {
 
 video.video.addEventListener("ended", function () {
    endVideo();
+});
+
+framerateSelect.addEventListener("change", function() {
+   currentFramerate = parseFloat(framerateSelect.options[framerateSelect.selectedIndex].text);
+   video.frameRate = currentFramerate;
 });
 
 seekBar.addEventListener("change", function () {
