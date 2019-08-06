@@ -131,7 +131,7 @@
       {% for annotation in cameradata.cameraannotation_set.all %}
         <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">
           {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}}) </a>
-          <button id="annotation_{{ annotation.id }}" class="controlButtonXS" name="{{ annotation.timestamp }}">
+          <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.timestamp }}">
             <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
                title="Jump to annotation">skip_previous</i></button>
           <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS">

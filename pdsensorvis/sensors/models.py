@@ -57,7 +57,7 @@ class PatientData(models.Model):
 
 
 class WearableData(models.Model):
-    """Data related to wristworn wearable"""
+    """Data related to wrist-worn wearable"""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True)

@@ -137,8 +137,8 @@ function rewindFromInput() {
 
 function rewindVideo(SMPTE) {
    video.video.currentTime = video.toMilliseconds(SMPTE)/1000;
-   // seems to be a bug in the toMilliseconds library conversion to be off by one frame
-   video.seekForward(1, updateSeekBar());
+   // Fix a bug in the toMilliseconds library conversion as off by one frame
+   // video.seekForward(1, updateSeekBar());
 }
 
 function stepBack() {
@@ -299,7 +299,6 @@ let keyCodeMap = {
    40: false,
    191: false
 };
-// Variable to track key press status (Video play toggle should not repeat on key hold)
 let keyIsDown = false;
 
 // Check for keypress and fire appropriate shortcut functions
@@ -323,6 +322,7 @@ $(document).keydown(function (e) {
             stepForwardBox.options[parseInt(forwardOption) - 1].selected = true;
          }
       }
+      // Video play toggle should not repeat on key hold
       if (keyIsDown) return;
       keyIsDown = true;
       if (e.which === 32) {
@@ -339,12 +339,11 @@ $(document).keydown(function (e) {
 // Handle Camera Annotation buttons
 $('button', $('#annotation-objects-list')).each(function () {
    $(this).click(function() {
-      // are we clicking on an edit button or a rewind?
       if ($(this).attr('id').indexOf('edit') > -1) {
          console.log(this.id);
-      } else {
+      } else if ($(this).attr('id').indexOf('rewind') > -1) {
          rewindVideo(this.name);
-         this.blur();
       }
+      this.blur();
    })
 });
