@@ -1,16 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
-from .forms import AnnotationForm
-
-
-def wearable_annotation_register(request):
-    # other view code
-    wearable_annotation = WearableAnnotation.objects.create(annotator=user, studio_name=name)
+from .forms import CameraAnnotationForm
 
 
 def index(request):

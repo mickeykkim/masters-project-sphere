@@ -40,7 +40,7 @@ let stdFrameRates = {
 };
 */
 let framerate = document.getElementById("framerate-list");
-let currentFramerate; // assigned on page load of metadata
+let currentFramerate = 24; // reassigned on page load of metadata
 let currentVolume;
 
 let video = VideoFrame({
@@ -136,9 +136,8 @@ function rewindFromInput() {
 }
 
 function rewindVideo(SMPTE) {
-   video.video.currentTime = video.toMilliseconds(SMPTE)/1000;
    // Fix a bug in the toMilliseconds library conversion as off by one frame
-   // video.seekForward(1, updateSeekBar());
+   video.video.currentTime = video.toMilliseconds(SMPTE)/1000 + currentFramerate/1000;
 }
 
 function stepBack() {

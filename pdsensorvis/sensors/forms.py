@@ -1,16 +1,13 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from .models import UPDRS_TASK, ANNOTATION_STATUS
+from .models import CameraAnnotation
 
 
-class AnnotationForm(forms.ModelForm):
-    timestamp = forms.CharField(help_text='hh:mm:ss:ff')
-    annotator = forms.ModelChoiceField(queryset=User.objects.all())
-    annotation = forms.ChoiceField(choices=UPDRS_TASK)
-    status = forms.ChoiceField(choices=ANNOTATION_STATUS)
-    note = forms.CharField(help_text='Note regarding annotation', required=False)
+class CameraAnnotationForm(forms.ModelForm):
+    class Meta:
+        model = CameraAnnotation
+        fields = ('timestamp', 'annotation', 'status', 'note')
 
     def clean_annotation(self):
         data = self.cleaned_data['annotation']
