@@ -127,8 +127,15 @@ function endVideo() {
    updateSeekBar();
 }
 
+function rewindFromInput() {
+   let desiredFrame = parseInt(rewindTextBox.value);
+   let desiredSMPTE = video.toSMPTE(desiredFrame);
+   rewindVideo(desiredSMPTE);
+}
+
 function rewindVideo(SMPTE) {
    video.video.currentTime = video.toMilliseconds(SMPTE)/1000;
+   updateSeekBar();
 }
 
 function stepBack() {
@@ -222,10 +229,12 @@ volumeBar.addEventListener("change", function () {
 
 playButton.addEventListener("click", function () {
    toggleVideoPlayback();
+   playButton.blur();
 });
 
 helpButton.addEventListener("click", function () {
    displayHelpAlert();
+   helpButton.blur();
 });
 
 video.video.addEventListener("click", function () {
@@ -240,28 +249,32 @@ muteButton.addEventListener("click", function () {
       video.video.muted = false;
       toggleVolumeButton("unmute");
    }
+   muteButton.blur();
 });
 
 rewindButton.addEventListener("click", function () {
-   let desiredFrame = parseInt(rewindTextBox.value);
-   let desiredSMPTE = video.toSMPTE(desiredFrame);
-   rewindVideo(desiredSMPTE);
+   rewindFromInput();
+   rewindButton.blur();
 });
 
 seekBackwardButton.addEventListener("click", function () {
    stepBack();
+   seekBackwardButton.blur();
 });
 
 seekForwardButton.addEventListener("click", function () {
    stepForward();
+   seekForwardButton.blur();
 });
 
 copyFrameNumber.addEventListener("click", function () {
    copyToClipboard("frames");
+   copyFrameNumber.blur();
 });
 
 copyTimeStamp.addEventListener("click", function () {
    copyToClipboard("time");
+   copyTimeStamp.blur();
 });
 
 // Keycodes for keypress event listeners
@@ -286,7 +299,7 @@ $(document).keydown(function (e) {
       let backOption = stepBackwardBox.selectedIndex;
       let forwardOption = stepForwardBox.selectedIndex;
       if (keyCodeMap[16] && keyCodeMap[191]) {
-         rewindVideo();
+         rewindFromInput();
       } else if (keyCodeMap[16] && keyCodeMap[37]) {
          stepBack();
       } else if (keyCodeMap[16] && keyCodeMap[39]) {
@@ -309,4 +322,17 @@ $(document).keydown(function (e) {
    if (e.keyCode in keyCodeMap) {
       keyCodeMap[e.keyCode] = false;
    }
+});
+
+// Handle Camera Annotation buttons
+$('button', $('#annotation-objects-list')).each(function () {
+   $(this).click(function() {
+      // are we clicking on an edit button or a rewind?
+      if ($(this).attr('id').indexOf('edit') > -1) {
+         console.log(this.id);
+      } else {
+         rewindVideo(this.name);
+         this.blur();
+      }
+   })
 });

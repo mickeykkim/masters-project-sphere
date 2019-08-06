@@ -115,7 +115,7 @@
 <hr>
 
 <!-- Camera Annotation List -->
-<div style="margin-left:20px;margin-top:20px">
+<div class="annotation-container" style="margin-left:20px;margin-top:20px">
   <h4>Camera Annotations <button id="export_all" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
       data-trigger="hover" title="Download annotations"><i class="material-icons">save_alt</i></button>
     <select id="download-format" class="downloadFormatDropDown" data-toggle="tooltip" data-placement="bottom"
@@ -126,19 +126,21 @@
       <option value="4">Tab-delimited Text (.txt)</option>
     </select>
   </h4>
-  <ul>
-    {% for annotation in cameradata.cameraannotation_set.all %}
-    <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">
-        {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}}) </a>
-      <button id="annotation_{{ annotation.id }}" class="controlButtonXS"><i class="material-icons"
-        data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
-        title="Jump to annotation">skip_previous</i></button>
-      <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"><i class="material-icons"
-        data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
-        title="Edit annotation">edit</i></button>
-    </li>
-    {% endfor %}
-  </ul>
+  <div class="annotation-objects">
+    <ul id="annotation-objects-list">
+      {% for annotation in cameradata.cameraannotation_set.all %}
+        <li><a href="{% url 'cameraannotation-detail' cameradata.id annotation.id %}">
+          {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}}) </a>
+          <button id="annotation_{{ annotation.id }}" class="controlButtonXS" name="{{ annotation.timestamp }}">
+            <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
+               title="Jump to annotation">skip_previous</i></button>
+          <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS">
+            <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
+               title="Edit annotation">edit</i></button>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 {% endblock %}
 
