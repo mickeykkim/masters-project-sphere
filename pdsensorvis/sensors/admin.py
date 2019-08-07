@@ -34,9 +34,9 @@ class CameraDataAdmin(admin.ModelAdmin):
 
 @admin.register(WearableAnnotation)
 class WearableAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('wearable', 'timestamp', 'annotation')
+    list_display = ('wearable', 'timestamp', 'annotation', 'id')
 
 
 @admin.register(CameraAnnotation)
 class CameraAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('camera', 'timestamp', 'annotation')
+    list_display = ('camera', 'timestamp', 'annotation', 'id')

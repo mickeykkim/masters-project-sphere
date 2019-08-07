@@ -5,10 +5,6 @@ from .models import CameraAnnotation
 
 
 class CameraAnnotationForm(forms.ModelForm):
-    class Meta:
-        model = CameraAnnotation
-        fields = ('timestamp', 'annotation', 'status', 'note')
-
     def clean_annotation(self):
         data = self.cleaned_data['annotation']
 
@@ -16,3 +12,8 @@ class CameraAnnotationForm(forms.ModelForm):
             raise ValidationError(_('Annotation cannot be blank.'))
 
         return data
+
+    class Meta:
+        model = CameraAnnotation
+        fields = ['timestamp', 'annotation', 'status', 'note']
+

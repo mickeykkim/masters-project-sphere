@@ -113,7 +113,7 @@ class WearableAnnotation(models.Model):
         ordering = ['timestamp']
 
     def get_absolute_url(self):
-        return reverse('wearableannotation-detail', args=[str(self.id)])
+        return reverse('wearableannotation-detail', args=[str(self.wearable.id), str(self.id)])
 
     def __str__(self):
         """String for representing the Model object."""
@@ -139,7 +139,7 @@ class CameraAnnotation(models.Model):
         ordering = ['timestamp']
 
     def get_absolute_url(self):
-        return reverse('cameraannotation-detail', args=[str(self.id)])
+        return reverse('cameraannotation-detail', args=[str(self.camera.id), str(self.id)])
 
     def __str__(self):
         """String for representing the Model object."""

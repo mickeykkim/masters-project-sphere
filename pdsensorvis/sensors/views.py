@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.http import HttpResponse
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
 from .forms import CameraAnnotationForm
@@ -27,6 +28,26 @@ def index(request):
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
+
+
+def edit_camera_annotation(request, uuid, pk):
+    existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+    if request.method == 'POST':
+        form = CameraAnnotationForm(request.POST, instance=existing_annotation)
+        if form.is_valid():
+            existing_annotation = form.save(commit=False)
+            existing_annotation.annotation = form.cleaned_data['annotation']
+            existing_annotation.save()
+            return redirect('cameradata-detail', pk=uuid)
+
+    else:
+        form = CameraAnnotationForm(instance=existing_annotation)
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'sensors/edit_camera_annotation.html', context)
 
 
 class PatientDataListView(LoginRequiredMixin, generic.ListView):
