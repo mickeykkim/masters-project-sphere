@@ -45,6 +45,7 @@ def edit_camera_annotation(request, uuid, pk):
 
     context = {
         'form': form,
+        'cameraannotation': existing_annotation,
     }
 
     return render(request, 'sensors/edit_camera_annotation.html', context)

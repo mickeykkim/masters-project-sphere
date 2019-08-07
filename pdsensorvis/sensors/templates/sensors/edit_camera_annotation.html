@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Annotation: {{ cameraannotation.camera.id }}</h1>
-  <p>Annotator: {{ cameraannotation.annotator }}</p>
+  <h1>{{ cameraannotation.camera }}</h1>
+  <hr>
+  <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
 
   <form action="" method="post">
     {% csrf_token %}
