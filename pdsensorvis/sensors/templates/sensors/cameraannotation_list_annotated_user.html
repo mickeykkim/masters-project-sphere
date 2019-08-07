@@ -7,7 +7,7 @@
     <ul>
       {% for annotation in cameraannotation_list %} 
       <li>
-        ({{ annotation }})        
+        <a href="{{ annotation.get_absolute_url }}">({{ annotation }})</a>
       </li>
       {% endfor %}
     </ul>

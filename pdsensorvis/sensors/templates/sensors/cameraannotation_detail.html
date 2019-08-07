@@ -3,13 +3,13 @@
 {% block content %}
   <h1>{{ cameraannotation.camera }}</h1>
   <hr>
+  <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
   <p><strong>Timestamp:</strong> {{ cameraannotation.timestamp }}</p>
   <p><strong>Annotation:</strong> {{ cameraannotation.get_annotation_display }}
     {% if cameraannotation.get_status_display == '+' %} (begin)
     {% elif cameraannotation.get_status_display == '-' %} (end)
     {% endif %}
   </p>
-  <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
   {% if cameraannotation.note %}
   <p><strong>Note:</strong> {{ cameraannotation.note }}</p>
   {% endif %}

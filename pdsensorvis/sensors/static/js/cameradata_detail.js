@@ -338,10 +338,10 @@ $(document).keydown(function (e) {
 // Handle Camera Annotation buttons
 $('button', $('#annotation-objects-list')).each(function () {
    $(this).click(function() {
-      if ($(this).attr('id').indexOf('edit') > -1) {
-         console.log(this.id);
-      } else if ($(this).attr('id').indexOf('rewind') > -1) {
+      if ($(this).attr('id').indexOf('rewind') > -1) {
          rewindVideo(this.name);
+      } else if ($(this).attr('id').indexOf('edit') > -1) {
+         document.location.href = this.name;
       }
       this.blur();
    })

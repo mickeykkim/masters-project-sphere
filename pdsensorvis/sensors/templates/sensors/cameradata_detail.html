@@ -81,7 +81,7 @@
         </select>
       </span>
       <button id="annotate" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-        title="Save annotation"><i class="material-icons">create</i></button>
+        title="Save annotation"><i class="material-icons">text_rotation_none</i></button>
       <span class="vert-divider">|</span>
       <button id="help" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
         title="Display shortcut keys"><i class="material-icons">live_help</i></button>
@@ -135,7 +135,7 @@
             <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
                title="Jump to annotation">skip_previous</i></button>
           <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
-              onclick="location.href='{% url 'edit-camera-annotation' cameradata.id annotation.id|stringformat:"i" %}'">
+             name="{% url 'edit-camera-annotation' cameradata.id annotation.id|stringformat:"i" %}">
             <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
                title="Edit annotation">edit</i></button>
         </li>

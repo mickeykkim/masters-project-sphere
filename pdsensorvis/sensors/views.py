@@ -31,6 +31,8 @@ def index(request):
 
 
 def edit_camera_annotation(request, uuid, pk):
+    """View function for editing an existing camera annotation."""
+
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
     if request.method == 'POST':
         form = CameraAnnotationForm(request.POST, instance=existing_annotation)
