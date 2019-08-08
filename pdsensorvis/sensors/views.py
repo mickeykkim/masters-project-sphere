@@ -1,11 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from django.http import HttpResponse
-from django.urls import reverse
+from django.http import HttpResponse, HttpResponseForbidden
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
 from .forms import CameraAnnotationForm
+
+User = get_user_model()
 
 
 def index(request):
@@ -80,8 +83,40 @@ class CameraDataListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
 
-class CameraDataDetailView(LoginRequiredMixin, generic.DetailView):
+class CameraDataDetailGet(generic.DetailView):
     model = CameraData
+
+    def get_context_data(self, **kwargs):
+        context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
+        context['form'] = CameraAnnotationForm()
+        return context
+
+
+class CameraDataDetailPost(generic.detail.SingleObjectMixin, generic.FormView):
+    template_name = 'sensors/cameradata_detail.html'
+    form_class = CameraAnnotationForm
+    model = CameraData
+
+    def post(self, request, *args, **kwargs):
+        """if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        """
+        self.object = self.get_object()
+        return super(CameraDataDetailPost, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('cameradata-detail', kwargs={'pk': self.object.pk})
+
+
+class CameraDataDetailView(LoginRequiredMixin, generic.View):
+
+    def get(self, request, *args, **kwargs):
+        view = CameraDataDetailGet.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = CameraDataDetailPost.as_view()
+        return view(request, *args, **kwargs)
 
 
 class CameraAnnotationDetailView(LoginRequiredMixin, generic.DetailView):
@@ -89,7 +124,7 @@ class CameraAnnotationDetailView(LoginRequiredMixin, generic.DetailView):
 
 
 class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
-    """Generic class-based view listing books on loan to current user."""
+    """Generic class-based view listing annotations by current user."""
     model = CameraAnnotation
     template_name = 'sensors/cameraannotation_list_annotated_user.html'
     paginate_by = 10

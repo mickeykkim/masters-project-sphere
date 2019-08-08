@@ -16,4 +16,3 @@ class CameraAnnotationForm(forms.ModelForm):
     class Meta:
         model = CameraAnnotation
         fields = ['timestamp', 'annotation', 'status', 'note']
-

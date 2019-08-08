@@ -18,6 +18,7 @@
 .seekControls,
 .frameDetails {
   margin: 10px 0px 0px 0px;
+  vertical-align: middle;
 }
 
 .controlButtonL,
