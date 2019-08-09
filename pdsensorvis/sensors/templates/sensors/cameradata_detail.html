@@ -104,18 +104,19 @@
           <span class="vert-divider">|</span>
           <span class="frameStatusText">
             Current Frame: <input type="text" id="id-frame" value=0 class="rewindTextValue" readonly>
-            <button id="copy-frame" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            {% comment %}<button id="copy-frame" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                     title="Copy frame to clipboard"><i class="material-icons">assignment_returned</i></button>
+            {% endcomment %}
             <span class="vert-divider">|</span>
-            Timestamp (hh:mm:ss:ff): {{ form.timestamp }}
-            <button id="copy-time" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            Current Timestamp (hh:mm:ss:ff): {{ form.timestamp }}
+            {% comment %}<button id="copy-time" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                     title="Copy time to clipboard"><i class="material-icons">assignment_returned</i></button>
+            {% endcomment %}
           </span>
         </div>
       </form>
     </div>
   </div>
-
 
   <hr>
 

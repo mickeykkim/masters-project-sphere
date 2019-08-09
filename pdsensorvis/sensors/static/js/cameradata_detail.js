@@ -149,21 +149,12 @@ function stepForward() {
    togglePlayButton("play");
 }
 
+/*
 function copyToClipboard(selection) {
-   let textToCopy;
-   if (selection === "frames") {
-      textToCopy = document.getElementById("current-frame");
-   } else if (selection === "time") {
-      textToCopy = document.getElementById("current-time")
-   }
-   let textArea = document.createElement("textarea");
-   textArea.value = textToCopy.textContent;
-   document.body.appendChild(textArea);
-   textArea.select();
+   selection.select();
    document.execCommand("Copy");
-   alert("Copied to clipboard: " + textArea.value);
-   textArea.remove();
 }
+*/
 
 function displayHelpAlert() {
    const newLine = "\r\n";
@@ -271,17 +262,19 @@ seekForwardButton.addEventListener("click", function () {
    seekForwardButton.blur();
 });
 
+/*
 copyFrameNumber.addEventListener("click", function () {
    pauseVideo();
-   copyToClipboard("frames");
+   copyToClipboard(currentFrame);
    copyFrameNumber.blur();
 });
 
 copyTimeStamp.addEventListener("click", function () {
    pauseVideo();
-   copyToClipboard("time");
+   copyToClipboard(currentTime);
    copyTimeStamp.blur();
 });
+ */
 
 // Keycodes for keypress event listeners
 // 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right,

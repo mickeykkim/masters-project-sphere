@@ -24,10 +24,20 @@ class CameraAnnotationCreateForm(forms.ModelForm):
                 'readonly': True,
                 'style': 'font-family: "Roboto Mono", serif; text-align: center; display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 15%; min-width: 120px;',
             }),
+            'annotation': forms.Select(attrs={
+                'id': 'form-annotation',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 15%; min-width: 150px;',
+            }),
             'note': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': False,
                 'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 22%;',
+            }),
+            'status': forms.Select(attrs={
+                'id': 'form-annotation',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 5%; min-width: 35px;',
             }),
         }
 
