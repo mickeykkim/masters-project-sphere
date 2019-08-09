@@ -42,7 +42,7 @@
         <div class="seekControls">
           <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip" data-placement="bottom"
                  title="Frame to jump back to">
-          <button id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+          <button type="button" id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
                   data-trigger="hover" title="Jump back to frame"><i class="material-icons">skip_previous</i></button>
           <span class="vert-divider">|</span>
           <span class="selectBox">
@@ -56,7 +56,7 @@
               <option value="6">100</option>
             </select>
           </span>
-          <button id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+          <button type="button" id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
                   data-trigger="hover" title="Step backwards"><i class="material-icons">fast_rewind</i></button>
           <span class="vert-divider">|</span>
           <span class="selectBox">
@@ -70,7 +70,7 @@
               <option value="6">100</option>
             </select>
           </span>
-          <button id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+          <button type="button" id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
                   data-trigger="hover" title="Step forwards"><i class="material-icons">fast_forward</i></button>
           <span class="vert-divider">|</span>
           <!-- Form Controls -->
@@ -85,8 +85,8 @@
                 data-trigger="hover" title="Activity begin (+) or end (-)">
             {{ form.status }}
           </span>
-          <button id="annotate" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                  title="Add annotation" type="submit"><i class="material-icons">text_rotation_none</i></button>
+          <button type="submit" id="annotate" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+                  title="Add annotation"><i class="material-icons">text_rotation_none</i></button>
         </div>
         <!-- Frame Details -->
         <div class="frameDetails">

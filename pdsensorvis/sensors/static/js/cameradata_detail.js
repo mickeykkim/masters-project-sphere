@@ -128,8 +128,11 @@ function endVideo() {
 function rewindFromInput() {
    let desiredFrame = parseInt(rewindTextBox.value);
    let convertedSMPTE = video.toSMPTE(desiredFrame);
-   if (desiredFrame === 0) convertedSMPTE = '00:00:00:00';
-   rewindVideo(convertedSMPTE);
+   if (desiredFrame === 0) {
+      video.video.currentTime = 0;
+   } else {
+      rewindVideo(convertedSMPTE);
+   }
 }
 
 function rewindVideo(SMPTE) {
