@@ -28,11 +28,11 @@
     <!-- Play Controls -->
     <div id="play-controls" class="playControls">
       <button id="play-pause" class="controlButtonL"><i class="material-icons">play_arrow</i></button>
-      <input type="range" id="seek-bar" class="seekBar" style="width:50%;margin:5px 0px 0px 5px;" min="0" value="0" step="1">
+      <label for="seek-bar"></label><input type="range" id="seek-bar" class="seekBar" style="width:50%;margin:5px 0px 0px 5px;" min="0" value="0" step="1">
       <span id="video-time" class="timestamp">00:00</span><span class="timestamp">/</span><span id="video-duration" class="timestamp">00:00</span>
       <button id="mute" class="controlButtonL" data-toggle="tooltip" data-placement="bottom"
                 data-trigger="hover" title="Toggle mute"><i class="material-icons">volume_up</i></button>
-      <input type="range" id="volume-bar" class="volumeBar" style="width:10%;margin:5px 0px 0px 5px;" min="0" max="1" step="0.1" value="1"/>
+      <label for="volume-bar"></label><input type="range" id="volume-bar" class="volumeBar" style="width:10%;margin:5px 0px 0px 5px;" min="0" max="1" step="0.1" value="1"/>
     </div>
     <!-- Form  -->
     <div id="form-controls" class="formControls">
@@ -90,7 +90,7 @@
         </div>
         <!-- Frame Details -->
         <div class="frameDetails">
-          <span class="frameStatusText">Framerate:</span>
+          <label for="framerate-list">Framerate:&nbsp;</label>
           <span class="selectBox">
           <select id="framerate-list" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                   title="Framerate options" class="fpsDropDown">
@@ -103,12 +103,12 @@
         </span>
           <span class="vert-divider">|</span>
           <span class="frameStatusText">
-            Current Frame: <input type="text" id="id-frame" value=0 class="rewindTextValue" readonly>
+            <label for="id-frame">Current Frame:&nbsp;</label><input type="text" id="id-frame" value=0 class="rewindTextValue" readonly>
             {% comment %}<button id="copy-frame" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                     title="Copy frame to clipboard"><i class="material-icons">assignment_returned</i></button>
             {% endcomment %}
             <span class="vert-divider">|</span>
-            Current Timestamp (hh:mm:ss:ff): {{ form.timestamp }}
+            <label for="form-timestamp">Current Timestamp (hh:mm:ss:ff):&nbsp;</label>{{ form.timestamp }}
             {% comment %}<button id="copy-time" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                     title="Copy time to clipboard"><i class="material-icons">assignment_returned</i></button>
             {% endcomment %}
