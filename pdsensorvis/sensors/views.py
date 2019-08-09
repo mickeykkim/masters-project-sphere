@@ -95,7 +95,7 @@ class CameraDataDetailGet(generic.DetailView):
 class CameraDataDetailPost(generic.detail.SingleObjectMixin, generic.FormView):
     template_name = 'sensors/cameradata_detail.html'
     form_class = CameraAnnotationCreateForm
-    model = CameraData
+    model = CameraAnnotation
 
     def post(self, request, *args, **kwargs):
         """if not request.user.is_authenticated():
@@ -131,19 +131,3 @@ class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('id')
-
-
-"""
-class CreateWearableAnnotationView(LoginRequiredMixin, generic.CreateView):
-    model = WearableAnnotation
-    form_class = AnnotationForm
-    template_name = 'sensors/wearabledata_detail.html'
-    success_url = 'sensors/wearabledata_detail.html'
-
-
-class CreateAnnotationView(LoginRequiredMixin, generic.CreateView):
-    model = CameraAnnotation
-    form_class = AnnotationForm
-    template_name = 'sensors/cameradata_detail.html'
-    success_url = 'sensors/cameradata_detail.html'
-"""

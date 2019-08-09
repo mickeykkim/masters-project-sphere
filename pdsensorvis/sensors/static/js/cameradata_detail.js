@@ -23,8 +23,8 @@ let volumeBar = document.getElementById("volume-bar");
 let rewindTextBox = document.getElementById("rewind-value");
 let stepBackwardBox = document.getElementById("backward-increment");
 let stepForwardBox = document.getElementById("forward-increment");
-let copyFrameNumber = document.getElementById("copy-frame");
-let copyTimeStamp = document.getElementById("copy-time");
+// let copyFrameNumber = document.getElementById("copy-frame");
+// let copyTimeStamp = document.getElementById("copy-time");
 
 // Framerate and Export Elements
 /*
@@ -134,7 +134,7 @@ function rewindFromInput() {
 
 function rewindVideo(SMPTE) {
    // Fix a bug in the toMilliseconds library conversion as off by one frame
-   video.video.currentTime = video.toMilliseconds(SMPTE)/1000 + currentFramerate/1000;
+   video.video.currentTime = (video.toMilliseconds(SMPTE)+currentFramerate)/1000;
 }
 
 function stepBack() {

@@ -7,15 +7,13 @@ from .models import CameraAnnotation
 class CameraAnnotationCreateForm(forms.ModelForm):
     def clean_annotation(self):
         data = self.cleaned_data['annotation']
-
         if not data:
             raise ValidationError(_('Annotation cannot be blank.'))
-
         return data
 
     class Meta:
         model = CameraAnnotation
-        fields = ['timestamp', 'annotation', 'status', 'note']
+        fields = ['camera', 'timestamp', 'annotation', 'annotator', 'status', 'note']
         widgets = {
             'timestamp': forms.TextInput(attrs={
                 'id': 'form-timestamp',
