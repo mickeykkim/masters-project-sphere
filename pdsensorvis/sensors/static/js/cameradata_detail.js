@@ -1,8 +1,8 @@
 "use strict";
 
 // Video Elements
-let currentFrame = $('#current-frame');
-let currentTime = $('#current-time');
+let currentFrame = document.getElementById('id-frame');
+let currentTime = document.getElementById('form-timestamp');
 let videoTime = document.getElementById("video-time");
 let videoDuration = document.getElementById("video-duration");
 let framerateSelect = document.getElementById("framerate-list");
@@ -47,8 +47,7 @@ let video = VideoFrame({
    id: 'video',
    frameRate: currentFramerate,
    callback: function (frame) {
-      currentFrame.html(video.get());
-      currentTime.html(frame);
+      updateSeekBar();
    }
 });
 
@@ -80,14 +79,12 @@ function pauseVideo() {
 
 function updateVideoTime() {
    video.video.currentTime = seekBar.value / currentFramerate;
-   currentFrame.html(video.get());
-   currentTime.html(video.toSMPTE());
 }
 
 function updateSeekBar() {
    seekBar.value = video.video.currentTime * currentFramerate;
-   currentFrame.html(video.get());
-   currentTime.html(video.toSMPTE());
+   currentFrame.value = video.get();
+   currentTime.value = video.toSMPTE();
    refreshVideoTimes();
 }
 

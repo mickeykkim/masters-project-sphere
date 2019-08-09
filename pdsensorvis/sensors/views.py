@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.http import HttpResponse, HttpResponseForbidden
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
-from .forms import CameraAnnotationForm
+from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm
 
 User = get_user_model()
 
@@ -38,7 +38,7 @@ def edit_camera_annotation(request, uuid, pk):
 
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
     if request.method == 'POST':
-        form = CameraAnnotationForm(request.POST, instance=existing_annotation)
+        form = CameraAnnotationEditForm(request.POST, instance=existing_annotation)
         if form.is_valid():
             existing_annotation = form.save(commit=False)
             existing_annotation.annotation = form.cleaned_data['annotation']
@@ -46,7 +46,7 @@ def edit_camera_annotation(request, uuid, pk):
             return redirect('cameradata-detail', pk=uuid)
 
     else:
-        form = CameraAnnotationForm(instance=existing_annotation)
+        form = CameraAnnotationEditForm(instance=existing_annotation)
 
     context = {
         'form': form,
@@ -88,13 +88,13 @@ class CameraDataDetailGet(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
-        context['form'] = CameraAnnotationForm()
+        context['form'] = CameraAnnotationCreateForm()
         return context
 
 
 class CameraDataDetailPost(generic.detail.SingleObjectMixin, generic.FormView):
     template_name = 'sensors/cameradata_detail.html'
-    form_class = CameraAnnotationForm
+    form_class = CameraAnnotationCreateForm
     model = CameraData
 
     def post(self, request, *args, **kwargs):
