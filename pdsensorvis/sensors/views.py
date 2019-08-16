@@ -61,7 +61,7 @@ class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
-        context['form'] = CameraAnnotationCreateForm()
+        context['form'] = CameraAnnotationCreateForm(initial=self.request.session.get('form_data'))
         return context
 
 
@@ -77,6 +77,7 @@ class CameraDataDetailView(LoginRequiredMixin, generic.View):
         form = CameraAnnotationCreateForm(request.POST)
 
         if form.is_valid():
+            self.request.session['form_data'] = form.cleaned_data
             new_annotation = form.save(commit=False)
             new_annotation.camera = current_camera
             new_annotation.annotator = request.user
