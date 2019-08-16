@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from django.http import HttpResponse, HttpResponseForbidden
-from django.urls import reverse
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -56,6 +56,44 @@ def edit_camera_annotation(request, uuid, pk):
     return render(request, 'sensors/edit_camera_annotation.html', context)
 
 
+class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):
+    model = CameraData
+
+    def get_context_data(self, **kwargs):
+        context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
+        context['form'] = CameraAnnotationCreateForm()
+        return context
+
+
+class CameraDataDetailView(LoginRequiredMixin, generic.View):
+
+    def get(self, request, *args, **kwargs):
+        view = CameraDataDetailGet.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, pk):
+        current_camera = get_object_or_404(CameraData, pk=pk)
+
+        form = CameraAnnotationCreateForm(request.POST)
+
+        if form.is_valid():
+            new_annotation = form.save(commit=False)
+            new_annotation.camera = current_camera
+            new_annotation.annotator = request.user
+            new_annotation.annotation = form.cleaned_data['annotation']
+            new_annotation.save()
+            return redirect('cameradata-detail', pk=pk)
+        else:
+            print(form.errors)
+
+        context = {
+            'form': form,
+            'cameradata': current_camera
+        }
+
+        return render(request, 'sensors/cameradata_detail.html', context)
+
+
 class PatientDataListView(LoginRequiredMixin, generic.ListView):
     model = PatientData
     paginate_by = 10
@@ -81,42 +119,6 @@ class WearableAnnotationDetailView(LoginRequiredMixin, generic.DetailView):
 class CameraDataListView(LoginRequiredMixin, generic.ListView):
     model = CameraData
     paginate_by = 10
-
-
-class CameraDataDetailGet(generic.DetailView):
-    model = CameraData
-
-    def get_context_data(self, **kwargs):
-        context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
-        context['form'] = CameraAnnotationCreateForm()
-        return context
-
-
-class CameraDataDetailPost(generic.detail.SingleObjectMixin, generic.FormView):
-    template_name = 'sensors/cameradata_detail.html'
-    form_class = CameraAnnotationCreateForm
-    model = CameraAnnotation
-
-    def post(self, request, *args, **kwargs):
-        """if not request.user.is_authenticated():
-            return HttpResponseForbidden()
-        """
-        self.object = self.get_object()
-        return super(CameraDataDetailPost, self).post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return reverse('cameradata-detail', kwargs={'pk': self.object.pk})
-
-
-class CameraDataDetailView(LoginRequiredMixin, generic.View):
-
-    def get(self, request, *args, **kwargs):
-        view = CameraDataDetailGet.as_view()
-        return view(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        view = CameraDataDetailPost.as_view()
-        return view(request, *args, **kwargs)
 
 
 class CameraAnnotationDetailView(LoginRequiredMixin, generic.DetailView):

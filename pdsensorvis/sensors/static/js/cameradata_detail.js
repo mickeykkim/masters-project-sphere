@@ -136,8 +136,12 @@ function rewindFromInput() {
 }
 
 function rewindVideo(SMPTE) {
-   // Fix a bug in the toMilliseconds library conversion as off by one frame
-   video.video.currentTime = (video.toMilliseconds(SMPTE)+currentFramerate)/1000;
+   if (SMPTE === "00:00:00:00") {
+      video.video.currentTime = 0;
+   } else {
+      // Fix a bug in the toMilliseconds library conversion as off by one frame
+      video.video.currentTime = (video.toMilliseconds(SMPTE)+currentFramerate)/1000;
+   }
 }
 
 function stepBack() {
@@ -188,6 +192,11 @@ video.video.addEventListener("loadedmetadata", function () {
    currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
    seekBar.max = video.video.duration * currentFramerate;
    refreshVideoTimes();
+});
+
+window.addEventListener("DOMContentLoaded", function(){
+   rewindVideo(currentTime.value);
+   updateSeekBar();
 });
 
 video.video.addEventListener("timeupdate", function () {
