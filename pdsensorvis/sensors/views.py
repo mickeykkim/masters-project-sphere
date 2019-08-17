@@ -37,6 +37,7 @@ def edit_camera_annotation(request, uuid, pk):
     """View function for editing an existing camera annotation."""
 
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+
     if request.method == 'POST':
         form = CameraAnnotationEditForm(request.POST, instance=existing_annotation)
         if form.is_valid():
@@ -44,7 +45,23 @@ def edit_camera_annotation(request, uuid, pk):
             existing_annotation.annotation = form.cleaned_data['annotation']
             existing_annotation.save()
             return redirect('cameradata-detail', pk=uuid)
+    else:
+        form = CameraAnnotationEditForm(instance=existing_annotation)
 
+    context = {
+        'form': form,
+        'cameraannotation': existing_annotation,
+    }
+
+    return render(request, 'sensors/edit_camera_annotation.html', context)
+
+
+def delete_camera_annotation(request, uuid, pk):
+    existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+
+    if request.method == 'POST':
+        existing_annotation.delete()
+        return redirect('cameradata-detail', pk=uuid)
     else:
         form = CameraAnnotationEditForm(instance=existing_annotation)
 

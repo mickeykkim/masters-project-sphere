@@ -136,6 +136,10 @@
     width: 14%;
 }
 
+.form-group {
+    display: inline-block;
+}
+
 input[type=range] {
     -webkit-appearance: none;
     margin: 0 0;

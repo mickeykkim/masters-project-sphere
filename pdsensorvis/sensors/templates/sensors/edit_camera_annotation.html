@@ -5,11 +5,15 @@
   <hr>
   <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
 
-  <form action="" method="post">
+  <form action="" method="post" class="form-group">
     {% csrf_token %}
     <table>
       {{ form.as_table }}
     </table>
     <input type="submit" value="Save">
+    <form action="{% url 'delete-camera-annotation' cameraannotation.camera.id cameraannotation.id %}" method="post" class="form-group">
+      {% csrf_token %}
+      <input type="submit" value="Delete">
+    </form>
   </form>
 {% endblock %}
