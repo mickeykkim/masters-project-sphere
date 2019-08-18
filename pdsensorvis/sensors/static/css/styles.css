@@ -29,7 +29,8 @@
 .dropDownS,
 .downloadFormatDropDown,
 .rewindTextValue,
-.otherText {
+.otherText,
+.currentFrameText {
     display: table-cell;
     vertical-align: top;
     border: 1px solid #a0a0a0;
@@ -119,17 +120,25 @@
 }
 
 .rewindTextValue,
-.otherText {
+.otherText,
+.currentFrameText {
     font-family: 'Roboto Mono', serif;
     border-radius: 3px;
     height: 30px;
     line-height: 30px;
-    margin: 0px 5px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 .rewindTextValue {
     width: 7%;
     text-align: center;
+    min-width: 65px;
+}
+
+.currentFrameText {
+    width: 7%;
+    text-align: center;
+    min-width: 60px;
 }
 
 .otherText {
