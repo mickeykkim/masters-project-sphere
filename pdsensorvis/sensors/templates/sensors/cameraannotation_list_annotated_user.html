@@ -1,18 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>My Camera Annotations</h1>
+  <h1>My Camera Annotations</h1>
+  {% if cameraannotation_list %}
+    <div class="annotation-objects">
+      <ul id="annotation-objects-list">
+        {% for annotation in cameraannotation_list %}
+          <li>
+            <a href="{{ annotation.get_absolute_url }}">{{ annotation.camera.patient }} ({{ annotation.camera.time }}) - {{ annotation.timestamp}} - {{annotation.get_annotation_display}}
+                {% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
+              ({{annotation.get_status_display}})</a>
+            <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
+               name="{% url 'edit-camera-annotation' annotation.camera.id annotation.id|stringformat:"i" %}">
+            <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
+               title="Edit annotation">edit</i></button>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <p>You have no annotations.</p>
+  {% endif %}
+{% endblock %}
 
-    {% if cameraannotation_list %}
-    <ul>
-      {% for annotation in cameraannotation_list %} 
-      <li>
-        <a href="{{ annotation.get_absolute_url }}">({{ annotation }})</a>
-      </li>
-      {% endfor %}
-    </ul>
-
-    {% else %}
-      <p>You have no annotations.</p>
-    {% endif %}       
+{% block jquery %}
+$('button', $('#annotation-objects-list')).each(function () {
+   $(this).click(function() {
+      if ($(this).attr('id').indexOf('rewind') > -1) {
+         rewindVideo(this.name);
+      } else if ($(this).attr('id').indexOf('edit') > -1) {
+         document.location.href = this.name;
+      }
+      this.blur();
+   })
+});
 {% endblock %}

@@ -11,6 +11,7 @@
     {% endif %}
   </p>
   {% if cameraannotation.note %}
-  <p><strong>Note:</strong> {{ cameraannotation.note }}</p>
+    <p><strong>Note:</strong> {{ cameraannotation.note }}</p>
   {% endif %}
+  <input type="button" value="Back" class="controlButtonL" onclick="window.history.back()" />
 {% endblock %}

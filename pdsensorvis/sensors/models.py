@@ -3,17 +3,14 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 import uuid
 
-# User-defined UPDRS tasks
-UPDRS_TASK = (
-    ('prs', 'prone sup'),
-    ('toe', 'toe tapping'),
-    ('leg', 'leg agility'),
-    ('afc', 'arising from chair'),
-    ('tug', 'timed up and go'),
-    ('nmp', 'normal pace'),
-    ('slp', 'slow pace'),
-    ('fsp', 'fast pace'),
-    ('oth', '(other)'),
+PD_SYMPTOM = (
+    ('pos', 'Stooped Posture'),
+    ('asm', 'Asymmetry'),
+    ('ebt', 'En Bloc Turning'),
+    ('dys', 'Dystonia/Dyskensia'),
+    ('mov', 'Slow/Hesitant Movement'),
+    ('str', 'Short Stride Length'),
+    ('oth', 'Other')
 )
 
 # Indicators for annotation status (begin or end)
@@ -102,11 +99,11 @@ class WearableAnnotation(models.Model):
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
-        choices=UPDRS_TASK,
-        default='prs',
-        help_text='UPDRS Task',
+        choices=PD_SYMPTOM,
+        default='oth',
+        help_text='PD Symptom',
     )
-    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN)
+    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN, help_text='Begin (+) or End (-)')
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
@@ -128,11 +125,11 @@ class CameraAnnotation(models.Model):
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
-        choices=UPDRS_TASK,
-        default='prs',
-        help_text='UPDRS Task',
+        choices=PD_SYMPTOM,
+        default='oth',
+        help_text='PD Symptom',
     )
-    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN)
+    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN, help_text='Begin (+) or End (-)')
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:

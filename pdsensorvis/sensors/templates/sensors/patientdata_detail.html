@@ -2,11 +2,13 @@
 
 {% block content %}
   <h1>Patient: {{ patientdata }}</h1>
-
-  <p><strong>Last Name:</strong> <a href="">{{ patientdata.last_name }}</a></p> <!-- author detail link not yet defined -->
+  <hr>
+  <p><strong>Last Name:</strong> <a href="">{{ patientdata.last_name }}</a>
+  <button id="edit" class="controlButtonXS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            title="Edit Camera Data"><i class="material-icons" style="font-size: 22px">create</i></button></p>
   <p><strong>First Name:</strong> {{ patientdata.first_name }}</p>
   <p><strong>Date of Birth:</strong> {{ patientdata.date_of_birth }}</p> 
-  <p><strong>Notes:</strong> {{ patientdata.notes }}</p> 
+  <p><strong>Notes:</strong> {{ patientdata.notes }}</p>
 
   <div style="margin-left:20px;margin-top:40px">
     <h4>Wearable Data Session History</h4>

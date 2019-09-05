@@ -51,18 +51,18 @@ let video = VideoFrame({
    }
 });
 
-function togglePlayButton(text) {
-   if (text === "play") {
+function togglePlayButton(option) {
+   if (option === "play") {
       playButton.innerHTML = "<i class=\"material-icons\">play_arrow</i>";
-   } else if (text === "pause") {
+   } else if (option === "pause") {
       playButton.innerHTML = "<i class=\"material-icons\">pause</i>";
    }
 }
 
-function toggleVolumeButton(text) {
-   if (text === "mute") {
+function toggleVolumeButton(option) {
+   if (option === "mute") {
       muteButton.innerHTML = "<i class=\"material-icons\">volume_off</i>";
-   } else if (text === "unmute") {
+   } else if (option === "unmute") {
       muteButton.innerHTML = "<i class=\"material-icons\">volume_up</i>";
    }
 }
@@ -187,11 +187,16 @@ function updateVolume(level) {
    video.video.volume = level;
 }
 
-// --- Event Listeners ---
-video.video.addEventListener("loadedmetadata", function () {
+function adjustFramerate(){
    currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
    seekBar.max = video.video.duration * currentFramerate;
+   video.frameRate = currentFramerate;
    refreshVideoTimes();
+}
+
+// --- Event Listeners ---
+video.video.addEventListener("loadedmetadata", function () {
+   adjustFramerate();
 });
 
 window.addEventListener("DOMContentLoaded", function(){
@@ -208,22 +213,15 @@ video.video.addEventListener("ended", function () {
 });
 
 framerateSelect.addEventListener("change", function() {
-   currentFramerate = parseFloat(framerateSelect.options[framerateSelect.selectedIndex].text);
-   video.frameRate = currentFramerate;
+   adjustFramerate();
 });
 
 seekBar.addEventListener("change", function () {
    updateVideoTime();
-   if (playButton.innerHTML === "Pause") {
-      playVideo();
-   }
 });
 
 seekBar.addEventListener("input", function () {
    updateVideoTime();
-   if (playButton.innerHTML === "Pause") {
-      playVideo();
-   }
 });
 
 volumeBar.addEventListener("input", function () {

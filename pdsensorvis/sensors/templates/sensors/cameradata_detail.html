@@ -12,6 +12,7 @@
     <span class="vert-divider">|</span>
     <em>Note:</em> {{ cameradata.note }}
     <span class="vert-divider">|</span>
+    <em>Edit:&nbsp;</em>
     <button id="edit" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
             title="Edit Camera Data"><i class="material-icons">create</i></button>
     <span class="vert-divider">|</span>
@@ -121,7 +122,6 @@
       <select id="download-format" class="downloadFormatDropDown" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Download format">
         <option value="1">Excel (.xls)</option>
-        <option value="2">Subtitle (.srt)</option>
         <option value="3">Comma-separated Values (.csv)</option>
         <option value="4">Tab-delimited Text (.txt)</option>
       </select>
@@ -134,7 +134,10 @@
               <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
                  title="Jump to annotation">skip_previous</i></button>
             <a href="{{ annotation.get_absolute_url }}">
-              {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}})
+              <!-- All In-line -->
+              {{annotation.timestamp}} - {{annotation.get_annotation_display}}
+                {% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
+              ({{annotation.get_status_display}})
             </a>
             <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
                     name="{% url 'edit-camera-annotation' cameradata.id annotation.id|stringformat:"i" %}">
