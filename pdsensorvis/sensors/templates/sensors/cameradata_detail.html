@@ -129,20 +129,23 @@
     <div class="annotation-objects">
       <ul id="annotation-objects-list">
         {% for annotation in cameradata.cameraannotation_set.all %}
-          <li>
+          <li class="annotationDetails">
             <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.timestamp }}">
               <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
-                 title="Jump to annotation">skip_previous</i></button>
-            <a href="{{ annotation.get_absolute_url }}">
-              <!-- All In-line -->
-              {{annotation.timestamp}} - {{annotation.get_annotation_display}}
-                {% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
+                 title="Jump to annotation">skip_previous</i>
+            </button>
+            <span class="annotationTimestamp">{{annotation.timestamp}}</span> -
+            <a href="{{ annotation.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+                 title="Link to discussion page">
+              {{annotation.get_annotation_display}}
+              {% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
               ({{annotation.get_status_display}})
             </a>
             <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
                     name="{% url 'edit-camera-annotation' cameradata.id annotation.id|stringformat:"i" %}">
               <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
-                 title="Edit annotation">edit</i></button>
+                 title="Edit annotation">edit</i>
+            </button>
           </li>
         {% endfor %}
       </ul>

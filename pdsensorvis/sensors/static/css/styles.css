@@ -21,6 +21,10 @@
     vertical-align: middle;
 }
 
+.annotationDetails {
+    vertical-align: middle;
+}
+
 .controlButtonL,
 .controlButtonM,
 .controlButtonS,
@@ -86,7 +90,8 @@
 }
 
 .timestamp,
-.vert-divider {
+.vert-divider,
+.annotationTimestamp {
     font-family: 'Roboto Mono';
 }
 
@@ -94,6 +99,10 @@
     font-size: 16px;
     margin: 10px 5px 5px 5px;
     vertical-align: middle;
+}
+
+.annotationTimestamp {
+    font-size: 16px;
 }
 
 .vert-divider {
