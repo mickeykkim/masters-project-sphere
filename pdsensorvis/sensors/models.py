@@ -90,6 +90,9 @@ class CameraData(models.Model):
     def __str__(self):
         return f'{self.patient} ({self.time})'
 
+    def get_user_annotations(self):
+        return self.cameraannotation_set.filter(annotator=User)
+
 
 class WearableAnnotation(models.Model):
     """Fields and Functions related to wearable annotations"""
@@ -141,3 +144,4 @@ class CameraAnnotation(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.camera} - {self.timestamp} - {self.annotation}'
+

@@ -13,5 +13,5 @@
   {% if cameraannotation.note %}
     <p><strong>Note:</strong> {{ cameraannotation.note }}</p>
   {% endif %}
-  <input type="button" value="Back" class="controlButtonL" onclick="window.history.back()" />
+  <input type="button" value="Camera" class="controlButtonL" onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
 {% endblock %}
