@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from .models import CameraAnnotation
+from .models import CameraAnnotation, CameraAnnotationComment
 
 
 class CameraAnnotationCreateForm(forms.ModelForm):
@@ -59,3 +59,27 @@ class CameraAnnotationEditForm(forms.ModelForm):
     class Meta:
         model = CameraAnnotation
         fields = ['timestamp', 'annotation', 'status', 'note']
+
+
+class CameraAnnotationCommentCreateForm(forms.ModelForm):
+    """
+    def clean_text(self):
+        data = self.cleaned_data['text']
+
+        if not data:
+            raise ValidationError(_('Comment cannot be blank.'))
+
+        return data
+    """
+
+    class Meta:
+        model = CameraAnnotationComment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'id': 'form-text',
+                'required': False,
+                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; '
+                         'height: 150px; width: 90%; box-sizing: border-box; background-color: #f8f8f8;',
+            }),
+        }

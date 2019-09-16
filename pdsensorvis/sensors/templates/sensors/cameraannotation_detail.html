@@ -16,14 +16,23 @@
     <p><strong>Note:</strong> {{ cameraannotation.note }}</p>
   {% endif %}
   <hr>
+  <h4>Comments</h4>
   {% for comment in cameraannotation.comments.all %}
     <div class="comment">
-      <strong>{{ comment.author }}</strong> <em>(Posted: {{ comment.timestamp }})</em>
+      <strong>{{ comment.author }}</strong> <em>(Posted on: {{ comment.timestamp }})</em>
       <p>{{ comment.text|linebreaks }}</p>
     </div>
   {% empty %}
     <p>No comments.</p>
   {% endfor %}
-  <input type="button" value="Back" class="controlButtonL"
-         onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
+  <form method="POST" class="post-form">
+    {% csrf_token %}
+    <h6>Post new comment:</h6>
+    {{ form.text }}
+    <div>
+      <button type="submit" id="post" class="controlButtonL">Post</button>
+      <input type="button" value="Back" class="controlButtonL"
+           onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
+    </div>
+  </form>
 {% endblock %}

@@ -5,8 +5,9 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, CameraAnnotationComment
-from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm
+from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm
 
 User = get_user_model()
 
@@ -155,7 +156,7 @@ class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CameraAnnotationDetailGet, self).get_context_data(**kwargs)
-        # context['form'] = CameraAnnotationCreateForm(initial=self.request.session.get('form_data'))
+        context['form'] = CameraAnnotationCommentCreateForm()
         return context
 
 
@@ -165,3 +166,25 @@ class CameraAnnotationDetailView(LoginRequiredMixin, generic.View):
         view = CameraAnnotationDetailGet.as_view()
         return view(request, *args, **kwargs)
 
+    def post(self, request, uuid, pk):
+        current_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+
+        form = CameraAnnotationCommentCreateForm(request.POST)
+
+        if form.is_valid():
+            # self.request.session['form_data'] = form.cleaned_data
+            new_comment = form.save(commit=False)
+            new_comment.annotation = current_annotation
+            new_comment.author = request.user
+            new_comment.text = form.cleaned_data['text']
+            new_comment.save()
+            return redirect('cameraannotation-detail', uuid=uuid, pk=pk)
+        else:
+            print(form.errors)
+
+        context = {
+            'form': form,
+            'cameraannotation': current_annotation
+        }
+
+        return render(request, 'sensors/cameraannotation_detail.html', context)
