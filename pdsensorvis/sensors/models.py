@@ -1,9 +1,10 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils import timezone
 import uuid
 
-PD_SYMPTOM = (
+ANNOTATION = (
     ('pos', 'Stooped Posture'),
     ('asm', 'Asymmetry'),
     ('ebt', 'En Bloc Turning'),
@@ -102,7 +103,7 @@ class WearableAnnotation(models.Model):
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
-        choices=PD_SYMPTOM,
+        choices=ANNOTATION,
         default='oth',
         help_text='PD Symptom',
     )
@@ -128,7 +129,7 @@ class CameraAnnotation(models.Model):
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
-        choices=PD_SYMPTOM,
+        choices=ANNOTATION,
         default='oth',
         help_text='PD Symptom',
     )
@@ -145,3 +146,17 @@ class CameraAnnotation(models.Model):
         """String for representing the Model object."""
         return f'{self.camera} - {self.timestamp} - {self.annotation}'
 
+
+class CameraAnnotationComment(models.Model):
+    id = models.AutoField(primary_key=True)
+    annotation = models.ForeignKey('CameraAnnotation', on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    timestamp = models.DateTimeField(default=timezone.now)
+    text = models.TextField()
+
+    class Meta:
+        ordering = ['timestamp']
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.text

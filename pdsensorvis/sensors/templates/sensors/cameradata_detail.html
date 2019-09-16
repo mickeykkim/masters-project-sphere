@@ -146,7 +146,7 @@
               {% endif %}
             {% endif %}
             <a href="{{ annotation.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                 title="Link to discussion page">( comments)</a>
+                 title="Link to discussion page">({{ annotation.comments.count }} comment{% if annotation.comments.count != 1 %}s{% endif %})</a>
           </li>
         {% endfor %}
       </ul>

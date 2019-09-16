@@ -151,6 +151,7 @@ ADMIN_REORDER = (
                 'sensors.WearableAnnotation',
                 'sensors.CameraData',
                 'sensors.CameraAnnotation',
+                'sensors.CameraAnnotationComment',
             )
     },
 )

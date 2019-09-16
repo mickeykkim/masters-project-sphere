@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
+from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, CameraAnnotationComment
 
 
 # Register your models here.
@@ -37,6 +37,18 @@ class WearableAnnotationAdmin(admin.ModelAdmin):
     list_display = ('wearable', 'timestamp', 'annotation', 'id')
 
 
+class CameraAnnotationCommentInline(admin.TabularInline):
+    model = CameraAnnotationComment
+    extra = 0
+
+
 @admin.register(CameraAnnotation)
 class CameraAnnotationAdmin(admin.ModelAdmin):
     list_display = ('camera', 'timestamp', 'annotation', 'id')
+    inlines = [CameraAnnotationCommentInline]
+    extra = 0
+
+
+@admin.register(CameraAnnotationComment)
+class CameraAnnotationCommentAdmin(admin.ModelAdmin):
+    list_display = ('annotation', 'author', 'timestamp', 'text')

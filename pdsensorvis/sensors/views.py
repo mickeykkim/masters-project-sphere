@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation
+from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, CameraAnnotationComment
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm
 
 User = get_user_model()
@@ -139,10 +139,6 @@ class CameraDataListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
 
-class CameraAnnotationDetailView(LoginRequiredMixin, generic.DetailView):
-    model = CameraAnnotation
-
-
 class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing annotations by current user."""
     model = CameraAnnotation
@@ -151,3 +147,22 @@ class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('id')
+
+
+class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):
+    """View to get annotations."""
+    model = CameraAnnotation
+
+    def get_context_data(self, **kwargs):
+        context = super(CameraAnnotationDetailGet, self).get_context_data(**kwargs)
+        # context['form'] = CameraAnnotationCreateForm(initial=self.request.session.get('form_data'))
+        context['comment'] = get_object_or_404(CameraAnnotationComment)
+        return context
+
+
+class CameraAnnotationDetailView(LoginRequiredMixin, generic.View):
+    """Combined get and post for camera annotations and comments."""
+    def get(self, request, *args, **kwargs):
+        view = CameraAnnotationDetailGet.as_view()
+        return view(request, *args, **kwargs)
+

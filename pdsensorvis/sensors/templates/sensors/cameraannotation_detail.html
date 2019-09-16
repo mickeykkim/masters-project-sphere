@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block content %}
   <h1>{{ cameraannotation.camera }}</h1>
   <hr>
@@ -13,5 +15,15 @@
   {% if cameraannotation.note %}
     <p><strong>Note:</strong> {{ cameraannotation.note }}</p>
   {% endif %}
-  <input type="button" value="Camera" class="controlButtonL" onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
+  <hr>
+  {% for comment in cameraannotation.comments.all %}
+    <div class="comment">
+      <strong>{{ comment.author }}</strong> <em>({{ comment.timestamp }})</em>
+      <p>{{ comment.text|linebreaks }}</p>
+    </div>
+  {% empty %}
+    <p>No comments.</p>
+  {% endfor %}
+  <input type="button" value="Back" class="controlButtonL" onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
 {% endblock %}
+
