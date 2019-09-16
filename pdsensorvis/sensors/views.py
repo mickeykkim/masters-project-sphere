@@ -156,7 +156,6 @@ class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(CameraAnnotationDetailGet, self).get_context_data(**kwargs)
         # context['form'] = CameraAnnotationCreateForm(initial=self.request.session.get('form_data'))
-        context['comment'] = get_object_or_404(CameraAnnotationComment)
         return context
 
 

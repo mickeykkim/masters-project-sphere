@@ -18,12 +18,12 @@
   <hr>
   {% for comment in cameraannotation.comments.all %}
     <div class="comment">
-      <strong>{{ comment.author }}</strong> <em>({{ comment.timestamp }})</em>
+      <strong>{{ comment.author }}</strong> <em>(Posted: {{ comment.timestamp }})</em>
       <p>{{ comment.text|linebreaks }}</p>
     </div>
   {% empty %}
     <p>No comments.</p>
   {% endfor %}
-  <input type="button" value="Back" class="controlButtonL" onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
+  <input type="button" value="Back" class="controlButtonL"
+         onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
 {% endblock %}
-

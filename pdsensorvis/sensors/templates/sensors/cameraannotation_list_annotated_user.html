@@ -11,7 +11,8 @@
               - {{ annotation.timestamp}} - {{annotation.get_annotation_display}}
               {% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}
               {% endif %}
-              ({{annotation.get_status_display}})</a>
+              ({{annotation.get_status_display}}) <em>({{ annotation.comments.count }}
+                comment{% if annotation.comments.count != 1 %}s{% endif %})</em></a>
             <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
                name="{% url 'edit-camera-annotation' annotation.camera.id annotation.id|stringformat:"i" %}">
             <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
