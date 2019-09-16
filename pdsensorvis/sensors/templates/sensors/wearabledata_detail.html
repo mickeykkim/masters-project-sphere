@@ -62,15 +62,7 @@ var myChart = new Chart(ctx, {
 <canvas id="myChart" width="500" height="400"></canvas>
 <hr>
 <div style="margin-left:20px;margin-top:20px">
-  <h4>Wearable Annotations <button id="export_all" class="controlButtonS"><i class="material-icons">save_alt</i></button>
-      <select id="download-format" class="downloadFormatDropDown" data-toggle="tooltip" data-placement="bottom"
-        data-trigger="hover" title="Download format">
-        <option value="1">Excel (.xls)</option>
-        <option value="2">Subtitle (.srt)</option>
-        <option value="3">Comma-separated Values (.csv)</option>
-        <option value="4">Tab-delimited Text (.txt)</option>
-      </select>
-  </h4>
+  <h4>Wearable Annotations</h4>
   <ul>
     {% for annotation in wearabledata.wearableannotation_set.all %}
       <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">

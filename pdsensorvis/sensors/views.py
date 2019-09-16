@@ -144,7 +144,7 @@ class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('id')
+        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('camera', 'timestamp')
 
 
 class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):

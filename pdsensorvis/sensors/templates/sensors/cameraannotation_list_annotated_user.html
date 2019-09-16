@@ -2,6 +2,7 @@
 
 {% block content %}
   <h1>My Camera Annotations</h1>
+  <hr>
   {% if cameraannotation_list %}
     <div class="annotation-objects">
       <ul id="annotation-objects-list">
@@ -9,8 +10,7 @@
           <li>
             <a href="{{ annotation.camera.get_absolute_url }}">
               {{ annotation.camera.patient }} ({{ annotation.camera.time }})</a>
-            - {{ annotation.timestamp}} - {{annotation.get_annotation_display}}
-            {% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
+            - {{ annotation.timestamp}} - {{annotation.get_annotation_display}}{% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
             ({{annotation.get_status_display}})
             <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
                     name="{% url 'edit-camera-annotation' annotation.camera.id annotation.id|stringformat:"i" %}">

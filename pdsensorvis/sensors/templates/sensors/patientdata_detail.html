@@ -12,7 +12,6 @@
 
   <div style="margin-left:20px;margin-top:40px">
     <h4>Wearable Data Session History</h4>
-
     {% for wearable in patientdata.wearabledata_set.all %}
       <hr>
       <p><strong>Session:</strong> <a href="{% url 'wearabledata-detail' wearable.id %}">{{ wearable.time }}</a></p>
@@ -24,7 +23,6 @@
 
   <div style="margin-left:20px;margin-top:40px">
     <h4>Camera Data Session History</h4>
-
     {% for camera in patientdata.cameradata_set.all %}
       <hr>
       <p><strong>Session:</strong> <a href="{% url 'cameradata-detail' camera.id %}">{{ camera.time }}</a></p>

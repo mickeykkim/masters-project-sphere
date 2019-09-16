@@ -24,7 +24,7 @@ class CameraAnnotationCreateForm(forms.ModelForm):
                 'readonly': True,
                 'style': 'font-family: "Roboto Mono", serif; text-align: center; display: table-cell; vertical-align: '
                          'top; border: 1px solid #a0a0a0; border-radius: 3px; height: 30px; line-height: 30px; '
-                         'margin: 0px 0px 0px 0px; width: 14%; min-width: 130px;',
+                         'margin: 0px 0px 0px 0px; width: 14%; min-width: 130px; background-color: #f8f8f8;',
             }),
             'annotation': forms.Select(attrs={
                 'id': 'form-annotation',
@@ -62,23 +62,13 @@ class CameraAnnotationEditForm(forms.ModelForm):
 
 
 class CameraAnnotationCommentCreateForm(forms.ModelForm):
-    """
-    def clean_text(self):
-        data = self.cleaned_data['text']
-
-        if not data:
-            raise ValidationError(_('Comment cannot be blank.'))
-
-        return data
-    """
-
     class Meta:
         model = CameraAnnotationComment
         fields = ['text']
         widgets = {
             'text': forms.Textarea(attrs={
                 'id': 'form-text',
-                'required': False,
+                'required': True,
                 'style': 'border: 1px solid #a0a0a0; border-radius: 3px; '
                          'height: 150px; width: 90%; box-sizing: border-box; background-color: #f8f8f8;',
             }),

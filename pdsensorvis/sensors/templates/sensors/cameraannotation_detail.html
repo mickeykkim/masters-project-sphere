@@ -25,6 +25,7 @@
   {% empty %}
     <p>No comments.</p>
   {% endfor %}
+  <hr>
   <form method="POST" class="post-form">
     {% csrf_token %}
     <h6>Post new comment:</h6>
@@ -32,7 +33,7 @@
     <div>
       <button type="submit" id="post" class="controlButtonL">Post</button>
       <input type="button" value="Back to Video" class="controlButtonXL"
-           onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
+             onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
     </div>
   </form>
 {% endblock %}

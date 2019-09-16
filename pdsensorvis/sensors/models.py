@@ -14,7 +14,6 @@ ANNOTATION = (
     ('oth', 'Other')
 )
 
-# Indicators for annotation status (begin or end)
 BEGIN = 'b'
 END = 'e'
 ANNOTATION_STATUS = (
@@ -22,6 +21,7 @@ ANNOTATION_STATUS = (
     (END, '-'),
 )
 
+"""
 # Standard Frame Rate Options
 FRAME_RATES = (
     ('NTSC_Film', 23.98),
@@ -33,11 +33,10 @@ FRAME_RATES = (
     ('NTSC_HD', 59.94),
     ('High', 60),
 )
+"""
 
 
 class PatientData(models.Model):
-    """Fields and Functions related to each patient"""
-
     id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, help_text='Patient first name')
     last_name = models.CharField(max_length=50, help_text='Patient last name')
@@ -55,8 +54,6 @@ class PatientData(models.Model):
 
 
 class WearableData(models.Model):
-    """Data related to wrist-worn wearable"""
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True)
     filename = models.FileField(upload_to='wearable/')
@@ -74,8 +71,6 @@ class WearableData(models.Model):
 
 
 class CameraData(models.Model):
-    """Data related to silhouette camera"""
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True)
     filename = models.FileField(upload_to='camera/')
@@ -96,7 +91,6 @@ class CameraData(models.Model):
 
 
 class WearableAnnotation(models.Model):
-    """Fields and Functions related to wearable annotations"""
     id = models.AutoField(primary_key=True)
     wearable = models.ForeignKey('WearableData', on_delete=models.CASCADE, null=True)
     timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
@@ -117,12 +111,10 @@ class WearableAnnotation(models.Model):
         return reverse('wearableannotation-detail', args=[str(self.wearable.id), str(self.id)])
 
     def __str__(self):
-        """String for representing the Model object."""
         return f'{self.wearable} - {self.timestamp} - {self.annotation}'
 
 
 class CameraAnnotation(models.Model):
-    """Fields and Functions related to camera annotations"""
     id = models.AutoField(primary_key=True)
     camera = models.ForeignKey('CameraData', on_delete=models.CASCADE, null=True)
     timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
@@ -143,7 +135,6 @@ class CameraAnnotation(models.Model):
         return reverse('cameraannotation-detail', args=[str(self.camera.id), str(self.id)])
 
     def __str__(self):
-        """String for representing the Model object."""
         return f'{self.camera} - {self.timestamp} - {self.annotation}'
 
 
@@ -158,5 +149,4 @@ class CameraAnnotationComment(models.Model):
         ordering = ['annotation', 'timestamp']
 
     def __str__(self):
-        """String for representing the Model object."""
         return self.text
