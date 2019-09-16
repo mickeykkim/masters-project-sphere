@@ -44,7 +44,7 @@ class CameraAnnotationCommentInline(admin.TabularInline):
 
 @admin.register(CameraAnnotation)
 class CameraAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('camera', 'timestamp', 'annotation', 'id')
+    list_display = ('camera', 'timestamp', 'annotation', 'status', 'id')
     inlines = [CameraAnnotationCommentInline]
     extra = 0
 

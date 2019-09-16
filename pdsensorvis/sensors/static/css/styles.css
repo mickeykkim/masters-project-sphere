@@ -25,6 +25,7 @@
     vertical-align: middle;
 }
 
+.controlButtonXL,
 .controlButtonL,
 .controlButtonM,
 .controlButtonS,
@@ -44,6 +45,7 @@
     margin: 15px 0 0 10px;
 }
 
+.controlButtonXL,
 .controlButtonL,
 .controlButtonM,
 .controlButtonS {
@@ -68,6 +70,11 @@
     background-color: indianred;
     height: 30px;
     border-radius: 6px;
+}
+
+.controlButtonXL {
+    width: 14%;
+    min-width: 120px;
 }
 
 .controlButtonL {

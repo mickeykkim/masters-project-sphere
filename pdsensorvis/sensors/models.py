@@ -137,7 +137,7 @@ class CameraAnnotation(models.Model):
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
-        ordering = ['timestamp']
+        ordering = ['camera', 'timestamp']
 
     def get_absolute_url(self):
         return reverse('cameraannotation-detail', args=[str(self.camera.id), str(self.id)])
@@ -155,7 +155,7 @@ class CameraAnnotationComment(models.Model):
     text = models.TextField()
 
     class Meta:
-        ordering = ['timestamp']
+        ordering = ['annotation', 'timestamp']
 
     def __str__(self):
         """String for representing the Model object."""
