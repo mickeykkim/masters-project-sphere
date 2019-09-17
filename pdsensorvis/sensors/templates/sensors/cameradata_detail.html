@@ -7,14 +7,13 @@
 {% load static %}
 
 {% block content %}
-  <h1>Patient: {{ cameradata.patient }} </h1>
+  <div class="titleText">
+    <h1>Patient: {{ cameradata.patient }}</h1><button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            title="Edit Camera Data"><i class="material-icons buttonIconS">create</i> Edit</button>
+  </div>
   <p><em>Session Time:</em> {{ cameradata.time }}
     <span class="vert-divider">|</span>
     <em>Note:</em> {{ cameradata.note }}
-    <span class="vert-divider">|</span>
-    <em>Edit:&nbsp;</em>
-    <button id="edit" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-            title="Edit Camera Data"><i class="material-icons">create</i></button>
     <span class="vert-divider">|</span>
     <button id="help" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
             title="Display shortcut keys"><i class="material-icons">settings</i></button>
@@ -87,7 +86,7 @@
             {{ form.status }}
           </span>
           <button type="submit" id="annotate" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                  title="Add annotation"><i class="material-icons">text_rotation_none</i></button>
+                  title="Add annotation"><i class="material-icons">add</i></button>
         </div>
         <!-- Frame Details -->
         <div class="frameDetails">
@@ -122,8 +121,7 @@
       <select id="download-format" class="downloadFormatDropDown" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Download format">
         <option value="1">Excel (.xls)</option>
-        <option value="3">Comma-separated Values (.csv)</option>
-        <option value="4">Tab-delimited Text (.txt)</option>
+        <option value="2">Comma-separated Values (.csv)</option>
       </select>
     </h4>
     <div class="annotation-objects">

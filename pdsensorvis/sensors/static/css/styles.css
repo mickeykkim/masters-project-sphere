@@ -5,6 +5,34 @@
     list-style: none;
 }
 
+.titleText {
+    position: relative;
+}
+
+.titleButton {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+.createNewSessionButton {
+    position: absolute;
+    right: 20px;
+    top: 0px;
+}
+
+.buttonIconL {
+    position: relative;
+    font-size: 22px;
+    vertical-align: middle;
+}
+
+.buttonIconS {
+    position: relative;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
 .videoFrame {
     width: 100%;
 }

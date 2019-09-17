@@ -1,34 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Patient: {{ patientdata }}</h1>
+  <div class="titleText">
+    <h1>Patient: {{ patientdata }}</h1><button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            title="Edit Camera Data"><i class="material-icons buttonIconS">create</i> Edit</button>
+  </div>
   <hr>
-  <p><strong>Last Name:</strong> <a href="">{{ patientdata.last_name }}</a>
-  <button id="edit" class="controlButtonXS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-            title="Edit Camera Data"><i class="material-icons" style="font-size: 22px">create</i></button></p>
-  <p><strong>First Name:</strong> {{ patientdata.first_name }}</p>
-  <p><strong>Date of Birth:</strong> {{ patientdata.date_of_birth }}</p> 
-  <p><strong>Notes:</strong> {{ patientdata.notes }}</p>
+  <p><strong>Last Name: </strong>{{ patientdata.last_name }}</p>
+  <p><strong>First Name: </strong>{{ patientdata.first_name }}</p>
+  <p><strong>Date of Birth: </strong>{{ patientdata.date_of_birth }}</p>
+  <p><strong>Notes: </strong>{{ patientdata.notes }}</p>
 
   <div style="margin-left:20px;margin-top:40px">
-    <h4>Wearable Data Session History</h4>
+    <div class="titleText">
+      <h4>Wearable Data Session History</h4><button type='button' class="createNewSessionButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+    </div>
     {% for wearable in patientdata.wearabledata_set.all %}
       <hr>
-      <p><strong>Session:</strong> <a href="{% url 'wearabledata-detail' wearable.id %}">{{ wearable.time }}</a></p>
-      <p><strong>File:</strong> <a href="{{ media_url }}{{ wearable.filename }}">{{ wearable.filename }}</a></p>
-      <p><strong>Note:</strong> {{wearable.note}}</p>
-      <p class='text-muted'><strong>Id:</strong> {{wearable.id}}</p>
+      <p><strong>Session: </strong><a href="{% url 'wearabledata-detail' wearable.id %}">{{ wearable.time }}</a></p>
+      <p><strong>File: </strong><a href="{{ media_url }}{{ wearable.filename }}">{{ wearable.filename }}</a></p>
+      <p><strong>Note: </strong>{{wearable.note}}</p>
+      <p class='text-muted'><strong>Id: </strong>{{wearable.id}}</p>
+    {% empty %}
+      <hr>
+      <p><em>No data.</em></p>
     {% endfor %}
   </div>
 
   <div style="margin-left:20px;margin-top:40px">
-    <h4>Camera Data Session History</h4>
+    <div class="titleText">
+      <h4>Camera Data Session History</h4><button type='button' class="createNewSessionButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+    </div>
     {% for camera in patientdata.cameradata_set.all %}
       <hr>
-      <p><strong>Session:</strong> <a href="{% url 'cameradata-detail' camera.id %}">{{ camera.time }}</a></p>
-      <p><strong>File:</strong> <a href="{{ media_url }}{{ camera.filename }}">{{ camera.filename }}</a></p>
-      <p><strong>Note:</strong> {{camera.note}}</p>
-      <p class='text-muted'><strong>Id:</strong> {{camera.id}}</p>
+      <p><strong>Session: </strong><a href="{% url 'cameradata-detail' camera.id %}">{{ camera.time }}</a></p>
+      <p><strong>File: </strong><a href="{{ media_url }}{{ camera.filename }}">{{ camera.filename }}</a></p>
+      <p><strong>Note: </strong>{{camera.note}}</p>
+      <p class='text-muted'><strong>Id: </strong>{{camera.id}}</p>
+    {% empty %}
+      <hr>
+      <p><em>No data.</em></p>
     {% endfor %}
   </div>
 {% endblock %}

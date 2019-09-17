@@ -2,15 +2,37 @@
 
 {% block title %}<title>Bristol Sphere PD Sensors - Wearable Data</title>{% endblock %}
 
+{% block content %}
+  <div class="titleText">
+    <h1>Patient: {{ wearabledata.patient }}</h1><button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            title="Edit Wearable Data"><i class="material-icons buttonIconS">create</i> Edit</button>
+  </div>
+  <p><em>Session Time:</em> {{ wearabledata.time }} <span class="vert-divider">|</span> <em>Note:</em> {{ wearabledata.note }}</p>
+  <hr>
+  <h1>Wearable Data Visualization</h1>
+  <canvas id="myChart" width="500" height="400"></canvas>
+  <hr>
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Wearable Annotations</h4>
+    <ul>
+      {% for annotation in wearabledata.wearableannotation_set.all %}
+        <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
+            {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}})
+            </a></li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
 {% block jquery %}
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
    type: 'line',
    data: {
-      labels: ['1', '2', '3', '4', '5', '6'],
+      labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
       datasets: [{
          label: '',
-         data: [12, 19, 3, 5, 2, 3],
+         data: [12, 19, 3, 5, 2, 5, 12, 8, 12, 11, 12],
          backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
          ],
@@ -52,23 +74,4 @@ var myChart = new Chart(ctx, {
       }
    }
 });
-{% endblock %}
-
-{% block content %}
-<h1>Patient: {{ wearabledata.patient }} </h1>
-<p><em>Session Time:</em> {{ wearabledata.time }} <span class="vert-divider">|</span> <em>Note:</em> {{ wearabledata.note }}</p>
-<hr>
-<h1>Wearable Data Visualization</h1>
-<canvas id="myChart" width="500" height="400"></canvas>
-<hr>
-<div style="margin-left:20px;margin-top:20px">
-  <h4>Wearable Annotations</h4>
-  <ul>
-    {% for annotation in wearabledata.wearableannotation_set.all %}
-      <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
-          {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}})
-          </a></li>
-    {% endfor %}
-  </ul>
-</div>
 {% endblock %}

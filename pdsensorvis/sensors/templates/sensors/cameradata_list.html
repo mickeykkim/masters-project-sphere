@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Camera Data</h1>
+  <div class="titleText">
+    <h1>Camera Data</h1><button type='button' class="titleButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+  </div>
   <hr>
   {% if cameradata_list %}
     <ul>
