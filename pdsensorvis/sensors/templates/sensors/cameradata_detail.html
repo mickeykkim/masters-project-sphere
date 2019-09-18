@@ -114,7 +114,7 @@
   <hr>
 
   <!-- Camera Annotation List -->
-  <div class="annotation-container" style="margin-left:20px;margin-top:20px">
+  <div class="annotation-container">
     <h4>Camera Annotations
       <button id="export-all" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
               name="{% url 'export-annotations-xls' cameradata.id %}"
@@ -125,7 +125,6 @@
         <option value="1">Excel (.xls)</option>
         <option value="2">Comma-separated Values (.csv)</option>
       </select>
-
     </h4>
     <div class="annotation-objects">
       <ul id="annotation-objects-list">
@@ -133,7 +132,7 @@
           <li class="annotationDetails">
             <span class="annotationTimestamp">{{ annotation.timestamp }}</span>
             <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.timestamp }}">
-              <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
+              <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation">skip_previous</i>
             </button>
             {{ annotation.get_annotation_display }}{% if annotation.get_annotation_display == 'Other' %}: {{ annotation.note }}{% endif %}
@@ -142,7 +141,7 @@
               {% if annotation.annotator == user %}
                 <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
                         name="{% url 'edit-camera-annotation' cameradata.id annotation.id|stringformat:"i" %}">
-                  <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"
+                  <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                      title="Edit annotation">edit</i>
                 </button>
               {% endif %}

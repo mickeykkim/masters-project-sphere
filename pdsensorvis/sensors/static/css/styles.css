@@ -21,6 +21,11 @@
     top: 0px;
 }
 
+.buttonIcon {
+    position: relative;
+    font-size: 22px;
+}
+
 .buttonIconL {
     position: relative;
     font-size: 22px;
@@ -70,7 +75,11 @@
 }
 
 .comment {
-    margin: 15px 0 0 10px;
+    margin: 15px 0 0 15px;
+}
+
+.annotation-container {
+    margin: 20px 0 0 20px;
 }
 
 .controlButtonXL,
@@ -83,19 +92,22 @@
 }
 
 .saveButton {
-    background-color: lightgreen;
+    background-color: forestgreen;
+    color: white;
     height: 30px;
     border-radius: 6px;
 }
 
 .cancelButton {
-    background-color: white;
+    background-color: grey;
+    color: white;
     height: 30px;
     border-radius: 6px;
 }
 
 .deleteButton {
     background-color: indianred;
+    color: white;
     height: 30px;
     border-radius: 6px;
 }
