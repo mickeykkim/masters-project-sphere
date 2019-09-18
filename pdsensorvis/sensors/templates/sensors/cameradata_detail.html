@@ -8,7 +8,8 @@
 
 {% block content %}
   <div class="titleText">
-    <h1>Patient: {{ cameradata.patient }}</h1><button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+    <h1>Patient: {{ cameradata.patient }}</h1>
+    <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
             title="Edit Camera Data"><i class="material-icons buttonIconS">create</i> Edit</button>
   </div>
   <p><em>Session Time:</em> {{ cameradata.time }}
@@ -19,8 +20,6 @@
             title="Display shortcut keys"><i class="material-icons">keyboard</i></button>
   </p>
   <hr>
-
-  <script src="{% static 'js/VideoFrame.min.js' %}"></script>
 
   <div class="videoFrame">
     <!-- VideoFrame Object -->
@@ -116,13 +115,17 @@
 
   <!-- Camera Annotation List -->
   <div class="annotation-container" style="margin-left:20px;margin-top:20px">
-    <h4>Camera Annotations <button id="export_all" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
-                                   data-trigger="hover" title="Download annotations"><i class="material-icons">save_alt</i></button>
-      <select id="download-format" class="downloadFormatDropDown" data-toggle="tooltip" data-placement="bottom"
+    <h4>Camera Annotations
+      <button id="export-all" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
+              name="{% url 'export-annotations-xls' cameradata.id %}"
+              value="{% url 'export-annotations-csv' cameradata.id %}"
+              data-trigger="hover" title="Download annotations"><i class="material-icons">save_alt</i></button>
+      <select id="export-format" class="downloadFormatDropDown" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Download format">
         <option value="1">Excel (.xls)</option>
         <option value="2">Comma-separated Values (.csv)</option>
       </select>
+
     </h4>
     <div class="annotation-objects">
       <ul id="annotation-objects-list">
@@ -155,6 +158,7 @@
 {% endblock %}
 
 {% block javascript %}
+  <script src="{% static 'js/VideoFrame.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/cameradata_detail.js' %}"></script>
 {% endblock %}
 

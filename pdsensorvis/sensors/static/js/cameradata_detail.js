@@ -15,6 +15,10 @@ let seekBackwardButton = document.getElementById("seek-backward");
 let seekForwardButton = document.getElementById("seek-forward");
 let helpButton = document.getElementById("help");
 
+// Export functionality
+let downloadButton = document.getElementById("export-all");
+let downloadFormat = document.getElementById("export-format");
+
 // Range Sliders
 let seekBar = document.getElementById("seek-bar");
 let volumeBar = document.getElementById("volume-bar");
@@ -270,6 +274,15 @@ seekBackwardButton.addEventListener("click", function () {
 seekForwardButton.addEventListener("click", function () {
    stepForward();
    seekForwardButton.blur();
+});
+
+downloadButton.addEventListener("click", function() {
+   let option = downloadFormat.selectedIndex;
+   if (option === 0) {
+      document.location.href = this.name;
+   } else if (option === 1) {
+      document.location.href = this.value;
+   }
 });
 
 /*

@@ -78,7 +78,7 @@ def export_annotations_csv(request, pk):
     response['Content-Disposition'] = 'attachment; filename="annotations.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['Username', 'First name', 'Last name', 'Email address'])
+    writer.writerow([pk, 'First name', 'Last name', 'Email address'])
 
     users = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
     for user in users:
@@ -100,7 +100,7 @@ def export_annotations_xls(request, pk):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['Username', 'First name', 'Last name', 'Email address', ]
+    columns = [pk, 'First name', 'Last name', 'Email address', ]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)

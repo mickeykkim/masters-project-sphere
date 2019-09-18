@@ -4,7 +4,8 @@
 
 {% block content %}
   <div class="titleText">
-    <h1>Patient: {{ wearabledata.patient }}</h1><button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+    <h1>Patient: {{ wearabledata.patient }}</h1>
+    <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
             title="Edit Wearable Data"><i class="material-icons buttonIconS">create</i> Edit</button>
   </div>
   <p><em>Session Time:</em> {{ wearabledata.time }} <span class="vert-divider">|</span> <em>Note:</em> {{ wearabledata.note }}</p>
@@ -17,11 +18,17 @@
     <ul>
       {% for annotation in wearabledata.wearableannotation_set.all %}
         <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
-            {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}})
-            </a></li>
+          {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}})
+        </a></li>
       {% endfor %}
     </ul>
   </div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"
+          integrity="sha384-QzN1ywg2QLsf72ZkgRHgjkB/cfI4Dqjg6RJYQUqH6Wm8qp/MvmEYn+2NBsLnhLkr"
+          crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block jquery %}
