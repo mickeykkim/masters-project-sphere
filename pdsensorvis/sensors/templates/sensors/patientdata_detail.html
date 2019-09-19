@@ -15,7 +15,7 @@
     <div class="titleText">
       <h4>Wearable Data Session History</h4><button type='button' class="createNewSessionButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
     </div>
-    {% for wearable in patientdata.wearabledata_set.all %}
+    {% for wearable in patientdata.wearables.all %}
       <hr>
       <p><strong>Session: </strong><a href="{% url 'wearabledata-detail' wearable.id %}">{{ wearable.time }}</a></p>
       <p><strong>File: </strong><a href="{{ media_url }}{{ wearable.filename }}">{{ wearable.filename }}</a></p>
@@ -31,7 +31,7 @@
     <div class="titleText">
       <h4>Camera Data Session History</h4><button type='button' class="createNewSessionButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
     </div>
-    {% for camera in patientdata.cameradata_set.all %}
+    {% for camera in patientdata.cameras.all %}
       <hr>
       <p><strong>Session: </strong><a href="{% url 'cameradata-detail' camera.id %}">{{ camera.time }}</a></p>
       <p><strong>File: </strong><a href="{{ media_url }}{{ camera.filename }}">{{ camera.filename }}</a></p>

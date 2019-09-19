@@ -16,7 +16,7 @@
   <div style="margin-left:20px;margin-top:20px">
     <h4>Wearable Annotations</h4>
     <ul>
-      {% for annotation in wearabledata.wearableannotation_set.all %}
+      {% for annotation in wearabledata.w_annotations.all %}
         <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
           {{annotation.timestamp}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}})
         </a></li>

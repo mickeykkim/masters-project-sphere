@@ -78,11 +78,20 @@ def export_annotations_csv(request, pk):
     response['Content-Disposition'] = 'attachment; filename="annotations.csv"'
 
     writer = csv.writer(response)
-    writer.writerow([pk, 'First name', 'Last name', 'Email address'])
+    writer.writerow(['Annotation ID:', pk])
+    writer.writerow(['Timestamp', 'Annotation', 'Status', 'Note', 'Annotator', 'Comments'])
 
-    users = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
-    for user in users:
-        writer.writerow(user)
+    annotations = CameraAnnotation.objects.filter(camera_id=pk)
+
+    for annotation in annotations:
+        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
+        discussion = ""
+
+        for comment in comment_list:
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + comment.text + "\n"
+
+        writer.writerow([annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
+                         annotation.note, annotation.annotator, discussion, ])
 
     return response
 

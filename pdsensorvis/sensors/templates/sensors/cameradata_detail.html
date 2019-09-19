@@ -128,7 +128,7 @@
     </h4>
     <div class="annotation-objects">
       <ul id="annotation-objects-list">
-        {% for annotation in cameradata.cameraannotation_set.all %}
+        {% for annotation in cameradata.c_annotations.all %}
           <li class="annotationDetails">
             <span class="annotationTimestamp">{{ annotation.timestamp }}</span>
             <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.timestamp }}">

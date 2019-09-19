@@ -55,7 +55,7 @@ class PatientData(models.Model):
 
 class WearableData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
-    patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True)
+    patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='wearables')
     filename = models.FileField(upload_to='wearable/')
     time = models.DateTimeField()
     note = models.CharField(max_length=500, help_text='Note regarding wearable')
@@ -72,7 +72,7 @@ class WearableData(models.Model):
 
 class CameraData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
-    patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True)
+    patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='cameras')
     filename = models.FileField(upload_to='camera/')
     time = models.DateTimeField()
     note = models.CharField(max_length=500, help_text='Note regarding camera')
@@ -92,7 +92,7 @@ class CameraData(models.Model):
 
 class WearableAnnotation(models.Model):
     id = models.AutoField(primary_key=True)
-    wearable = models.ForeignKey('WearableData', on_delete=models.CASCADE, null=True)
+    wearable = models.ForeignKey('WearableData', on_delete=models.CASCADE, null=True,  related_name='w_annotations')
     timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
@@ -116,7 +116,7 @@ class WearableAnnotation(models.Model):
 
 class CameraAnnotation(models.Model):
     id = models.AutoField(primary_key=True)
-    camera = models.ForeignKey('CameraData', on_delete=models.CASCADE, null=True)
+    camera = models.ForeignKey('CameraData', on_delete=models.CASCADE, null=True, related_name='c_annotations')
     timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
