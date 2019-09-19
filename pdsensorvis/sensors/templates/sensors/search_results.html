@@ -9,7 +9,7 @@
       <ul>
         <li>
           <a href="{{ item.get_absolute_url }}">
-            {{ item.patient }} ({{ item.time }}) - {{ item.id }}</a>
+            {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
         </li>
       </ul>
       {% empty %}
@@ -20,7 +20,7 @@
       <ul>
         <li>
           <a href="{{ item.get_absolute_url }}">
-            {{ item.patient }} ({{ item.time }}) - {{ item.id }}</a>
+            {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
         </li>
       </ul>
       {% empty %}

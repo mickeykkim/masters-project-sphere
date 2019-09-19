@@ -3,13 +3,14 @@
 {% block content %}
   <h1>PD Sensors Home</h1>
   <hr>
-  <h5>Look up sensor data by Patient or ID:</h5>
-  <form action="{% url 'search_results' %}" method="get">
+  {% if user.is_authenticated %}
+  <h4>Look up sensor data by Patient or ID:</h4>
+  <form action="{% url 'search_results' %}" method="get" style="margin-top:15px">
     <input type="text" class="searchText" name="q" placeholder="Input Patient or ID" />
     <input type="submit" class="controlButtonL" value="Search" />
   </form>
-  <br>
-  <h4>Data Overview</h4>
+  {% endif %}
+  <h4 style="margin-top:25px">Data Overview</h4>
   <p>The database has the following records:</p>
   <ul>
     <li><strong>Patients:</strong> {{ num_patients }}</li>
