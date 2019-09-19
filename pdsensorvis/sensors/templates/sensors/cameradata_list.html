@@ -7,10 +7,10 @@
   <hr>
   {% if cameradata_list %}
     <ul>
-      {% for annotation in cameradata_list %}
+      {% for cameradata in cameradata_list %}
         <li>
-          <a href="{{ annotation.get_absolute_url }}">
-            {{ annotation.patient }} ({{ annotation.time }})
+          <a href="{{ cameradata.get_absolute_url }}">
+            {{ cameradata.patient }} ({{ cameradata.time }}) - [{{ cameradata.id }}]
           </a>
         </li>
       {% endfor %}

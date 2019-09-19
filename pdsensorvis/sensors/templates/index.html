@@ -3,8 +3,13 @@
 {% block content %}
   <h1>PD Sensors Home</h1>
   <hr>
-  <p>PD Sensors for Bristol Sphere</p>
-  <h2>Data Overview</h2>
+  <h5>Look up sensor data by Patient or ID:</h5>
+  <form action="{% url 'search_results' %}" method="get">
+    <input type="text" class="searchText" name="q" placeholder="Input Patient or ID" />
+    <input type="submit" class="controlButtonL" value="Search" />
+  </form>
+  <br>
+  <h4>Data Overview</h4>
   <p>The database has the following records:</p>
   <ul>
     <li><strong>Patients:</strong> {{ num_patients }}</li>

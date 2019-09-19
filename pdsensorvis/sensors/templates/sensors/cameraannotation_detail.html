@@ -20,6 +20,15 @@
   {% for comment in cameraannotation.comments.all %}
     <div class="comment">
       <strong>{{ comment.author }}</strong> <em>(Posted on: {{ comment.timestamp }})</em>
+      {% if user.is_authenticated %}
+        {% if comment.author == user %}
+          <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
+                  onclick="window.location.href=''">
+            <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+               title="Edit comment">edit</i>
+          </button>
+        {% endif %}
+      {% endif %}
       <p>{{ comment.text|linebreaks }}</p>
     </div>
   {% empty %}

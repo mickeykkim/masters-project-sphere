@@ -87,7 +87,7 @@ class CameraData(models.Model):
         return f'{self.patient} ({self.time})'
 
     def get_user_annotations(self):
-        return self.cameraannotation_set.filter(annotator=User)
+        return self.c_annotations.filter(annotator=User)
 
 
 class WearableAnnotation(models.Model):
@@ -111,7 +111,7 @@ class WearableAnnotation(models.Model):
         return reverse('wearableannotation-detail', args=[str(self.wearable.id), str(self.id)])
 
     def __str__(self):
-        return f'{self.wearable} - {self.timestamp} - {self.annotation}'
+        return f'{self.wearable} - {self.timestamp} - {self.get_annotation_display()}'
 
 
 class CameraAnnotation(models.Model):
@@ -135,7 +135,7 @@ class CameraAnnotation(models.Model):
         return reverse('cameraannotation-detail', args=[str(self.camera.id), str(self.id)])
 
     def __str__(self):
-        return f'{self.camera} - {self.timestamp} - {self.annotation}'
+        return f'{self.camera} - {self.timestamp} - {self.get_annotation_display()}'
 
 
 class CameraAnnotationComment(models.Model):

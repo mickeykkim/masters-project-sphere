@@ -11,7 +11,7 @@
     {% for wearabledata in wearabledata_list %}
       <li>
         <a href="{{ wearabledata.get_absolute_url }}">
-          {{ wearabledata.patient }} ({{ wearabledata.time }})
+          {{ wearabledata.patient }} ({{ wearabledata.time }}) - [{{ wearabledata.id }}]
         </a>
       </li>
     {% endfor %}

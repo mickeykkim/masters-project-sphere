@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
    path('', views.index, name='index'),
+   path('search/', views.search_results, name='search_results'),
    path('patientdata/', views.PatientDataListView.as_view(), name='patientdata'),
    re_path(r'^patientdata/(?P<pk>\d+)$', views.PatientDataDetailView.as_view(), name='patientdata-detail'),
    path('wearabledata/', views.WearableDataListView.as_view(), name='wearabledata'),

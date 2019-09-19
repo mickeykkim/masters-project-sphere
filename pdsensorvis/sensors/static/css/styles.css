@@ -199,6 +199,7 @@
 
 .rewindTextValue,
 .otherText,
+.searchText,
 .currentFrameText {
     font-family: 'Roboto Mono', serif;
     border-radius: 3px;
@@ -222,6 +223,10 @@
 
 .otherText {
     width: 14%;
+}
+
+.searchText {
+    width: 50%;
 }
 
 .form-group {

@@ -2,6 +2,7 @@ import csv
 import xlwt
 
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from django.views import generic
 from django.shortcuts import redirect
 from django.http import HttpResponse
@@ -9,13 +10,22 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, CameraAnnotationComment
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm
+from uuid import UUID
 
 User = get_user_model()
 
 
-def index(request):
-    """View function for sensor index site."""
+def is_valid_uuid(uuid_to_test, version=4):
+    """Check if uuid_to_test is a valid UUID."""
+    try:
+        uuid_obj = UUID(uuid_to_test, version=version)
+    except ValueError:
+        return False
 
+    return str(uuid_obj) == uuid_to_test
+
+
+def index(request):
     # Generate counts of some of the main objects
     num_patients = PatientData.objects.all().count()
     num_wearables = WearableData.objects.all().count()
@@ -33,6 +43,26 @@ def index(request):
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
+
+
+def search_results(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+
+        if query is not None:
+            if is_valid_uuid(query, 4):
+                lookups = Q(pk=query)
+            else:
+                lookups = Q(patient__first_name__icontains=query) | Q(patient__last_name__icontains=query)
+            camera_results = CameraData.objects.filter(lookups)
+            wearable_results = WearableData.objects.filter(lookups)
+            context = {'cameradata': camera_results, 'wearabledata': wearable_results}
+            return render(request, "sensors/search_results.html", context)
+        else:
+            return render(request, "sensors/search_results.html")
+
+    else:
+        return render(request, "sensors/search_results.html")
 
 
 def edit_camera_annotation(request, uuid, pk):
@@ -78,7 +108,7 @@ def export_annotations_csv(request, pk):
     response['Content-Disposition'] = 'attachment; filename="annotations.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['Annotation ID:', pk])
+    writer.writerow(['Session ID:', pk])
     writer.writerow(['Timestamp', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments'])
 
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
@@ -88,7 +118,8 @@ def export_annotations_csv(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + comment.text + "\n"
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + \
+                          comment.text + "\n"
 
         writer.writerow([annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
                          annotation.note, annotation.annotator.username, discussion, ])
@@ -109,14 +140,13 @@ def export_annotations_xls(request, pk):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['Annotation ID:', pk, ]
+    columns = ['Session ID:', pk, ]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
     # Sheet headers
     row_num = 1
-
     columns = ['Timestamp', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments', ]
 
     for col_num in range(len(columns)):
@@ -124,7 +154,6 @@ def export_annotations_xls(request, pk):
 
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
-
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
 
     for annotation in annotations:
@@ -133,7 +162,8 @@ def export_annotations_xls(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + comment.text + "\n"
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + \
+                          comment.text + "\n"
 
         items = [annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
                  annotation.note, annotation.annotator.username, discussion, ]

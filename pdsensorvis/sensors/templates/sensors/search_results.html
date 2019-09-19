@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Search Results</h1>
+  <hr>
+    <div class="annotation-objects">
+      <h5>Camera Data:</h5>
+      {% for item in cameradata %}
+      <ul>
+        <li>
+          <a href="{{ item.get_absolute_url }}">
+            {{ item.patient }} ({{ item.time }}) - {{ item.id }}</a>
+        </li>
+      </ul>
+      {% empty %}
+        <p>No camera data found.</p>
+      {% endfor %}
+      <h5>Wearable Data:</h5>
+      {% for item in wearabledata %}
+      <ul>
+        <li>
+          <a href="{{ item.get_absolute_url }}">
+            {{ item.patient }} ({{ item.time }}) - {{ item.id }}</a>
+        </li>
+      </ul>
+      {% empty %}
+        <p>No wearable data found.</p>
+      {% endfor %}
+    </div>
+{% endblock %}
