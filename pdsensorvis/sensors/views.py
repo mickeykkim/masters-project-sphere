@@ -79,7 +79,7 @@ def export_annotations_csv(request, pk):
 
     writer = csv.writer(response)
     writer.writerow(['Annotation ID:', pk])
-    writer.writerow(['Timestamp', 'Annotation', 'Status', 'Note', 'Annotator', 'Comments'])
+    writer.writerow(['Timestamp', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments'])
 
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
 
@@ -91,7 +91,7 @@ def export_annotations_csv(request, pk):
             discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + comment.text + "\n"
 
         writer.writerow([annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
-                         annotation.note, annotation.annotator, discussion, ])
+                         annotation.note, annotation.annotator.username, discussion, ])
 
     return response
 
@@ -103,13 +103,21 @@ def export_annotations_xls(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Users')
 
-    # Sheet header, first row
+    # Sheet first row
     row_num = 0
 
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = [pk, 'First name', 'Last name', 'Email address', ]
+    columns = ['Annotation ID:', pk, ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet headers
+    row_num = 1
+
+    columns = ['Timestamp', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments', ]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -117,11 +125,21 @@ def export_annotations_xls(request, pk):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
 
-    rows = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
-    for row in rows:
+    annotations = CameraAnnotation.objects.filter(camera_id=pk)
+
+    for annotation in annotations:
         row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
+        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
+        discussion = ""
+
+        for comment in comment_list:
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + comment.text + "\n"
+
+        items = [annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
+                 annotation.note, annotation.annotator.username, discussion, ]
+
+        for col_num in range(len(items)):
+            ws.write(row_num, col_num, items[col_num], font_style)
 
     wb.save(response)
     return response
