@@ -3,14 +3,8 @@
 {% block content %}
   <div class="titleText">
     <h1>Wearable Data</h1>
-    {% if perms.sensors.can_alter_wearabledata %}
-      <button type='button' class="titleButton controlButtonXL">
-        <i class="material-icons buttonIconS">add</i>Create New
-      </button>
-    {% endif %}
   </div>
   <hr>
-  {% if wearabledata_list %}
   <ul>
     {% for wearabledata in wearabledata_list %}
       <li>
@@ -18,9 +12,8 @@
           {{ wearabledata.patient }} ({{ wearabledata.time }}) - {{ wearabledata.note }}
         </a>
       </li>
+    {% empty %}
+      <p>There are no wearable data in the database.</p>
     {% endfor %}
   </ul>
-  {% else %}
-    <p>There are no wearable data in the database.</p>
-  {% endif %}       
 {% endblock %}

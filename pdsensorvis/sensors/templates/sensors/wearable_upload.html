@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block head_add %}
+  <!-- Font Awesome -->
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+  <!-- Moment.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+
+  <!-- Tempus Dominus Bootstrap 4 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+  <h1>Create New Wearable Data</h1>
+  <hr>
+  <p><strong>Patient:</strong> {{ patientdata }}</p>
+  <form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ form.filename }}
+      {{ form.filename.errors }}
+      <div class="input-group date" id="datetimepicker1" data-target-input="nearest" style="margin-top: 10px">
+        {{ form.time }}
+        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+      </div>
+      {{ form.time.errors }}
+      {{ form.time.help_text }}
+      {{ form.note }}
+      {{ form.note.help_text}}
+      {{ form.note.errors }}
+    </table>
+    <div class="buttons" style="margin-top: 10px">
+      <input type="submit" value="Create" class="saveButton" />
+      <input type="button" value="Cancel" class="cancelButton" onclick="window.history.back()" />
+    </div>
+  </form>
+{% endblock %}
+
+{% block jquery %}
+  $(function () {
+      $("#datetimepicker1").datetimepicker({
+          format: 'DD/MM/YYYY HH:mm',
+      });
+  });
+{% endblock %}

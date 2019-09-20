@@ -49,7 +49,7 @@ class CameraDataAdmin(admin.ModelAdmin):
 
 @admin.register(WearableAnnotation)
 class WearableAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('wearable', 'frame', 'annotation', 'id')
+    list_display = ('wearable', 'frame_begin', 'frame_end', 'annotation', 'id')
 
 
 class CameraAnnotationCommentInline(admin.TabularInline):

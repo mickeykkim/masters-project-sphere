@@ -58,7 +58,7 @@ class WearableData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='wearables')
     filename = models.FileField(upload_to='wearable/')
-    time = models.DateTimeField()
+    time = models.DateTimeField(help_text='Session Date & Time')
     note = models.CharField(max_length=500, help_text='Note regarding wearable')
 
     class Meta:
@@ -76,7 +76,7 @@ class CameraData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='cameras')
     filename = models.FileField(upload_to='camera/')
-    time = models.DateTimeField()
+    time = models.DateTimeField(help_text='Session Date & Time')
     note = models.CharField(max_length=500, help_text='Note regarding camera')
 
     class Meta:
@@ -96,7 +96,8 @@ class CameraData(models.Model):
 class WearableAnnotation(models.Model):
     id = models.AutoField(primary_key=True)
     wearable = models.ForeignKey('WearableData', on_delete=models.CASCADE, null=True,  related_name='w_annotations')
-    frame = models.PositiveIntegerField()
+    frame_begin = models.PositiveIntegerField()
+    frame_end = models.PositiveIntegerField()
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
@@ -104,18 +105,17 @@ class WearableAnnotation(models.Model):
         default='oth',
         help_text='PD Symptom',
     )
-    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN, help_text='Begin (+) or End (-)')
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
-        ordering = ['frame']
+        ordering = ['frame_begin']
         permissions = (("can_alter_wearableannotation", "Can create or edit wearable annotations."),)
 
     def get_absolute_url(self):
         return reverse('wearableannotation-detail', args=[str(self.wearable.id), str(self.id)])
 
     def __str__(self):
-        return f'{self.wearable} - {self.frame} - {self.get_annotation_display()}'
+        return f'{self.wearable} - {self.frame_begin - self.frame_end} - {self.get_annotation_display()}'
 
 
 class CameraAnnotation(models.Model):

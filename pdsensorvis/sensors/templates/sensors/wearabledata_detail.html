@@ -19,14 +19,16 @@
   <div style="margin-left:20px;margin-top:20px">
     <h4>Wearable Annotations
       <button id="import" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
-              name=""
+              onclick=""
               data-trigger="hover" title="Import annotations"><i class="material-icons">cloud_upload</i></button>
     </h4>
     <ul>
       {% for annotation in wearabledata.w_annotations.all %}
         <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
-          Frame: {{annotation.frame}} - {{annotation.get_annotation_display}} ({{annotation.get_status_display}})
+          Frames {{ annotation.frame_begin }}-{{ annotation.frame_end }}: {{ annotation.get_annotation_display }}
         </a></li>
+      {% empty %}
+        <p>There are no wearable annotations in the database.</p>
       {% endfor %}
     </ul>
   </div>
@@ -47,8 +49,8 @@
      data: {
         labels: [{% for data in wearabledata.data_point.all %}'{{ data.frame }}', {% endfor %}],
         datasets: [{
-           label: '',
-           fill: true, // set to false for just line
+           label: 'Wearable Data Visualization',
+           fill: true, // Set to false to only display line
            data: [{% for data in wearabledata.data_point.all %}{{ data.magnitude }}, {% endfor %}],
            backgroundColor: [
               'rgba(255, 99, 132, 0.2)',

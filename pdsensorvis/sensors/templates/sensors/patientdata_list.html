@@ -4,11 +4,10 @@
   <div class="titleText">
     <h1>Patient Data</h1>
     {% if perms.sensors.can_alter_patientdata %}
-      <button type='button' class="titleButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+      <button type='button' class="titleButton controlButtonXL"><i class="material-icons buttonIconS">add</i> Create New</button>
     {% endif %}
   </div>
   <hr>
-  {% if patientdata_list %}
   <ul>
     {% for patientdata in patientdata_list %}
       <li>
@@ -16,9 +15,8 @@
           {{ patientdata.last_name }}, {{ patientdata.first_name }} ({{ patientdata.date_of_birth }}) - {{ patientdata.notes }}
         </a>
       </li>
+    {% empty %}
+      <p>There are no patient data in the database.</p>
     {% endfor %}
   </ul>
-  {% else %}
-    <p>There are no patient data in the database.</p>
-  {% endif %}       
 {% endblock %}

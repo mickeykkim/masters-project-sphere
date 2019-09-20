@@ -154,6 +154,8 @@
                    title="Link to discussion page">({{ annotation.comments.count }}
               comment{% if annotation.comments.count != 1 %}s{% endif %})</a></em>
           </li>
+        {% empty %}
+          <p>There are no camera annotations in the database.</p>
         {% endfor %}
       </ul>
     </div>

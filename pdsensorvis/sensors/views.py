@@ -5,20 +5,21 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.views import generic
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
     CameraAnnotationComment, WearableDataPoint
-from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm
+from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
+    UploadFileForm, WearableDataCreateForm
 from uuid import UUID
 
 User = get_user_model()
 
 
 def is_valid_uuid(uuid_to_test, version=4):
-    """Check if uuid_to_test is a valid UUID."""
+    """Check if uuid_to_test is a valid UUID. Default to check UUID version 4."""
     try:
         uuid_obj = UUID(uuid_to_test, version=version)
     except ValueError:
@@ -52,7 +53,7 @@ def search_results(request):
         query = request.GET.get('q')
 
         if query and query.strip():
-            if is_valid_uuid(query, 4):
+            if is_valid_uuid(query):
                 lookups = Q(pk=query)
             else:
                 lookups = Q(patient__first_name__icontains=query) | Q(patient__last_name__icontains=query)
@@ -65,6 +66,30 @@ def search_results(request):
 
     else:
         return render(request, "search_results.html")
+
+
+@permission_required('sensors.can_alter_wearabledata')
+def create_wearabledata(request, pk):
+    patient_id = get_object_or_404(PatientData, pk=pk)
+
+    if request.method == 'POST':
+        form = WearableDataCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_wearable = form.save(commit=False)
+            new_wearable.patient = patient_id
+            new_wearable.save()
+            return redirect('patientdata-detail', pk=pk)
+        else:
+            print(form.errors)
+    else:
+        form = WearableDataCreateForm()
+
+    context = {
+        'form': form,
+        'patientdata': patient_id,
+    }
+
+    return render(request, 'sensors/wearable_upload.html', context)
 
 
 @permission_required('sensors.can_alter_cameraannotation')
@@ -175,9 +200,9 @@ def export_annotations_xls(request, pk):
     return response
 
 
-def import_wearabledata_csv(uuid, path):
-    """Method for creating wearable data points. Requires csv file with no headers."""
-    wearabledata = get_object_or_404(WearableData, pk=uuid)
+def import_wearabledata_csv(pk, path):
+    """Method for importing wearable data points. Requires csv file with no headers."""
+    wearabledata = get_object_or_404(WearableData, pk=pk)
     with open(path) as import_file:
         reader = csv.reader(import_file)
         for row in reader:
@@ -185,6 +210,22 @@ def import_wearabledata_csv(uuid, path):
                 wearable=wearabledata,
                 frame=row[0],
                 magnitude=row[1],
+            )
+
+
+def import_wearableannotation_csv(pk, path):
+    """Method for importing wearable data annotations. Requires csv file with no headers."""
+    wearabledata = get_object_or_404(WearableData, pk=pk)
+    with open(path) as import_file:
+        reader = csv.reader(import_file)
+        for row in reader:
+            _, created = WearableAnnotation.objects.get_or_create(
+                wearable=wearabledata,
+                annotator=User,
+                frame_begin=row[0],
+                frame_end=row[1],
+                annotation=row[3],
+                note=row[4],
             )
 
 

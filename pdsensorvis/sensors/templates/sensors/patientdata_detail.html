@@ -18,7 +18,10 @@
     <div class="titleText">
       <h4>Wearable Data Session History</h4>
       {% if perms.sensors.can_alter_wearabledata %}
-        <button type='button' class="createNewSessionButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+        <button type='button' class="createNewSessionButton controlButtonXL"
+                onclick='window.location.href="{% url 'create_wearabledata' patientdata.id %}"'>
+          <i class="material-icons buttonIconS">add</i> Create New
+        </button>
       {% endif %}
     </div>
     {% for wearable in patientdata.wearables.all %}
@@ -37,7 +40,7 @@
     <div class="titleText">
       <h4>Camera Data Session History</h4>
       {% if perms.sensors.can_alter_cameradata %}
-        <button type='button' class="createNewSessionButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+        <button type='button' class="createNewSessionButton controlButtonXL"><i class="material-icons buttonIconS">add</i> Create New</button>
       {% endif %}
     </div>
     {% for camera in patientdata.cameras.all %}
