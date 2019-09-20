@@ -78,6 +78,7 @@ def create_wearabledata(request, pk):
             new_wearable = form.save(commit=False)
             new_wearable.patient = patient_id
             new_wearable.save()
+            import_wearabledata_csv(new_wearable.id, new_wearable.filename.path)
             return redirect('patientdata-detail', pk=pk)
         else:
             print(form.errors)
