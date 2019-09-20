@@ -9,7 +9,8 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
-from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, CameraAnnotationComment
+from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
+    CameraAnnotationComment, WearableDataPoint
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm
 from uuid import UUID
 
@@ -58,12 +59,12 @@ def search_results(request):
             camera_results = CameraData.objects.filter(lookups)
             wearable_results = WearableData.objects.filter(lookups)
             context = {'cameradata': camera_results, 'wearabledata': wearable_results}
-            return render(request, "sensors/search_results.html", context)
+            return render(request, "search_results.html", context)
         else:
-            return render(request, "sensors/search_results.html")
+            return render(request, "search_results.html")
 
     else:
-        return render(request, "sensors/search_results.html")
+        return render(request, "search_results.html")
 
 
 @permission_required('sensors.can_alter_cameraannotation')
@@ -172,6 +173,19 @@ def export_annotations_xls(request, pk):
 
     wb.save(response)
     return response
+
+
+def import_wearabledata_csv(uuid, path):
+    """Method for creating wearable data points. Requires csv file with no headers."""
+    wearabledata = get_object_or_404(WearableData, pk=uuid)
+    with open(path) as import_file:
+        reader = csv.reader(import_file)
+        for row in reader:
+            _, created = WearableDataPoint.objects.get_or_create(
+                wearable=wearabledata,
+                frame=row[0],
+                magnitude=row[1],
+            )
 
 
 class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):

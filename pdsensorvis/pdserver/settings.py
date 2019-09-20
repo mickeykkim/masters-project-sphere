@@ -148,6 +148,7 @@ ADMIN_REORDER = (
             'models': (
                 'sensors.PatientData', 
                 'sensors.WearableData',
+                'sensors.WearableDataPoint',
                 'sensors.WearableAnnotation',
                 'sensors.CameraData',
                 'sensors.CameraAnnotation',

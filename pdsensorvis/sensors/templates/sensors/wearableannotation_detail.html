@@ -3,7 +3,7 @@
 {% block content %}
   <h1>{{ wearableannotation.wearable }}</h1>
   <hr>
-  <p><strong>Timestamp:</strong> {{ wearableannotation.timestamp }}</p>
+  <p><strong>Frame:</strong> {{ wearableannotation.frame }}</p>
   <p><strong>Annotation:</strong> {{ wearableannotation.get_annotation_display }}
     {% if wearableannotation.get_status_display == '+' %} (begin)
     {% elif wearableannotation.get_status_display == '-' %} (end)

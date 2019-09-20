@@ -96,7 +96,7 @@ class CameraData(models.Model):
 class WearableAnnotation(models.Model):
     id = models.AutoField(primary_key=True)
     wearable = models.ForeignKey('WearableData', on_delete=models.CASCADE, null=True,  related_name='w_annotations')
-    timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
+    frame = models.PositiveIntegerField()
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
@@ -108,14 +108,14 @@ class WearableAnnotation(models.Model):
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
-        ordering = ['timestamp']
+        ordering = ['frame']
         permissions = (("can_alter_wearableannotation", "Can create or edit wearable annotations."),)
 
     def get_absolute_url(self):
         return reverse('wearableannotation-detail', args=[str(self.wearable.id), str(self.id)])
 
     def __str__(self):
-        return f'{self.wearable} - {self.timestamp} - {self.get_annotation_display()}'
+        return f'{self.wearable} - {self.frame} - {self.get_annotation_display()}'
 
 
 class CameraAnnotation(models.Model):
@@ -156,3 +156,17 @@ class CameraAnnotationComment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class WearableDataPoint(models.Model):
+    id = models.AutoField(primary_key=True)
+    wearable = models.ForeignKey('WearableData', on_delete=models.CASCADE, null=True, related_name='data_point')
+    frame = models.PositiveIntegerField()
+    magnitude = models.FloatField()
+
+    class Meta:
+        ordering = ['frame']
+        permissions = (("can_alter_wearabledata_point", "Can create or edit wearable data point."),)
+
+    def __str__(self):
+        return f'{self.wearable.id} - ({self.frame}, {self.magnitude})'
