@@ -3,7 +3,9 @@
 {% block content %}
   <div class="titleText">
     <h1>Patient Data</h1>
-    <button type='button' class="titleButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+    {% if perms.sensors.can_alter_patientdata %}
+      <button type='button' class="titleButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+    {% endif %}
   </div>
   <hr>
   {% if patientdata_list %}
@@ -11,7 +13,7 @@
     {% for patientdata in patientdata_list %}
       <li>
         <a href="{{ patientdata.get_absolute_url }}">
-          {{ patientdata.last_name }}, {{ patientdata.first_name }} ({{ patientdata.date_of_birth }})
+          {{ patientdata.last_name }}, {{ patientdata.first_name }} ({{ patientdata.date_of_birth }}) - {{ patientdata.notes }}
         </a>
       </li>
     {% endfor %}

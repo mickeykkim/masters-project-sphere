@@ -15,7 +15,14 @@ class WearableAnnotationInline(admin.TabularInline):
 
 @admin.register(WearableData)
 class WearableDataAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'time', 'id')
+    def annotations(self):
+        annotations_num = self.w_annotations.count()
+        if annotations_num > 0:
+            return annotations_num
+        else:
+            return ""
+
+    list_display = ('patient', 'time', 'id', annotations)
     inlines = [WearableAnnotationInline]
     extra = 0
 
@@ -27,7 +34,14 @@ class CameraAnnotationInline(admin.TabularInline):
 
 @admin.register(CameraData)
 class CameraDataAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'time', 'id')
+    def annotations(self):
+        annotations_num = self.c_annotations.count()
+        if annotations_num > 0:
+            return annotations_num
+        else:
+            return ""
+
+    list_display = ('patient', 'time', 'id', annotations)
     inlines = [CameraAnnotationInline]
     extra = 0
 
@@ -44,10 +58,14 @@ class CameraAnnotationCommentInline(admin.TabularInline):
 
 @admin.register(CameraAnnotation)
 class CameraAnnotationAdmin(admin.ModelAdmin):
-    def comm(self):
-        return self.comments.count()
+    def comment(self):
+        comments_num = self.comments.count()
+        if comments_num > 0:
+            return comments_num
+        else:
+            return ""
 
-    list_display = ('camera', 'timestamp', 'id', 'annotation', 'status', comm)
+    list_display = ('camera', 'timestamp', 'id', 'annotation', 'status', comment)
     inlines = [CameraAnnotationCommentInline]
     extra = 0
 

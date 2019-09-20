@@ -5,26 +5,26 @@
   <hr>
     <div class="annotation-objects">
       <h5>Camera Data:</h5>
-      {% for item in cameradata %}
       <ul>
+      {% for item in cameradata %}
         <li>
           <a href="{{ item.get_absolute_url }}">
             {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
         </li>
-      </ul>
       {% empty %}
         <p>No camera data found.</p>
       {% endfor %}
+      </ul>
       <h5>Wearable Data:</h5>
-      {% for item in wearabledata %}
       <ul>
+      {% for item in wearabledata %}
         <li>
           <a href="{{ item.get_absolute_url }}">
             {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
         </li>
-      </ul>
       {% empty %}
         <p>No wearable data found.</p>
       {% endfor %}
+      </ul>
     </div>
 {% endblock %}

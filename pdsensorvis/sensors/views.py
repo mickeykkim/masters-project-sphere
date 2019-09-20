@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import permission_required
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, CameraAnnotationComment
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm
 from uuid import UUID
@@ -49,7 +50,7 @@ def search_results(request):
     if request.method == 'GET':
         query = request.GET.get('q')
 
-        if query is not None:
+        if query and query.strip():
             if is_valid_uuid(query, 4):
                 lookups = Q(pk=query)
             else:
@@ -65,6 +66,7 @@ def search_results(request):
         return render(request, "sensors/search_results.html")
 
 
+@permission_required('sensors.can_alter_cameraannotation')
 def edit_camera_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
 
@@ -86,6 +88,7 @@ def edit_camera_annotation(request, uuid, pk):
     return render(request, 'sensors/edit_camera_annotation.html', context)
 
 
+@permission_required('sensors.can_alter_cameraannotation')
 def delete_camera_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
 
@@ -118,7 +121,7 @@ def export_annotations_csv(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + \
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
 
         writer.writerow([annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
@@ -136,10 +139,8 @@ def export_annotations_xls(request, pk):
 
     # Sheet first row
     row_num = 0
-
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-
     columns = ['Session ID:', pk, ]
 
     for col_num in range(len(columns)):
@@ -148,7 +149,6 @@ def export_annotations_xls(request, pk):
     # Sheet headers
     row_num = 1
     columns = ['Timestamp', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments', ]
-
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
@@ -162,9 +162,8 @@ def export_annotations_xls(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y') + "): " + \
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
-
         items = [annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
                  annotation.note, annotation.annotator.username, discussion, ]
 
@@ -177,6 +176,7 @@ def export_annotations_xls(request, pk):
 
 class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):
     model = CameraData
+    permission_required = 'catalog.sensors.can_alter_cameradata'
 
     def get_context_data(self, **kwargs):
         context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
@@ -185,7 +185,6 @@ class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):
 
 
 class CameraDataDetailView(LoginRequiredMixin, generic.View):
-
     def get(self, request, *args, **kwargs):
         view = CameraDataDetailGet.as_view()
         return view(request, *args, **kwargs)

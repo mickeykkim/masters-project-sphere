@@ -45,6 +45,7 @@ class PatientData(models.Model):
 
     class Meta:
         ordering = ['last_name']
+        permissions = (("can_alter_patientdata", "Can create or edit patient data entries."),)
 
     def get_absolute_url(self):
         return reverse('patientdata-detail', args=[str(self.id)])
@@ -62,6 +63,7 @@ class WearableData(models.Model):
 
     class Meta:
         ordering = ['patient', '-time']
+        permissions = (("can_alter_wearabledata", "Can create or edit wearable data entries."),)
 
     def get_absolute_url(self):
         return reverse('wearabledata-detail', args=[str(self.id)])
@@ -79,6 +81,7 @@ class CameraData(models.Model):
 
     class Meta:
         ordering = ['patient', '-time']
+        permissions = (("can_alter_cameradata", "Can create or edit camera data entries."),)
 
     def get_absolute_url(self):
         return reverse('cameradata-detail', args=[str(self.id)])
@@ -106,6 +109,7 @@ class WearableAnnotation(models.Model):
 
     class Meta:
         ordering = ['timestamp']
+        permissions = (("can_alter_wearableannotation", "Can create or edit wearable annotations."),)
 
     def get_absolute_url(self):
         return reverse('wearableannotation-detail', args=[str(self.wearable.id), str(self.id)])
@@ -130,6 +134,7 @@ class CameraAnnotation(models.Model):
 
     class Meta:
         ordering = ['camera', 'timestamp']
+        permissions = (("can_alter_cameraannotation", "Can create or edit camera annotations."),)
 
     def get_absolute_url(self):
         return reverse('cameraannotation-detail', args=[str(self.camera.id), str(self.id)])
@@ -147,6 +152,7 @@ class CameraAnnotationComment(models.Model):
 
     class Meta:
         ordering = ['annotation', 'timestamp']
+        permissions = (("can_alter_cameraannotation_comment", "Can create or edit camera annotation comments."),)
 
     def __str__(self):
         return self.text

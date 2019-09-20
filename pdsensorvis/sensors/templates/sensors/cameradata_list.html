@@ -2,7 +2,10 @@
 
 {% block content %}
   <div class="titleText">
-    <h1>Camera Data</h1><button type='button' class="titleButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+    <h1>Camera Data</h1>
+    {% if perms.sensors.can_alter_cameradata %}
+      <button type='button' class="titleButton controlButtonXL"><i class="material-icons buttonIconS">add</i>Create New</button>
+    {% endif %}
   </div>
   <hr>
   {% if cameradata_list %}
@@ -10,7 +13,7 @@
       {% for cameradata in cameradata_list %}
         <li>
           <a href="{{ cameradata.get_absolute_url }}">
-            {{ cameradata.patient }} ({{ cameradata.time }}) - [{{ cameradata.id }}]
+            {{ cameradata.patient }} ({{ cameradata.time }}) - {{ cameradata.note }}
           </a>
         </li>
       {% endfor %}
