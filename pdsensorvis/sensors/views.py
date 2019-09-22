@@ -139,7 +139,7 @@ def export_annotations_csv(request, pk):
 
     writer = csv.writer(response)
     writer.writerow(['Session ID:', pk])
-    writer.writerow(['Time Begin', 'Time End', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments'])
+    writer.writerow(['Time Begin', 'Time End', 'Annotation', 'Note', 'Annotator', 'Comments', ])
 
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
 
@@ -148,11 +148,11 @@ def export_annotations_csv(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.time_begin.strftime('%d/%m/%Y %H:%M') + "-" + \
-                          comment.time_end.strftime('%d/%m/%Y %H:%M') + "): " + comment.text + "\n"
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
+                          comment.text + "\n"
 
         writer.writerow([annotation.time_begin, annotation.time_end, annotation.get_annotation_display(),
-                         annotation.get_status_display(), annotation.note, annotation.annotator.username, discussion, ])
+                         annotation.note, annotation.annotator.username, discussion, ])
 
     return response
 
@@ -175,7 +175,7 @@ def export_annotations_xls(request, pk):
 
     # Sheet headers
     row_num = 1
-    columns = ['Time Begin', 'Time End', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments', ]
+    columns = ['Time Begin', 'Time End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
@@ -189,10 +189,10 @@ def export_annotations_xls(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.time_begin.strftime('%d/%m/%Y %H:%M') + "-" + \
-                          comment.time_end.strftime('%d/%m/%Y %H:%M') + "): " + comment.text + "\n"
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
+                          comment.text + "\n"
         items = [annotation.time_begin, annotation.time_end, annotation.get_annotation_display(),
-                 annotation.get_status_display(), annotation.note, annotation.annotator.username, discussion, ]
+                 annotation.note, annotation.annotator.username, discussion, ]
 
         for col_num in range(len(items)):
             ws.write(row_num, col_num, items[col_num], font_style)
