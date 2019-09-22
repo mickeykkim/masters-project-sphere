@@ -18,7 +18,7 @@
 .createNewSessionButton {
     position: absolute;
     right: 20px;
-    top: 0px;
+    top: 0;
 }
 
 .buttonIcon {
@@ -50,14 +50,28 @@
 
 .videoFrame video {
     display: block;
-    margin: 0px auto 10px 0px;
+    margin: 0 auto 10px 0;
 }
 
 .playControls,
-.seekControls,
 .frameDetails {
-    margin: 10px 0px 0px 0px;
+    margin: 10px 0 0 0;
     vertical-align: middle;
+}
+
+.seekControls {
+    margin: 6px 0 0 0;
+    vertical-align: middle;
+}
+
+.frameStatusText {
+    vertical-align: middle;
+    margin: -3px 0 0 0;
+}
+
+.frameStatusTimestamps {
+    vertical-align: middle;
+    margin: 3px 0 0 0;
 }
 
 .annotationDetails {
@@ -158,7 +172,7 @@
 .timestamp,
 .vert-divider,
 .annotationTimestamp {
-    font-family: 'Roboto Mono';
+    font-family: 'Roboto Mono', sans-serif;
 }
 
 .timestamp {
@@ -217,11 +231,11 @@
 .searchText,
 .currentFrameText,
 .currentTimeText {
-    font-family: 'Roboto Mono', serif;
+    font-family: 'Roboto Mono', sans-serif;
     border-radius: 3px;
     height: 30px;
     line-height: 30px;
-    margin: 0px 0px 0px 0px;
+    margin: 0 0 0 0;
 }
 
 .rewindTextValue {
@@ -235,10 +249,6 @@
     text-align: center;
     min-width: 60px;
     background-color: #f8f8f8;
-}
-
-.frameStatusText {
-    vertical-align: middle;
 }
 
 .currentTimeText {
