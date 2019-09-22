@@ -14,6 +14,12 @@ let rewindButton = document.getElementById("rewind-video");
 let seekBackwardButton = document.getElementById("seek-backward");
 let seekForwardButton = document.getElementById("seek-forward");
 let helpButton = document.getElementById("help");
+let setBeginButton = document.getElementById("set-begin");
+let setEndButton = document.getElementById("set-end");
+
+// Form elements
+let setBeginFormText = document.getElementById("form-time-begin");
+let setEndFormText = document.getElementById("form-time-end");
 
 // Export functionality
 let downloadButton = document.getElementById("export-all");
@@ -245,6 +251,14 @@ playButton.addEventListener("click", function () {
 helpButton.addEventListener("click", function () {
    displayHelpAlert();
    helpButton.blur();
+});
+
+setBeginButton.addEventListener("click", function () {
+   setBeginFormText.value = currentTimeText.value;
+});
+
+setEndButton.addEventListener("click", function () {
+   setEndFormText.value = currentTimeText.value;
 });
 
 video.video.addEventListener("click", function () {
