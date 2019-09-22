@@ -2,31 +2,55 @@
 
 {% block title %}<title>Bristol Sphere PD Sensors - Wearable Data</title>{% endblock %}
 
+{% block head_add %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"
+          integrity="sha384-QzN1ywg2QLsf72ZkgRHgjkB/cfI4Dqjg6RJYQUqH6Wm8qp/MvmEYn+2NBsLnhLkr"
+          crossorigin="anonymous"></script>
+{% endblock %}
+
 {% block content %}
   <div class="titleText">
-    <h1>Patient: <a href="{{ wearabledata.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                   title="Link to patient data page">{{ wearabledata.patient }}</a></h1>
+    <h1>Patient:
+      <a href="{{ wearabledata.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+         data-trigger="hover" title="Link to patient data page">{{ wearabledata.patient }}
+      </a>
+    </h1>
     {% if perms.sensors.can_alter_wearabledata %}
-      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-              title="Edit Wearable Data"><i class="material-icons buttonIconS">create</i> Edit</button>
+      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
+              data-trigger="hover" title="Edit Wearable Data"><i class="material-icons buttonIconS">create</i> Edit
+      </button>
     {% endif %}
   </div>
-  <p><em>Session Time:</em> {{ wearabledata.time }} <span class="vert-divider">|</span> <em>Note:</em> {{ wearabledata.note }}</p>
+  <p><em>Session Time:</em> {{ wearabledata.time }}
+    <span class="vert-divider">|</span> <em>Note:</em> {{ wearabledata.note }}
+  </p>
   <hr>
-  <h1>Wearable Data Visualization</h1>
+  <h4>Wearable Data Visualization</h4>
   <canvas id="myChart" width="500" height="400" style="margin-top: 25px"></canvas>
   <hr>
   <div style="margin-left:20px;margin-top:20px">
     <h4>Wearable Annotations
       <button id="import" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
               onclick=""
-              data-trigger="hover" title="Import annotations"><i class="material-icons">cloud_upload</i></button>
+              data-trigger="hover" title="Import annotations"><i class="material-icons">cloud_upload</i>
+      </button>
     </h4>
     <ul>
       {% for annotation in wearabledata.w_annotations.all %}
-        <li><a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
-          Frames {{ annotation.frame_begin }}-{{ annotation.frame_end }}: {{ annotation.get_annotation_display }}
-        </a></li>
+        <li>
+          <a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
+            Frames {{ annotation.frame_begin }}-{{ annotation.frame_end }}: {{ annotation.get_annotation_display }}
+          </a>
+          {% if user.is_authenticated %}
+            {% if annotation.annotator == user %}
+              <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
+                      name="">
+                <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+                   title="Edit annotation">edit</i>
+              </button>
+            {% endif %}
+          {% endif %}
+        </li>
       {% empty %}
         <p>There are no wearable annotations in the database.</p>
       {% endfor %}
@@ -34,20 +58,15 @@
   </div>
 {% endblock %}
 
-{% block javascript %}
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"
-          integrity="sha384-QzN1ywg2QLsf72ZkgRHgjkB/cfI4Dqjg6RJYQUqH6Wm8qp/MvmEYn+2NBsLnhLkr"
-          crossorigin="anonymous"></script>
-{% endblock %}
-
 {% block jquery %}
   $('[data-toggle="tooltip"]').tooltip();
 
   var ctx = document.getElementById('myChart').getContext('2d');
+
   var myChart = new Chart(ctx, {
      type: 'line',
      data: {
-        labels: [{% for data in wearabledata.data_point.all %}'{{ data.frame }}', {% endfor %}],
+        labels: [{% for data in wearabledata.data_point.all %}{{ data.frame }}, {% endfor %}],
         datasets: [{
            label: 'Wearable Data Visualization',
            fill: true, // Set to false to only display line
@@ -59,7 +78,7 @@
               'rgba(255, 99, 132, 1)',
            ],
            borderWidth: 1
-        }]
+        }],
      },
      options: {
         responsive: true,

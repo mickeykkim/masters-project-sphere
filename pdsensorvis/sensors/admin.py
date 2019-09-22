@@ -49,7 +49,7 @@ class CameraDataAdmin(admin.ModelAdmin):
 
 @admin.register(WearableAnnotation)
 class WearableAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('wearable', 'frame_begin', 'frame_end', 'annotation', 'id')
+    list_display = ('wearable', 'frame_begin', 'frame_end', 'annotation')
 
 
 class CameraAnnotationCommentInline(admin.TabularInline):
@@ -66,7 +66,7 @@ class CameraAnnotationAdmin(admin.ModelAdmin):
         else:
             return ""
 
-    list_display = ('camera', 'timestamp', 'id', 'annotation', 'status', comment)
+    list_display = ('camera', 'time_begin', 'time_end', 'annotation', comment)
     inlines = [CameraAnnotationCommentInline]
     extra = 0
 
@@ -78,4 +78,4 @@ class CameraAnnotationCommentAdmin(admin.ModelAdmin):
 
 @admin.register(WearableDataPoint)
 class WearableDataPointAdmin(admin.ModelAdmin):
-    list_display = ('wearable', 'frame', 'magnitude', 'id')
+    list_display = ('wearable', 'frame', 'magnitude')

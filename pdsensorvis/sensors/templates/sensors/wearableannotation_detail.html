@@ -1,7 +1,26 @@
 {% extends "base.html" %}
 
+{% block head_add %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"
+          integrity="sha384-QzN1ywg2QLsf72ZkgRHgjkB/cfI4Dqjg6RJYQUqH6Wm8qp/MvmEYn+2NBsLnhLkr"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.min.js"
+          integrity="sha384-fIE8wIddxI8s1yO253uBKjQyxNZ5UuilW9rx7H4ePN7XS7Z9ukIeK+ECX5B8jDAj"
+          crossorigin="anonymous"></script>
+{% endblock %}
+
 {% block content %}
-  <h1>{{ wearableannotation.wearable }}</h1>
+  <h1>Patient:
+    <a href="{{ wearableannotation.wearable.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+       data-trigger="hover" title="Link to patient data page">{{ wearableannotation.wearable.patient }}</a></h1>
+  <p><em>Session Time:</em>
+    <a href="{{ wearableannotation.wearable.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+       data-trigger="hover" title="Link to wearable data page">{{ wearableannotation.wearable.time }}</a>
+    <span class="vert-divider">|</span> <em>Note:</em> {{ wearableannotation.wearable.note }}
+  </p>
+  <hr>
+  <h4>Wearable Data Visualization</h4>
+    <canvas id="myChart" width="500" height="400" style="margin-top: 25px"></canvas>
   <hr>
   <p><strong>Frames:</strong> {{ wearableannotation.frame_begin }}-{{ wearableannotation.frame_end }}</p>
   <p><strong>Annotation:</strong> {{ wearableannotation.get_annotation_display }}
@@ -10,4 +29,123 @@
   {% if wearableannotation.note %}
     <p><strong>Note:</strong> {{ wearableannotation.note }}</p>
   {% endif %}
+  <input type="button" value="Back" class="controlButtonL" onclick="window.history.back()" />
+{% endblock %}
+
+{% block jquery %}
+  $('[data-toggle="tooltip"]').tooltip();
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+
+  // The original draw function for the line chart. This will be applied after we have drawn our highlight range (as a rectangle behind the line chart).
+  var originalLineDraw = Chart.controllers.line.prototype.draw;
+  // Extend the line chart, in order to override the draw function.
+  Chart.helpers.extend(Chart.controllers.line.prototype, {
+    draw : function() {
+      var chart = this.chart;
+      // Get the object that determines the region to highlight.
+      var xHighlightRange = chart.config.data.xHighlightRange;
+
+      // If the object exists.
+      if (xHighlightRange !== undefined) {
+        var ctx = chart.chart.ctx;
+
+        var xRangeBegin = xHighlightRange.begin - 1;
+        var xRangeEnd = xHighlightRange.end - 1;
+
+        var xaxis = chart.scales['x-axis-0'];
+        var yaxis = chart.scales['y-axis-0'];
+
+        var xRangeBeginPixel = xaxis.getPixelForValue(undefined, xRangeBegin);
+        var xRangeEndPixel = xaxis.getPixelForValue(undefined, xRangeEnd);
+
+        ctx.save();
+
+        // The fill style of the rectangle we are about to fill.
+        ctx.fillStyle = 'rgba(0, 255, 0, 0.3)';
+        // Fill the rectangle that represents the highlight region. The parameters are the closest-to-starting-point pixel's x-coordinate,
+        // the closest-to-starting-point pixel's y-coordinate, the width of the rectangle in pixels, and the height of the rectangle in pixels, respectively.
+        ctx.fillRect(xRangeBeginPixel, yaxis.bottom, xRangeEndPixel - xRangeBeginPixel, yaxis.top - yaxis.bottom);
+
+        ctx.restore();
+      }
+
+      // Apply the original draw function for the line chart.
+      originalLineDraw.apply(this, arguments);
+    }
+  });
+
+  var myChart = new Chart(ctx, {
+     type: 'line',
+     data: {
+        labels: [{% for data in wearableannotation.wearable.data_point.all %}{{ data.frame }}, {% endfor %}],
+        datasets: [{
+           label: 'Wearable Data Visualization',
+           fill: true, // Set to false to only display line
+           data: [{% for data in wearableannotation.wearable.data_point.all %}{{ data.magnitude }}, {% endfor %}],
+           backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+           ],
+           borderColor: [
+              'rgba(255, 99, 132, 1)',
+           ],
+           borderWidth: 1
+        }],
+        xHighlightRange : {
+           begin: {{ wearableannotation.frame_begin }},
+           end: {{ wearableannotation.frame_end }}
+        }
+     },
+     options: {
+        responsive: true,
+        animation: {
+           duration: 0
+        },
+        legend: {
+           display: false
+        },
+        tooltips: {
+           callbacks: {
+              label: function(tooltipItem) {
+                 return tooltipItem.yLabel;
+              }
+           }
+        },
+        title: {
+           display: false,
+           text: ''
+        },
+        tooltips: {
+           mode: 'index',
+           intersect: false,
+        },
+        hover: {
+           mode: 'nearest',
+           intersect: true
+        },
+        /*
+        elements: { d
+          line: {
+              tension: 0 // disables bezier curves for better performance with large amounts of data
+          }
+        },
+        */
+        scales: {
+           xAxes: [{
+              display: true,
+              scaleLabel: {
+                 display: true,
+                 labelString: 'Frame'
+              }
+           }],
+           yAxes: [{
+              display: true,
+              scaleLabel: {
+                 display: true,
+                 labelString: 'Average Magnitude'
+              }
+           }]
+        }
+     }
+  });
 {% endblock %}

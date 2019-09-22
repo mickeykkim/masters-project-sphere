@@ -7,10 +7,9 @@
     <ul id="annotation-objects-list">
       {% for annotation in cameraannotation_list %}
         <li>
-          <a href="{{ annotation.camera.get_absolute_url }}">
-            {{ annotation.camera.patient }} ({{ annotation.camera.time }})</a>
-          - {{ annotation.timestamp}} - {{annotation.get_annotation_display}}{% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
-          ({{annotation.get_status_display}})
+          <a href="{{ annotation.camera.get_absolute_url }}">{{ annotation.camera.patient }} ({{ annotation.camera.time }})</a>
+          - ({{ annotation.time_begin}} - {{ annotation.time_end}}) -
+          {{annotation.get_annotation_display}}{% if annotation.get_annotation_display == 'Other' %}: {{annotation.note}}{% endif %}
           <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
                   name="{% url 'edit-camera-annotation' annotation.camera.id annotation.id|stringformat:"i" %}">
             <i class="material-icons" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" style="font-size: 22px"

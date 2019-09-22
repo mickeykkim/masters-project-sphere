@@ -14,17 +14,7 @@ ANNOTATION = (
     ('oth', 'Other')
 )
 
-BEGIN = 'b'
-END = 'e'
-ANNOTATION_STATUS = (
-    (BEGIN, '+'),
-    (END, '-'),
-)
-
-"""
-# Standard Frame Rate Options
 FRAME_RATES = (
-    ('NTSC_Film', 23.98),
     ('Film', 24),
     ('PAL', 25),
     ('NTSC', 29.97),
@@ -33,7 +23,6 @@ FRAME_RATES = (
     ('NTSC_HD', 59.94),
     ('High', 60),
 )
-"""
 
 
 class PatientData(models.Model):
@@ -58,8 +47,8 @@ class WearableData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='wearables')
     filename = models.FileField(upload_to='wearable/')
-    time = models.DateTimeField(help_text='Session Date & Time')
-    note = models.CharField(max_length=500, help_text='Note regarding wearable')
+    time = models.DateTimeField(help_text='Session date & time')
+    note = models.CharField(max_length=500, help_text='Note regarding wearable data')
 
     class Meta:
         ordering = ['patient', '-time']
@@ -76,8 +65,14 @@ class CameraData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='cameras')
     filename = models.FileField(upload_to='camera/')
-    time = models.DateTimeField(help_text='Session Date & Time')
-    note = models.CharField(max_length=500, help_text='Note regarding camera')
+    framerate = models.CharField(
+        max_length=7,
+        choices=FRAME_RATES,
+        default='Film',
+        help_text='Video framerate',
+    )
+    time = models.DateTimeField(help_text='Session date & time')
+    note = models.CharField(max_length=500, help_text='Note regarding camera data')
 
     class Meta:
         ordering = ['patient', '-time']
@@ -115,13 +110,14 @@ class WearableAnnotation(models.Model):
         return reverse('wearableannotation-detail', args=[str(self.wearable.id), str(self.id)])
 
     def __str__(self):
-        return f'{self.wearable} - {self.frame_begin - self.frame_end} - {self.get_annotation_display()}'
+        return f'{self.wearable} - ({self.frame_begin}-{self.frame_end}) - {self.get_annotation_display()}'
 
 
 class CameraAnnotation(models.Model):
     id = models.AutoField(primary_key=True)
     camera = models.ForeignKey('CameraData', on_delete=models.CASCADE, null=True, related_name='c_annotations')
-    timestamp = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
+    time_begin = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
+    time_end = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,
@@ -129,18 +125,17 @@ class CameraAnnotation(models.Model):
         default='oth',
         help_text='PD Symptom',
     )
-    status = models.CharField(max_length=1, choices=ANNOTATION_STATUS, default=BEGIN, help_text='Begin (+) or End (-)')
     note = models.CharField(max_length=500, help_text='Note regarding annotation', null=True, blank=True)
 
     class Meta:
-        ordering = ['camera', 'timestamp']
+        ordering = ['camera', 'time_begin']
         permissions = (("can_alter_cameraannotation", "Can create or edit camera annotations."),)
 
     def get_absolute_url(self):
         return reverse('cameraannotation-detail', args=[str(self.camera.id), str(self.id)])
 
     def __str__(self):
-        return f'{self.camera} - {self.timestamp} - {self.get_annotation_display()}'
+        return f'{self.camera} - ({self.time_begin}-{self.time_end}) - {self.get_annotation_display()}'
 
 
 class CameraAnnotationComment(models.Model):

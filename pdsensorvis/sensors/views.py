@@ -139,7 +139,7 @@ def export_annotations_csv(request, pk):
 
     writer = csv.writer(response)
     writer.writerow(['Session ID:', pk])
-    writer.writerow(['Timestamp', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments'])
+    writer.writerow(['Time Begin', 'Time End', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments'])
 
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
 
@@ -148,11 +148,11 @@ def export_annotations_csv(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
-                          comment.text + "\n"
+            discussion += comment.author.username + " (" + comment.time_begin.strftime('%d/%m/%Y %H:%M') + "-" + \
+                          comment.time_end.strftime('%d/%m/%Y %H:%M') + "): " + comment.text + "\n"
 
-        writer.writerow([annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
-                         annotation.note, annotation.annotator.username, discussion, ])
+        writer.writerow([annotation.time_begin, annotation.time_end, annotation.get_annotation_display(),
+                         annotation.get_status_display(), annotation.note, annotation.annotator.username, discussion, ])
 
     return response
 
@@ -175,7 +175,7 @@ def export_annotations_xls(request, pk):
 
     # Sheet headers
     row_num = 1
-    columns = ['Timestamp', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments', ]
+    columns = ['Time Begin', 'Time End', 'Annotation', 'Status', 'Annotation Note', 'Annotator', 'Comments', ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
@@ -189,10 +189,10 @@ def export_annotations_xls(request, pk):
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
-                          comment.text + "\n"
-        items = [annotation.timestamp, annotation.get_annotation_display(), annotation.get_status_display(),
-                 annotation.note, annotation.annotator.username, discussion, ]
+            discussion += comment.author.username + " (" + comment.time_begin.strftime('%d/%m/%Y %H:%M') + "-" + \
+                          comment.time_end.strftime('%d/%m/%Y %H:%M') + "): " + comment.text + "\n"
+        items = [annotation.time_begin, annotation.time_end, annotation.get_annotation_display(),
+                 annotation.get_status_display(), annotation.note, annotation.annotator.username, discussion, ]
 
         for col_num in range(len(items)):
             ws.write(row_num, col_num, items[col_num], font_style)
@@ -202,7 +202,10 @@ def export_annotations_xls(request, pk):
 
 
 def import_wearabledata_csv(pk, path):
-    """Method for importing wearable data points. Requires csv file with no headers."""
+    """
+    Method for importing wearable data points. Requires csv file with no headers.
+    WARNING: Does not do any validation.
+    """
     wearabledata = get_object_or_404(WearableData, pk=pk)
     with open(path) as import_file:
         reader = csv.reader(import_file)
@@ -215,7 +218,10 @@ def import_wearabledata_csv(pk, path):
 
 
 def import_wearableannotation_csv(pk, path):
-    """Method for importing wearable data annotations. Requires csv file with no headers."""
+    """
+    Method for importing wearable data annotations. Requires csv file with no headers.
+    WARNING: Does not do any validation.
+    """
     wearabledata = get_object_or_404(WearableData, pk=pk)
     with open(path) as import_file:
         reader = csv.reader(import_file)
@@ -303,7 +309,7 @@ class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('camera', 'timestamp')
+        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('camera', 'time_begin')
 
 
 class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):

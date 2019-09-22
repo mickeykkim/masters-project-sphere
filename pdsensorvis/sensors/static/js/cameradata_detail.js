@@ -1,11 +1,11 @@
 "use strict";
 
 // Video Elements
-let currentFrame = document.getElementById('id-frame');
-let currentTime = document.getElementById('form-timestamp');
+let currentFrameText = document.getElementById('id-frame');
+let currentTimeText = document.getElementById('id-timestamp');
 let videoTime = document.getElementById("video-time");
 let videoDuration = document.getElementById("video-duration");
-let framerateSelect = document.getElementById("framerate-list");
+// let framerateSelect = document.getElementById("framerate-list");
 
 // Buttons
 let playButton = document.getElementById("play-pause");
@@ -35,7 +35,6 @@ let stepForwardBox = document.getElementById("forward-increment");
 let stdFrameRates = {
    film: 24,
    NTSC: 29.97,
-   NTSC_Film: 23.98,
    NTSC_HD: 59.94,
    PAL: 25,
    PAL_HD: 50,
@@ -43,7 +42,7 @@ let stdFrameRates = {
    high: 60
 };
 */
-let framerate = document.getElementById("framerate-list");
+// let framerate = document.getElementById("framerate-list");
 let currentFramerate = 24; // reassigned on page load of metadata
 let currentVolume;
 
@@ -87,8 +86,8 @@ function updateVideoTime() {
 
 function updateSeekBar() {
    seekBar.value = video.video.currentTime * currentFramerate;
-   currentFrame.value = video.get();
-   currentTime.value = video.toSMPTE();
+   currentFrameText.value = video.get();
+   currentTimeText.value = video.toSMPTE();
    refreshVideoTimes();
 }
 
@@ -192,7 +191,7 @@ function updateVolume(level) {
 }
 
 function adjustFramerate(){
-   currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
+   // currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
    seekBar.max = video.video.duration * currentFramerate;
    video.frameRate = currentFramerate;
    refreshVideoTimes();
@@ -204,7 +203,7 @@ video.video.addEventListener("loadedmetadata", function () {
 });
 
 window.addEventListener("DOMContentLoaded", function(){
-   rewindVideo(currentTime.value);
+   rewindVideo(currentTimeText.value);
    updateSeekBar();
 });
 
@@ -216,9 +215,11 @@ video.video.addEventListener("ended", function () {
    endVideo();
 });
 
+/*
 framerateSelect.addEventListener("change", function() {
    adjustFramerate();
 });
+ */
 
 seekBar.addEventListener("change", function () {
    updateVideoTime();
@@ -288,7 +289,7 @@ downloadButton.addEventListener("click", function() {
 /*
 copyFrameNumber.addEventListener("click", function () {
    pauseVideo();
-   copyToClipboard(currentFrame);
+   copyToClipboard(currentFrameText);
    copyFrameNumber.blur();
 });
 

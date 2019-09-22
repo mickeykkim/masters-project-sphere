@@ -4,7 +4,7 @@
   <h1>PD Sensors Home</h1>
   <hr>
   {% if user.is_authenticated %}
-  <h5>Look Up Sensor Data by Patient First or Last Name or by Sensor ID:</h5>
+  <h6>Look Up Sensor Data by Patient First or Last Name or by Sensor ID:</h6>
   <form action="{% url 'search_results' %}" method="get" style="margin-top:15px">
     <input type="text" class="searchText" name="q" placeholder="Input Patient or Sensor ID" />
     <input type="submit" class="controlButtonL" value="Search" />

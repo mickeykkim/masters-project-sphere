@@ -35,7 +35,7 @@
       <span id="video-time" class="timestamp">00:00</span><span class="timestamp">/</span><span id="video-duration" class="timestamp">00:00</span>
       <button id="mute" class="controlButtonL" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Toggle mute"><i class="material-icons">volume_up</i></button>
-      <label for="volume-bar"></label><input type="range" id="volume-bar" class="volumeBar" style="width:10%;margin:5px 0 0 5px;" min="0" max="1" step="0.1" value="1"/>
+      <label for="volume-bar"></label><input type="range" id="volume-bar" class="volumeBar" style="width:9%;margin:5px 0 0 5px;" min="0" max="1" step="0.1" value="1"/>
     </div>
     <!-- Form  -->
     <div id="form-controls" class="formControls">
@@ -88,28 +88,31 @@
                 data-trigger="hover" title="Activity begin (+) or end (-)">
             {{ form.status }}
           </span>
-          <button type="submit" id="annotate" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                  title="Add annotation"><i class="material-icons">add</i></button>
         </div>
         <!-- Frame Details -->
         <div class="frameDetails">
-          <label for="framerate-list">Framerate:&nbsp;</label>
-          <span class="selectBox">
-          <select id="framerate-list" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                  title="Framerate options" class="fpsDropDown">
-            <option value="1" selected>24</option>
-            <option value="2">25</option>
-            <option value="3">29.97</option>
-            <option value="4">30</option>
-            <option value="5">60</option>
-          </select>
-        </span>
-          <span class="vert-divider">|</span>
-          <span class="frameStatusText">
-            <label for="id-frame">Current Frame:&nbsp;</label><input type="text" id="id-frame" value=0 class="currentFrameText" readonly>
+          <div class="frameStatusText">
+            <label for="id-frame"><i class="material-icons buttonIconM">play_arrow</i>Frame:</label>
+            <input type="text" id="id-frame" value=0 class="currentFrameText" readonly>
             <span class="vert-divider">|</span>
-            <label for="form-timestamp">Current Timestamp (hh:mm:ss:ff):&nbsp;</label>{{ form.timestamp }}
-          </span>
+            <label for="id-timestamp"><i class="material-icons buttonIconM">play_arrow</i>Timestamp (hh:mm:ss:ff):</label>
+            <input type="text" id="id-timestamp" value="00:00:00:00" class="currentTimeText" readonly>
+            <span class="vert-divider">|</span>
+            <button type="button" id="set-begin" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
+                    data-trigger="hover" title="Set beginning timestamp"><i class="material-icons buttonIconS">create</i> Set Begin</button>
+            <button type="button" id="set-end" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
+                    data-trigger="hover" title="Set ending timestamp"><i class="material-icons buttonIconS">create</i> Set End</button>
+          </div>
+          <div class="frameStatusText">
+            <label for="form-time-begin">Beginning timestamp:</label>
+            {{ form.time_begin }}
+            <span class="vert-divider">|</span>
+            <label for="form-time-end"> Ending timestamp:</label>
+            {{ form.time_end }}
+            <span class="vert-divider">|</span>
+            <button type="submit" id="annotate" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+                    title="Add annotation"><i class="material-icons buttonIconS">add</i> Annotate</button>
+          </div>
         </div>
       </form>
     </div>
@@ -134,13 +137,13 @@
       <ul id="annotation-objects-list">
         {% for annotation in cameradata.c_annotations.all %}
           <li class="annotationDetails">
-            <span class="annotationTimestamp">{{ annotation.timestamp }}</span>
-            <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.timestamp }}">
+            <span class="annotationTimestamp">{{ annotation.time_begin }} - {{ annotation.time_end }}</span>
+            <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.time_begin }}">
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation">skip_previous</i>
             </button>
             {{ annotation.get_annotation_display }}{% if annotation.get_annotation_display == 'Other' %}: {{ annotation.note }}{% endif %}
-            ({{ annotation.get_status_display }}) | {{ annotation.annotator }}
+            <em>({{ annotation.annotator }})</em>
             {% if user.is_authenticated %}
               {% if annotation.annotator == user %}
                 <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
@@ -155,7 +158,7 @@
               comment{% if annotation.comments.count != 1 %}s{% endif %})</a></em>
           </li>
         {% empty %}
-          <p>There are no camera annotations in the database.</p>
+          <p>No camera annotations.</p>
         {% endfor %}
       </ul>
     </div>
