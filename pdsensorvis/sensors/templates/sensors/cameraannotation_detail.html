@@ -13,11 +13,10 @@
   </p>
   <hr>
   <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
-  <p><strong>Times:</strong> {{ cameraannotation.time_begin }} - {{ cameraannotation.time_end }}</p>
+  <p><strong>Times (h:m:s:f):</strong> {{ cameraannotation.time_begin }} - {{ cameraannotation.time_end }}</p>
+  <p><strong>Times (h:m:s,ms):</strong> {{ cameraannotation.ms_time_begin }} - {{ cameraannotation.ms_time_end }}</p>
+  <p><strong>Frames:</strong> {{ cameraannotation.frame_begin }} - {{ cameraannotation.frame_end }}</p>
   <p><strong>Annotation:</strong> {{ cameraannotation.get_annotation_display }}
-    {% if cameraannotation.get_status_display == '+' %} (begin)
-    {% elif cameraannotation.get_status_display == '-' %} (end)
-    {% endif %}
   </p>
   {% if cameraannotation.note %}
     <p><strong>Note:</strong> {{ cameraannotation.note }}</p>

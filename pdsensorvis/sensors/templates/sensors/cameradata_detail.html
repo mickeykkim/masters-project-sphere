@@ -37,8 +37,9 @@
               data-trigger="hover" title="Toggle mute"><i class="material-icons">volume_up</i></button>
       <label for="volume-bar"></label><input type="range" id="volume-bar" class="volumeBar" style="width:9%;margin:5px 0 0 5px;" min="0" max="1" step="0.1" value="1"/>
     </div>
+    <!-- Hidden div for camera data FPS -->
     <div hidden>
-      <input type="text" id="camera-framerate" value="{{ cameradata.get_framerate_display }}">
+      <input type="text" id="camera-framerate" value="{{ cameradata.get_framerate_display }}" readonly>
     </div>
     <!-- Form  -->
     <div id="form-controls" class="formControls">
@@ -118,7 +119,7 @@
           </div>
         </div>
         <!-- Hidden div for non-displayed form elements -->
-        <div>
+        <div hidden>
           {{ form.frame_begin }} {{ form.frame_end }} {{ form.ms_time_begin }} {{ form.ms_time_end }}
         </div>
         {{ form.errors }}

@@ -133,7 +133,8 @@ def delete_camera_annotation(request, uuid, pk):
     return render(request, 'sensors/edit_camera_annotation.html', context)
 
 
-annotation_fields = ['Time Begin', 'Time End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
+annotation_fields = ['Time Begin (h:m:s:f)', 'Time Begin (h:m:s,ms)', 'Frame Begin', 'Time End (h:m:s:f)',
+                     'Time End (h:m:s,ms)', 'Frame End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
 
 
 def export_annotations_csv(request, pk):
@@ -154,7 +155,8 @@ def export_annotations_csv(request, pk):
             discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
 
-        writer.writerow([annotation.time_begin, annotation.time_end, annotation.get_annotation_display(),
+        writer.writerow([annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
+                         annotation.ms_time_end, annotation.frame_end, annotation.get_annotation_display(),
                          annotation.note, annotation.annotator.username, discussion, ])
 
     return response
@@ -194,7 +196,8 @@ def export_annotations_xls(request, pk):
         for comment in comment_list:
             discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
-        items = [annotation.time_begin, annotation.time_end, annotation.get_annotation_display(),
+        items = [annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
+                 annotation.ms_time_end, annotation.frame_end, annotation.get_annotation_display(),
                  annotation.note, annotation.annotator.username, discussion, ]
 
         for col_num in range(len(items)):
@@ -222,7 +225,7 @@ def import_wearabledata_csv(pk, path):
 
 def import_wearableannotation_csv(pk, path):
     """
-    Method for importing wearable data annotations. Requires csv file with no headers.
+    Method for importing wearable data annotations. Requires csv file with appropriate headers.
     WARNING: Does not do any validation.
     """
     wearabledata = get_object_or_404(WearableData, pk=pk)

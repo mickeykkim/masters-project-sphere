@@ -5,7 +5,6 @@ let currentFrameText = document.getElementById('id-frame');
 let currentTimeText = document.getElementById('id-timestamp');
 let videoTime = document.getElementById("video-time");
 let videoDuration = document.getElementById("video-duration");
-let videoFramerate = document.getElementById("camera-framerate");
 
 // Buttons
 let playButton = document.getElementById("play-pause");
@@ -43,16 +42,16 @@ let stepForwardBox = document.getElementById("forward-increment");
 // Framerate and Export Elements
 /*
 let stdFrameRates = {
-   film: 24,
+   FILM: 24,
    NTSC: 29.97,
    NTSC_HD: 59.94,
    PAL: 25,
    PAL_HD: 50,
-   web: 30,
-   high: 60
+   WEB: 30,
+   HIGH: 60
 };
 */
-// let framerate = document.getElementById("framerate-list");
+let videoFramerate = document.getElementById("camera-framerate");
 let currentFramerate = 24; // reassigned on page load of metadata
 let currentVolume;
 
@@ -208,7 +207,8 @@ function adjustFramerate() {
 }
 
 function updateHiddenFormElements(selection) {
-   let ms_time = video.toTime() + "," + ('00' + (video.toMilliseconds() % currentFramerate)).slice(-3)
+   let ms_frame = currentTimeText.value.slice(-2);
+   let ms_time = video.toTime() + "," + ('00' + Math.round(ms_frame*1000/currentFramerate)).slice(-3);
    if (selection === 'begin') {
       setBeginFormText.value = currentTimeText.value;
       setBeginFrameFormText.value = currentFrameText.value;
@@ -226,6 +226,7 @@ video.video.addEventListener("loadedmetadata", function () {
 });
 
 window.addEventListener("DOMContentLoaded", function(){
+   currentTimeText.value = setBeginFormText.value;
    rewindVideo(currentTimeText.value);
    updateSeekBar();
 });
