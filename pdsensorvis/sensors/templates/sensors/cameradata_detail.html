@@ -37,6 +37,9 @@
               data-trigger="hover" title="Toggle mute"><i class="material-icons">volume_up</i></button>
       <label for="volume-bar"></label><input type="range" id="volume-bar" class="volumeBar" style="width:9%;margin:5px 0 0 5px;" min="0" max="1" step="0.1" value="1"/>
     </div>
+    <div hidden>
+      <input type="text" id="camera-framerate" value="{{ cameradata.get_framerate_display }}">
+    </div>
     <!-- Form  -->
     <div id="form-controls" class="formControls">
       <form method="POST" class="post-form">
@@ -114,6 +117,10 @@
                     title="Add annotation"><i class="material-icons buttonIconS">add</i> Annotate</button>
           </div>
         </div>
+        <!-- Hidden div for non-displayed form elements -->
+        <div>
+          {{ form.frame_begin }} {{ form.frame_end }} {{ form.ms_time_begin }} {{ form.ms_time_end }}
+        </div>
         {{ form.errors }}
       </form>
     </div>
@@ -138,7 +145,7 @@
       <ul id="annotation-objects-list">
         {% for annotation in cameradata.c_annotations.all %}
           <li class="annotationDetails">
-            <span class="annotationTimestamp">{{ annotation.time_begin }} - {{ annotation.time_end }}</span>
+            <span class="annotationTimestamp">{{ annotation.time_begin }}</span> – <span class="annotationTimestamp">{{ annotation.time_end }}</span>
             <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.time_begin }}">
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation">skip_previous</i>

@@ -5,7 +5,7 @@ let currentFrameText = document.getElementById('id-frame');
 let currentTimeText = document.getElementById('id-timestamp');
 let videoTime = document.getElementById("video-time");
 let videoDuration = document.getElementById("video-duration");
-// let framerateSelect = document.getElementById("framerate-list");
+let videoFramerate = document.getElementById("camera-framerate");
 
 // Buttons
 let playButton = document.getElementById("play-pause");
@@ -20,6 +20,10 @@ let setEndButton = document.getElementById("set-end");
 // Form elements
 let setBeginFormText = document.getElementById("form-time-begin");
 let setEndFormText = document.getElementById("form-time-end");
+let setBeginFrameFormText = document.getElementById("id_frame_begin");
+let setEndFrameFormText = document.getElementById("id_frame_end");
+let setBeginMsTimeFormText = document.getElementById("id_ms_time_begin");
+let setEndMsTimeFormText = document.getElementById("id_ms_time_end");
 
 // Export functionality
 let downloadButton = document.getElementById("export-all");
@@ -196,11 +200,24 @@ function updateVolume(level) {
    video.video.volume = level;
 }
 
-function adjustFramerate(){
-   // currentFramerate = parseFloat(framerate.options[framerate.selectedIndex].text);
+function adjustFramerate() {
+   currentFramerate = parseFloat(videoFramerate.value);
    seekBar.max = video.video.duration * currentFramerate;
    video.frameRate = currentFramerate;
    refreshVideoTimes();
+}
+
+function updateHiddenFormElements(selection) {
+   let ms_time = video.toTime() + "," + ('00' + (video.toMilliseconds() % currentFramerate)).slice(-3)
+   if (selection === 'begin') {
+      setBeginFormText.value = currentTimeText.value;
+      setBeginFrameFormText.value = currentFrameText.value;
+      setBeginMsTimeFormText.value = ms_time;
+   } else if (selection === 'end') {
+      setEndFormText.value = currentTimeText.value;
+      setEndFrameFormText.value = currentFrameText.value;
+      setEndMsTimeFormText.value = ms_time;
+   }
 }
 
 // --- Event Listeners ---
@@ -220,12 +237,6 @@ video.video.addEventListener("timeupdate", function () {
 video.video.addEventListener("ended", function () {
    endVideo();
 });
-
-/*
-framerateSelect.addEventListener("change", function() {
-   adjustFramerate();
-});
- */
 
 seekBar.addEventListener("change", function () {
    updateVideoTime();
@@ -254,11 +265,11 @@ helpButton.addEventListener("click", function () {
 });
 
 setBeginButton.addEventListener("click", function () {
-   setBeginFormText.value = currentTimeText.value;
+   updateHiddenFormElements('begin');
 });
 
 setEndButton.addEventListener("click", function () {
-   setEndFormText.value = currentTimeText.value;
+   updateHiddenFormElements('end');
 });
 
 video.video.addEventListener("click", function () {

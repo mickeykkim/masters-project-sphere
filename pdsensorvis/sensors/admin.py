@@ -28,7 +28,7 @@ class WearableDataAdmin(admin.ModelAdmin):
         return self.data_point.count()
 
     list_display = ('patient', 'time', 'id', annotations, data_points)
-    inlines = [WearableAnnotationInline, WearableDataPointInline]
+    inlines = [WearableAnnotationInline]
     extra = 0
 
 

@@ -15,7 +15,8 @@ class CameraAnnotationCreateForm(forms.ModelForm):
 
     class Meta:
         model = CameraAnnotation
-        fields = ['time_begin', 'time_end', 'annotation', 'note']
+        fields = ['time_begin', 'time_end', 'annotation', 'note',
+                  'frame_begin', 'frame_end', 'ms_time_begin', 'ms_time_end']
         widgets = {
             'time_begin': forms.TextInput(attrs={
                 'id': 'form-time-begin',

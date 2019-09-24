@@ -118,6 +118,10 @@ class CameraAnnotation(models.Model):
     camera = models.ForeignKey('CameraData', on_delete=models.CASCADE, null=True, related_name='c_annotations')
     time_begin = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
     time_end = models.CharField(max_length=11, help_text='hh:mm:ss:ff')
+    frame_begin = models.PositiveIntegerField()
+    frame_end = models.PositiveIntegerField()
+    ms_time_begin = models.CharField(max_length=12, help_text='hours:minutes:seconds,mseconds')
+    ms_time_end = models.CharField(max_length=12, help_text='hours:minutes:seconds,mseconds')
     annotator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     annotation = models.CharField(
         max_length=3,

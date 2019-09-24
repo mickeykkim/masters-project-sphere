@@ -133,13 +133,16 @@ def delete_camera_annotation(request, uuid, pk):
     return render(request, 'sensors/edit_camera_annotation.html', context)
 
 
+annotation_fields = ['Time Begin', 'Time End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
+
+
 def export_annotations_csv(request, pk):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="annotations.csv"'
 
     writer = csv.writer(response)
     writer.writerow(['Session ID:', pk])
-    writer.writerow(['Time Begin', 'Time End', 'Annotation', 'Note', 'Annotator', 'Comments', ])
+    writer.writerow(annotation_fields)
 
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
 
@@ -164,7 +167,7 @@ def export_annotations_xls(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Users')
 
-    # Sheet first row
+    # Sheet title w/Session ID
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
@@ -175,7 +178,7 @@ def export_annotations_xls(request, pk):
 
     # Sheet headers
     row_num = 1
-    columns = ['Time Begin', 'Time End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
+    columns = annotation_fields
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
@@ -203,17 +206,17 @@ def export_annotations_xls(request, pk):
 
 def import_wearabledata_csv(pk, path):
     """
-    Method for importing wearable data points. Requires csv file with no headers.
+    Method for importing wearable data points. Requires csv file headed with 'frames' and 'magnitudes'.
     WARNING: Does not do any validation.
     """
     wearabledata = get_object_or_404(WearableData, pk=pk)
     with open(path) as import_file:
-        reader = csv.reader(import_file)
+        reader = csv.DictReader(import_file, fieldnames=['frames', 'magnitudes'])
         for row in reader:
             _, created = WearableDataPoint.objects.get_or_create(
                 wearable=wearabledata,
-                frame=row[0],
-                magnitude=row[1],
+                frame=row['frames'],
+                magnitude=row['magnitudes'],
             )
 
 
@@ -224,15 +227,15 @@ def import_wearableannotation_csv(pk, path):
     """
     wearabledata = get_object_or_404(WearableData, pk=pk)
     with open(path) as import_file:
-        reader = csv.reader(import_file)
+        reader = csv.DictReader(import_file, fieldnames=annotation_fields)
         for row in reader:
             _, created = WearableAnnotation.objects.get_or_create(
                 wearable=wearabledata,
                 annotator=User,
-                frame_begin=row[0],
-                frame_end=row[1],
-                annotation=row[3],
-                note=row[4],
+                frame_begin=row['frame_begin'],
+                frame_end=row['frame_end'],
+                annotation=row['annotation'],
+                note=row['note'],
             )
 
 
