@@ -12,13 +12,13 @@ class PatientDataCreateForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;',
             }),
             'last_name': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;',
             }),
             'date_of_birth': forms.DateTimeInput(attrs={
@@ -29,7 +29,7 @@ class PatientDataCreateForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': False,
-                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; margin: 10px 0 0 0; '
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 10px 0 0 0; '
                          'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
         }
@@ -55,7 +55,7 @@ class CameraAnnotationCreateForm(forms.ModelForm):
                 'default': '00:00:00:00',
                 'readonly': True,
                 'style': 'font-family: "Roboto Mono", serif; text-align: center; display: table-cell; vertical-align: '
-                         'top; border: 1px solid #a0a0a0; border-radius: 3px; height: 30px; line-height: 30px; '
+                         'top; border: 1px solid #D3D3D3; border-radius: 3px; height: 30px; line-height: 30px; '
                          'margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; background-color: #f8f8f8;',
             }),
             'time_end': forms.TextInput(attrs={
@@ -64,25 +64,25 @@ class CameraAnnotationCreateForm(forms.ModelForm):
                 'default': '00:00:00:00',
                 'readonly': True,
                 'style': 'font-family: "Roboto Mono", serif; text-align: center; display: table-cell; vertical-align: '
-                         'top; border: 1px solid #a0a0a0; border-radius: 3px; height: 30px; line-height: 30px; '
+                         'top; border: 1px solid #D3D3D3; border-radius: 3px; height: 30px; line-height: 30px; '
                          'margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; background-color: #f8f8f8;',
             }),
             'annotation': forms.Select(attrs={
                 'id': 'form-annotation',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25.5%; min-width: 190px;',
             }),
             'note': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': False,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px;',
             }),
             'status': forms.Select(attrs={
                 'id': 'form-annotation',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 5%; min-width: 45px;',
             }),
         }
@@ -110,7 +110,7 @@ class CameraAnnotationCommentCreateForm(forms.ModelForm):
             'text': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': True,
-                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 150px; width: 90%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
         }
@@ -132,7 +132,7 @@ class WearableDataCreateForm(forms.ModelForm):
             'note': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': True,
-                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; margin: 10px 0 0 0; '
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 10px 0 0 0; '
                          'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
             'time': forms.DateTimeInput(attrs={
@@ -143,7 +143,7 @@ class WearableDataCreateForm(forms.ModelForm):
             'framerate': forms.Select(attrs={
                 'id': 'form-framerate',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 5%; min-width: 45px;',
             }),
         }
@@ -157,7 +157,7 @@ class CameraDataCreateForm(forms.ModelForm):
             'note': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': True,
-                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; margin: 10px 0 0 0; '
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 10px 0 0 0; '
                          'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
             'time': forms.DateTimeInput(attrs={

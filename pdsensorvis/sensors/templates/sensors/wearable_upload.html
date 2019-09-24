@@ -25,8 +25,9 @@
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
-      {{ form.filename }}
+      <div style="margin-top: 15px;"><strong>{{ form.filename.help_text }}: {{ form.filename }}</strong></div>
       {{ form.filename.errors }}
+      <div style="margin-top: 15px;"><strong>{{ form.time.help_text }}:</strong></div>
       <div class="input-group date" id="datetimepicker1" data-target-input="nearest" style="margin-top: 10px">
         {{ form.time }}
         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -34,10 +35,11 @@
         </div>
       </div>
       {{ form.time.errors }}
-      {{ form.time.help_text }}
-      {{ form.note }}
-      {{ form.note.help_text}}
-      {{ form.note.errors }}
+      <div style="margin-top: 10px;">
+        <strong>{{ form.note.help_text}}:</strong>
+        {{ form.note }}
+        {{ form.note.errors }}
+      </div>
     </table>
     <div class="buttons" style="margin-top: 10px">
       <input type="submit" value="Create" class="saveButton" />

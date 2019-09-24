@@ -24,9 +24,9 @@
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
-      <div>{{ form.first_name.help_text }}<p>{{ form.first_name }}</p></div>
-      <div>{{ form.last_name.help_text }}<p>{{ form.last_name }}</p></div>
-      <div>{{ form.date_of_birth.help_text }}</div>
+      <div><strong>{{ form.first_name.help_text }}:</strong><p>{{ form.first_name }}</p></div>
+      <div><strong>{{ form.last_name.help_text }}:</strong><p>{{ form.last_name }}</p></div>
+      <div><strong>{{ form.date_of_birth.help_text }}:</strong></div>
       <div class="input-group date" id="datetimepicker1" data-target-input="nearest" style="margin-top: 10px">
         {{ form.date_of_birth }}
         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -34,7 +34,7 @@
         </div>
       </div>
       <div style="margin-top: 10px;">
-        {{ form.notes.help_text }}<p>{{ form.notes }}</p>
+        <strong>{{ form.notes.help_text }}:</strong><p>{{ form.notes }}</p>
       </div>
     </table>
     <div class="buttons" style="margin-top: 10px">
