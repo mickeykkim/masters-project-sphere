@@ -381,7 +381,9 @@ $(document).keydown(function (e) {
 $('button', $('#annotation-objects-list')).each(function () {
    $(this).click(function() {
       if ($(this).attr('id').indexOf('rewind') > -1) {
-         rewindVideo(this.name);
+         rewindVideo($(this).attr('name'));
+      } else if ($(this).attr('id').indexOf('end') > -1) {
+         rewindVideo($(this).attr('name'));
       } else if ($(this).attr('id').indexOf('edit') > -1) {
          document.location.href = this.name;
       }

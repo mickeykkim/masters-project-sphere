@@ -151,7 +151,12 @@
             <span class="annotationTimestamp">{{ annotation.time_begin }}</span> – <span class="annotationTimestamp">{{ annotation.time_end }}</span>
             <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.time_begin }}">
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                 title="Jump to annotation">skip_previous</i>
+                 title="Jump to annotation begin">skip_previous</i>
+            </button>
+            <button id="annotation_{{ annotation.id }}_end" class="controlButtonXS" name="{{ annotation.time_end }}"
+                    style="margin-left:-6px">
+              <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+                 title="Jump to annotation end">skip_next</i>
             </button>
             {{ annotation.get_annotation_display }}{% if annotation.get_annotation_display == 'Other' %}: {{ annotation.note }}{% endif %}
             <em>({{ annotation.annotator }})</em>
@@ -179,8 +184,4 @@
 {% block javascript %}
   <script src="{% static 'js/VideoFrame.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/cameradata_detail.js' %}"></script>
-{% endblock %}
-
-{% block jquery %}
-  $('[data-toggle="tooltip"]').tooltip();
 {% endblock %}

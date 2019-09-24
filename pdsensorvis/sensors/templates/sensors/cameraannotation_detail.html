@@ -3,14 +3,25 @@
 {% load static %}
 
 {% block content %}
-  <h1>Patient:
-    <a href="{{ cameraannotation.camera.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
-       data-trigger="hover" title="Link to patient data page">{{ cameraannotation.camera.patient }}</a></h1>
+  <div class="titleText">
+    <h1>Patient:
+      <a href="{{ cameraannotation.camera.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+         data-trigger="hover" title="Link to patient data page">{{ cameraannotation.camera.patient }}</a></h1>
+    {% if perms.sensors.can_alter_cameradata %}
+      <button id="edit" class="titleButton controlButtonXL"
+              onclick="window.location.href='{% url 'edit-camera-annotation' cameraannotation.camera.id cameraannotation.id|stringformat:'i' %}'"
+              data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+              title="Edit Camera Annotation">
+        <i class="material-icons buttonIconS">create</i> Edit
+      </button>
+    {% endif %}
+  </div>
   <p><em>Session Time:</em>
     <a href="{{ cameraannotation.camera.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
        data-trigger="hover" title="Link to wearable data page">{{ cameraannotation.camera.time }}</a>
     <span class="vert-divider">|</span> <em>Note:</em> {{ cameraannotation.camera.note }}
   </p>
+
   <hr>
   <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
   <p><strong>Times (h:m:s:f):</strong> {{ cameraannotation.time_begin }} - {{ cameraannotation.time_end }}</p>

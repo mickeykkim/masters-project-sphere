@@ -1,12 +1,11 @@
 import csv
 import xlwt
-from io import StringIO
 
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.views import generic
 from django.shortcuts import redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
@@ -118,15 +117,40 @@ def create_cameradata(request, pk):
     return render(request, 'sensors/camera_upload.html', context)
 
 
+def convert_smpte_to_frames(smpte, framerate):
+    components = smpte.split(":")
+    frames = int(components[0]) * (framerate * 60 * 60) + \
+             int(components[1]) * (framerate * 60) + \
+             int(components[2]) * framerate + \
+             int(components[3])
+    return frames
+
+
+def convert_smpte_to_ms_time(smpte, framerate):
+    components = smpte.split(":")
+    print(str(int(components[3])))
+    ms = str(round(int(components[3]) * 1000 / framerate)).zfill(3)
+    ms_time = str(components[0]) + ":" + \
+              str(components[1]) + ":" + \
+              str(components[2]) + "," + ms
+    return ms_time
+
+
 @permission_required('sensors.can_alter_cameraannotation')
 def edit_camera_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+    existing_camera = get_object_or_404(CameraData, pk=uuid)
 
     if request.method == 'POST':
         form = CameraAnnotationEditForm(request.POST, instance=existing_annotation)
         if form.is_valid():
             existing_annotation = form.save(commit=False)
             existing_annotation.annotation = form.cleaned_data['annotation']
+            fps = existing_camera.get_framerate_display()
+            existing_annotation.frame_begin = convert_smpte_to_frames(existing_annotation.time_begin, fps)
+            existing_annotation.frame_end = convert_smpte_to_frames(existing_annotation.time_end, fps)
+            existing_annotation.ms_time_begin = convert_smpte_to_ms_time(existing_annotation.time_begin, fps)
+            existing_annotation.ms_time_end = convert_smpte_to_ms_time(existing_annotation.time_end, fps)
             existing_annotation.save()
             return redirect('cameradata-detail', pk=uuid)
     else:
@@ -368,6 +392,7 @@ class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):
 
 class CameraAnnotationDetailView(LoginRequiredMixin, generic.View):
     """Combined get and post for camera annotations and comments."""
+
     def get(self, request, *args, **kwargs):
         view = CameraAnnotationDetailGet.as_view()
         return view(request, *args, **kwargs)

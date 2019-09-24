@@ -89,6 +89,7 @@
 <!-- Dynamic jquery/javascript -->
 <script>
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
         {% block jquery %} {% endblock %}
     })
 </script>
