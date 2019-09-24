@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>{{ cameraannotation.camera }}</h1>
+  <h1>Patient:
+    <a href="{{ cameraannotation.camera.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+       data-trigger="hover" title="Link to patient data page">{{ cameraannotation.camera.patient }}</a></h1>
+  <p><em>Session Time:</em>
+    <a href="{{ cameraannotation.camera.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+       data-trigger="hover" title="Link to wearable data page">{{ cameraannotation.camera.time }}</a>
+    <span class="vert-divider">|</span> <em>Note:</em> {{ cameraannotation.camera.note }}
+  </p>
   <hr>
   <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
 

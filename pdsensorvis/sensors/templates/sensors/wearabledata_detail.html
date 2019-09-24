@@ -31,7 +31,7 @@
   <div style="margin-left:20px;margin-top:20px">
     <h4>Wearable Annotations
       <button id="import" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
-              onclick=""
+              onclick='window.location.href="{% url 'upload_csv_annotation' wearabledata.id %}"'
               data-trigger="hover" title="Import annotations"><i class="material-icons">cloud_upload</i>
       </button>
     </h4>

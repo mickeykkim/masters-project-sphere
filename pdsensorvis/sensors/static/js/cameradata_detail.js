@@ -309,6 +309,8 @@ downloadButton.addEventListener("click", function() {
       document.location.href = this.name;
    } else if (option === 1) {
       document.location.href = this.value;
+   } else if (option === 2) {
+      document.location.href = this.getAttribute("data-subtitle");
    }
 });
 

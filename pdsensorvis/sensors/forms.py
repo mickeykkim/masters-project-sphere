@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from .models import CameraAnnotation, CameraAnnotationComment, WearableData
+from .models import CameraAnnotation, CameraAnnotationComment, WearableData, CameraData
 
 
 class CameraAnnotationCreateForm(forms.ModelForm):
@@ -87,13 +87,41 @@ class CameraAnnotationCommentCreateForm(forms.ModelForm):
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
-    filename = forms.FileField()
+    filename = forms.FileField(
+        label='Select a file',
+        help_text='max. 42 megabytes'
+    )
 
 
 class WearableDataCreateForm(forms.ModelForm):
     class Meta:
         model = WearableData
         fields = ['filename', 'note', 'time']
+        widgets = {
+            'note': forms.Textarea(attrs={
+                'id': 'form-text',
+                'required': True,
+                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; margin: 10px 0 0 0; '
+                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
+            }),
+            'time': forms.DateTimeInput(attrs={
+                'class': 'form-control datetimepicker-input',
+                'required': True,
+                'data-target': '#datetimepicker1',
+            }),
+            'framerate': forms.Select(attrs={
+                'id': 'form-framerate',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 5%; min-width: 45px;',
+            }),
+        }
+
+
+class CameraDataCreateForm(forms.ModelForm):
+    class Meta:
+        model = CameraData
+        fields = ['filename', 'note', 'time', 'framerate']
         widgets = {
             'note': forms.Textarea(attrs={
                 'id': 'form-text',

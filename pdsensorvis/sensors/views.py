@@ -1,5 +1,6 @@
 import csv
 import xlwt
+from io import StringIO
 
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
@@ -12,7 +13,7 @@ from django.contrib.auth.decorators import permission_required
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
     CameraAnnotationComment, WearableDataPoint
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
-    UploadFileForm, WearableDataCreateForm
+    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm
 from uuid import UUID
 
 User = get_user_model()
@@ -91,6 +92,30 @@ def create_wearabledata(request, pk):
     }
 
     return render(request, 'sensors/wearable_upload.html', context)
+
+
+@permission_required('sensors.can_alter_cameradata')
+def create_cameradata(request, pk):
+    patient_id = get_object_or_404(PatientData, pk=pk)
+
+    if request.method == 'POST':
+        form = CameraDataCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_camera = form.save(commit=False)
+            new_camera.patient = patient_id
+            new_camera.save()
+            return redirect('patientdata-detail', pk=pk)
+        else:
+            print(form.errors)
+    else:
+        form = CameraDataCreateForm()
+
+    context = {
+        'form': form,
+        'patientdata': patient_id,
+    }
+
+    return render(request, 'sensors/camera_upload.html', context)
 
 
 @permission_required('sensors.can_alter_cameraannotation')
@@ -207,20 +232,33 @@ def export_annotations_xls(request, pk):
     return response
 
 
+def upload_csv_annotation(request, pk):
+    context = {}
+    if "GET" == request.method:
+        return render(request, "sensors/upload_csv.html", context)
+    # if not GET, then proceed
+    csv_file = request.FILES["csv_file"]
+    import_wearableannotation_csv(pk, csv_file)
+
+    return render(request, 'sensors/upload_csv.html', context)
+
+
 def import_wearabledata_csv(pk, path):
     """
-    Method for importing wearable data points. Requires csv file headed with 'frames' and 'magnitudes'.
+    Method for importing wearable data points. Requires csv file with a first column of magnitudes.
     WARNING: Does not do any validation.
     """
     wearabledata = get_object_or_404(WearableData, pk=pk)
     with open(path) as import_file:
-        reader = csv.DictReader(import_file, fieldnames=['frames', 'magnitudes'])
+        reader = csv.reader(import_file)
+        frame_num = 1
         for row in reader:
             _, created = WearableDataPoint.objects.get_or_create(
                 wearable=wearabledata,
-                frame=row['frames'],
-                magnitude=row['magnitudes'],
+                frame=frame_num,
+                magnitude=row[0],
             )
+            frame_num += 1
 
 
 def import_wearableannotation_csv(pk, path):
