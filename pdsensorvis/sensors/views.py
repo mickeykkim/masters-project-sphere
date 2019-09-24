@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import permission_required
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
     CameraAnnotationComment, WearableDataPoint
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
-    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm
+    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm
 from uuid import UUID
 
 User = get_user_model()
@@ -66,6 +66,27 @@ def search_results(request):
 
     else:
         return render(request, "search_results.html")
+
+
+@permission_required('sensors.can_alter_patientdata')
+def create_patientdata(request):
+
+    if request.method == 'POST':
+        form = PatientDataCreateForm(request.POST)
+        if form.is_valid():
+            new_patient = form.save(commit=False)
+            new_patient.save()
+            return redirect('patientdata')
+        else:
+            print(form.errors)
+    else:
+        form = PatientDataCreateForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'sensors/patient_upload.html', context)
 
 
 @permission_required('sensors.can_alter_wearabledata')
@@ -269,7 +290,7 @@ def upload_csv_annotation(request, pk):
 
 def import_wearabledata_csv(pk, path):
     """
-    Method for importing wearable data points. Requires csv file with a first column of magnitudes.
+    Method for importing wearable data points. Requires csv file with acceleration magnitudes in the first column.
     WARNING: Does not do any validation.
     """
     wearabledata = get_object_or_404(WearableData, pk=pk)

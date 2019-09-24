@@ -1,7 +1,38 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from .models import CameraAnnotation, CameraAnnotationComment, WearableData, CameraData
+from .models import CameraAnnotation, CameraAnnotationComment, WearableData, CameraData, PatientData
+
+
+class PatientDataCreateForm(forms.ModelForm):
+    class Meta:
+        model = PatientData
+        fields = ['first_name', 'last_name', 'date_of_birth', 'notes']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'id': 'form-note',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'id': 'form-note',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;',
+            }),
+            'date_of_birth': forms.DateTimeInput(attrs={
+                'class': 'form-control datetimepicker-input',
+                'required': True,
+                'data-target': '#datetimepicker1',
+            }),
+            'notes': forms.Textarea(attrs={
+                'id': 'form-text',
+                'required': False,
+                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; margin: 10px 0 0 0; '
+                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
+            }),
+        }
 
 
 class CameraAnnotationCreateForm(forms.ModelForm):

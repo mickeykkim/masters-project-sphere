@@ -30,4 +30,5 @@ urlpatterns = [
     re_path(r'^cameradata/(?P<pk>[\w-]+)/create/$', views.create_cameradata, name='create_cameradata'),
     re_path(r'^wearabledata/(?P<pk>[\w-]+)/import/annotation/$', views.upload_csv_annotation,
             name='upload_csv_annotation'),
+    re_path(r'^patientdata/create/$', views.create_patientdata, name='create_patientdata'),
 ]

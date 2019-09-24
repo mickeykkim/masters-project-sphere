@@ -15,6 +15,7 @@ let seekForwardButton = document.getElementById("seek-forward");
 let helpButton = document.getElementById("help");
 let setBeginButton = document.getElementById("set-begin");
 let setEndButton = document.getElementById("set-end");
+let annotateButton = document.getElementById("annotate");
 
 // Form elements
 let setBeginFormText = document.getElementById("form-time-begin");
@@ -177,10 +178,7 @@ function copyToClipboard(selection) {
 
 function displayHelpAlert() {
    const newLine = "\r\n";
-   let helpMessage = "Shortcuts:";
-   helpMessage += newLine;
-   helpMessage += newLine;
-   helpMessage += "Space bar : Play/pause video.";
+   let helpMessage = "Spacebar : Play/pause video.";
    helpMessage += newLine;
    helpMessage += "Shift + Right Arrow : Step frames forward by selected amount.";
    helpMessage += newLine;
@@ -191,6 +189,12 @@ function displayHelpAlert() {
    helpMessage += "Shift + Down Arrow : Decrease frame step amount.";
    helpMessage += newLine;
    helpMessage += "Shift + / : Reset video to specified frame.";
+   helpMessage += newLine;
+   helpMessage += "Shift + [ : Set beginning timestamp for annotation.";
+   helpMessage += newLine;
+   helpMessage += "Shift + ] : Set ending timestamp for annotation.";
+   helpMessage += newLine;
+   helpMessage += "Shift + \\ : Annotate with the selected annotation and timestamps.";
    alert(helpMessage);
 }
 
@@ -330,7 +334,7 @@ copyTimeStamp.addEventListener("click", function () {
 
 // Keycodes for keypress event listeners
 // 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right,
-// 40 = down, 191 = forward slash
+// 40 = down, 191 = forward slash, 219 = [, 221 = ], 220 = back slash
 let keyCodeMap = {
    16: false,
    32: false,
@@ -338,7 +342,9 @@ let keyCodeMap = {
    38: false,
    39: false,
    40: false,
-   191: false
+   219: false,
+   221: false,
+   220: false
 };
 let keyIsDown = false;
 
@@ -355,6 +361,12 @@ $(document).keydown(function (e) {
             stepBack();
          } else if (keyCodeMap[16] && keyCodeMap[39]) {
             stepForward();
+         } else if (keyCodeMap[16] && keyCodeMap[219]) {
+            setBeginButton.click();
+         } else if (keyCodeMap[16] && keyCodeMap[221]) {
+            setEndButton.click();
+         } else if (keyCodeMap[16] && keyCodeMap[220]) {
+            annotateButton.click();
          } else if (keyCodeMap[16] && keyCodeMap[38]) {
             stepBackwardBox.options[parseInt(backOption) + 1].selected = true;
             stepForwardBox.options[parseInt(forwardOption) + 1].selected = true;

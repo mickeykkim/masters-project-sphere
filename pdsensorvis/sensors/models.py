@@ -29,7 +29,7 @@ class PatientData(models.Model):
     id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, help_text='Patient first name')
     last_name = models.CharField(max_length=50, help_text='Patient last name')
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(help_text='Patient date of birth')
     notes = models.CharField(max_length=500, help_text='Notes regarding patient')
 
     class Meta:
