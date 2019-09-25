@@ -31,12 +31,21 @@
   <canvas id="myChart" width="500" height="400" style="margin-top: 25px"></canvas>
   <hr>
   <div style="margin-left:20px;margin-top:20px">
-    <h4>Wearable Annotations
-      <button id="import" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
-              onclick='window.location.href="{% url 'upload_csv_annotation' wearabledata.id %}"'
-              data-trigger="hover" title="Import annotations"><i class="material-icons">cloud_upload</i>
-      </button>
-    </h4>
+    <span>
+      <h4>Wearable Annotations
+        {% if perms.sensors.can_alter_wearableannotation %}
+          <button type='button' class="controlButtonS" data-toggle="tooltip"
+                  data-placement="bottom" data-trigger="hover" title="Create Wearable Annotation"
+                  onclick='window.location.href="{% url 'create-wearable-annotation' wearabledata.id %}"'>
+            <i class="material-icons">add</i>
+          </button>
+        {% endif %}
+        <button id="import" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
+                onclick='window.location.href="{% url 'upload_csv_annotation' wearabledata.id %}"'
+                data-trigger="hover" title="Import annotations"><i class="material-icons">cloud_upload</i>
+        </button>
+      </h4>
+    </span>
     <ul>
       {% for annotation in wearabledata.w_annotations.all %}
         <li>

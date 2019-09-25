@@ -13,7 +13,8 @@ from .models import PatientData, WearableData, CameraData, WearableAnnotation, C
     CameraAnnotationComment, WearableDataPoint
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
     CameraAnnotationCommentEditForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, \
-    PatientDataEditForm, WearableDataEditForm, WearableAnnotationEditForm, CameraDataEditForm
+    PatientDataEditForm, WearableDataEditForm, WearableAnnotationCreateForm, WearableAnnotationEditForm, \
+    CameraDataEditForm
 from uuid import UUID
 
 User = get_user_model()
@@ -217,6 +218,30 @@ def delete_wearabledata(request, uuid):
     }
 
     return render(request, 'sensors/edit_wearabledata.html', context)
+
+
+@permission_required('sensors.can_alter_wearableannotation')
+def create_wearable_annotation(request, uuid):
+    existing_wearable = get_object_or_404(WearableData, pk=uuid)
+
+    if request.method == 'POST':
+        form = WearableAnnotationCreateForm(request.POST)
+        if form.is_valid():
+            new_annotation = form.save(commit=False)
+            new_annotation.wearable = existing_wearable
+            new_annotation.annotator = request.user
+            new_annotation.annotation = form.cleaned_data['annotation']
+            new_annotation.save()
+            return redirect('wearabledata-detail', pk=uuid)
+    else:
+        form = WearableAnnotationCreateForm()
+
+    context = {
+        'form': form,
+        'wearable': existing_wearable,
+    }
+
+    return render(request, 'sensors/create_wearable_annotation.html', context)
 
 
 @permission_required('sensors.can_alter_wearableannotation')

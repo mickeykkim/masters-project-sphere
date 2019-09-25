@@ -254,6 +254,49 @@ class CameraAnnotationEditForm(forms.ModelForm):
         }
 
 
+class WearableAnnotationCreateForm(forms.ModelForm):
+    def clean_annotation(self):
+        data = self.cleaned_data['annotation']
+
+        if not data:
+            raise ValidationError(_('Annotation cannot be blank.'))
+
+        return data
+
+    class Meta:
+        model = WearableAnnotation
+        fields = ['frame_begin', 'frame_end', 'annotation', 'note']
+        widgets = {
+            'frame_begin': forms.TextInput(attrs={
+                'id': 'form-time-begin',
+                'required': True,
+                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; '
+                         'background-color: #f8f8f8;',
+            }),
+            'frame_end': forms.TextInput(attrs={
+                'id': 'form-time-end',
+                'required': True,
+                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; '
+                         'background-color: #f8f8f8;',
+            }),
+            'annotation': forms.Select(attrs={
+                'id': 'form-annotation',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25.5%; min-width: 190px;',
+            }),
+            'note': forms.TextInput(attrs={
+                'id': 'form-note',
+                'required': False,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px;'
+                         'background-color: #f8f8f8;',
+            })
+        }
+
+
 class WearableAnnotationEditForm(forms.ModelForm):
     def clean_annotation(self):
         data = self.cleaned_data['annotation']
