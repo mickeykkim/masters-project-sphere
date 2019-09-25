@@ -27,7 +27,14 @@
     <span class="vert-divider">|</span> <em>Note:</em> {{ wearabledata.note }}
   </p>
   <hr>
-  <h4>Wearable Data Visualization</h4>
+  <h4>Wearable Data Visualization
+    <a id="download" download="{{ wearabledata.id }}.png">
+      <button type="button" class="controlButtonS" data-toggle="tooltip"
+              data-placement="bottom" data-trigger="hover" title="Download Visualization"
+              onClick="download()"><i class="material-icons">save_alt</i>
+      </button>
+    </a>
+  </h4>
   <canvas id="myChart" width="500" height="400" style="margin-top: 25px"></canvas>
   <hr>
   <div style="margin-left:20px;margin-top:20px">
@@ -141,4 +148,15 @@
         }
      }
   });
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    function download() {
+        let download = document.getElementById("download");
+        let image = document.getElementById("myChart").toDataURL("image/png").replace("image/png", "image/octet-stream");
+        download.setAttribute("href", image);
+        //download.setAttribute("download","archive.png");
+    }
+  </script>
 {% endblock %}
