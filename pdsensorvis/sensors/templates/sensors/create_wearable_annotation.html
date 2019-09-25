@@ -2,15 +2,20 @@
 
 {% block content %}
   <div class="titleText">
-    <h1>Patient:
-      <a href="{{ wearable.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
-         data-trigger="hover" title="Link to patient data page">{{ wearable.patient }}</a></h1>
+    <h1>Create Wearable Annotation</h1>
   </div>
-  <p><em>Session Time:</em>
+  <div>
+    <em>Patient: </em>
+    <a href="{{ wearable.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+               data-trigger="hover" title="Link to patient data page">{{ wearable.patient }}</a>
+    <span class="vert-divider">|</span>
+    <em>Session Time: </em>
     <a href="{{ wearable.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
        data-trigger="hover" title="Link to wearable data page">{{ wearable.time }}</a>
-    <span class="vert-divider">|</span> <em>Note:</em> {{ wearable.note }}
-  </p>
+    <span class="vert-divider">|</span>
+    <em>Note:</em> {{ wearable.note }}
+  </div>
+
   <hr>
 
   <form action="" method="post" class="form-group">

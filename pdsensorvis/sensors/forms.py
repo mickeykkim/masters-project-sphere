@@ -98,7 +98,7 @@ class WearableDataEditForm(forms.ModelForm):
                 'id': 'form-text',
                 'required': True,
                 'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 3px 0 0 0; '
-                         'height: 100px; width: 100%; box-sizing: border-box; ',
+                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
             'time': forms.DateTimeInput(attrs={
                 'id': 'form-note',
@@ -145,7 +145,7 @@ class CameraDataEditForm(forms.ModelForm):
                 'id': 'form-text',
                 'required': True,
                 'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 3px 0 0 0; '
-                         'height: 100px; width: 100%; box-sizing: border-box; ',
+                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
             'time': forms.DateTimeInput(attrs={
                 'id': 'form-note',
