@@ -12,11 +12,11 @@
     <span class="vert-divider">|</span> <em>Note:</em> {{ cameraannotation.camera.note }}
   </p>
   <hr>
-  <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
 
   <form action="" method="post" class="form-group">
     {% csrf_token %}
     <table>
+      <p><strong>Annotator:</strong> {{ cameraannotation.annotator }}</p>
       {{ form.as_table }}
     </table>
     <input type="submit" value="Save" class="saveButton" />

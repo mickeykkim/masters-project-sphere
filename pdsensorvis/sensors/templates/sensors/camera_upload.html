@@ -17,7 +17,7 @@
 {% block content %}
   <h1>Create New Camera Data</h1>
   <hr>
-  <form action="" method="post" class="form-group">
+  <form action="" method="post" class="form-group" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
       <p><strong>Patient:</strong> {{ patientdata }} ({{ patientdata.date_of_birth }})</p>

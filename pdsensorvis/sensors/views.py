@@ -12,7 +12,8 @@ from django.contrib.auth.decorators import permission_required
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
     CameraAnnotationComment, WearableDataPoint
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
-    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, PatientDataEditForm
+    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, PatientDataEditForm, \
+    WearableDataEditForm
 from uuid import UUID
 
 User = get_user_model()
@@ -149,7 +150,7 @@ def delete_patientdata(request, pk):
         'patientdata': existing_patientdata,
     }
 
-    return render(request, 'sensors/delete_patientdata.html', context)
+    return render(request, 'sensors/edit_patientdata.html', context)
 
 
 @permission_required('sensors.can_alter_wearabledata')
@@ -175,6 +176,48 @@ def create_wearabledata(request, pk):
     }
 
     return render(request, 'sensors/wearable_upload.html', context)
+
+
+@permission_required('sensors.can_alter_wearabledata')
+def edit_wearabledata(request, uuid):
+    existing_wearable = get_object_or_404(WearableData, pk=uuid)
+
+    if request.method == 'POST':
+        form = WearableDataEditForm(request.POST, instance=existing_wearable)
+        if form.is_valid():
+            existing_wearable = form.save(commit=False)
+            existing_wearable.save()
+            return redirect('wearabledata-detail', pk=uuid)
+        else:
+            print(form.errors)
+    else:
+        form = WearableDataEditForm(instance=existing_wearable)
+
+    context = {
+        'form': form,
+        'wearabledata': existing_wearable,
+    }
+
+    return render(request, 'sensors/edit_wearabledata.html', context)
+
+
+@permission_required('sensors.can_alter_wearabledata')
+def delete_wearabledata(request, uuid):
+    existing_wearable = get_object_or_404(WearableData, pk=uuid)
+
+    if request.method == 'POST':
+        existing_wearable.delete()
+        return redirect('wearabledata')
+    else:
+        form = WearableDataEditForm(instance=existing_wearable)
+
+    context = {
+        'form': form,
+        'wearabledata': existing_wearable,
+    }
+
+    return render(request, 'sensors/edit_patientdata.html', context)
+
 
 
 @permission_required('sensors.can_alter_cameradata')
@@ -245,6 +288,7 @@ def delete_camera_annotation(request, uuid, pk):
     }
 
     return render(request, 'sensors/edit_camera_annotation.html', context)
+
 
 
 class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):

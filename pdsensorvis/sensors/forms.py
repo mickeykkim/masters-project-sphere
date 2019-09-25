@@ -75,10 +75,6 @@ class WearableDataCreateForm(forms.ModelForm):
         model = WearableData
         fields = ['filename', 'note', 'time']
         widgets = {
-            'filename': forms.FileInput(attrs={
-                'class': 'form-control-file',
-                'required': True,
-            }),
             'note': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': True,
@@ -93,16 +89,32 @@ class WearableDataCreateForm(forms.ModelForm):
         }
 
 
+class WearableDataEditForm(forms.ModelForm):
+    class Meta:
+        model = WearableData
+        fields = ['note', 'time']
+        widgets = {
+            'note': forms.Textarea(attrs={
+                'id': 'form-text',
+                'required': True,
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 3px 0 0 0; '
+                         'height: 100px; width: 100%; box-sizing: border-box; ',
+            }),
+            'time': forms.DateTimeInput(attrs={
+                'id': 'form-note',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;'
+                         'background-color: #f8f8f8;',
+            }),
+        }
+
+
 class CameraDataCreateForm(forms.ModelForm):
     class Meta:
         model = CameraData
         fields = ['filename', 'note', 'time', 'framerate']
         widgets = {
-            'filename': forms.FileInput(attrs={
-                'id': 'form-file-select',
-                'class': 'form-control-file',
-                'required': True,
-            }),
             'note': forms.Textarea(attrs={
                 'id': 'form-note',
                 'required': True,

@@ -17,7 +17,9 @@
     </h1>
     {% if perms.sensors.can_alter_wearabledata %}
       <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
-              data-trigger="hover" title="Edit Wearable Data"><i class="material-icons buttonIconS">create</i> Edit
+              data-trigger="hover"
+              title="Edit Wearable Data" onclick='window.location.href="{% url 'edit-wearable-data' wearabledata.id %}"'>
+        <i class="material-icons buttonIconS">create</i> Edit
       </button>
     {% endif %}
   </div>
@@ -80,6 +82,9 @@
      },
      options: {
         responsive: true,
+        animation: {
+           duration: 0
+        },
         legend: {
            display: false
         },

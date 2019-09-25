@@ -8,11 +8,14 @@
 
 {% block content %}
   <div class="titleText">
-    <h1>Patient: <a href="{{ cameradata.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                   title="Link to patient data page">{{ cameradata.patient }}</a></h1>
+    <h1>Patient: <a href="{{ cameradata.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+                    data-trigger="hover"
+                    title="Link to patient data page">{{ cameradata.patient }}</a></h1>
     {% if perms.sensors.can_alter_cameradata %}
-      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-              title="Edit Camera Data"><i class="material-icons buttonIconS">create</i> Edit</button>
+      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
+              data-trigger="hover"
+              title="Edit Camera Data"><i class="material-icons buttonIconS">create</i> Edit
+      </button>
     {% endif %}
   </div>
   <p><em>Session Time:</em> {{ cameradata.time }}
@@ -29,15 +32,19 @@
 
   <div class="videoFrame">
     <!-- VideoFrame Object -->
-    <video height="50%" width="100%" id="video" src="{{ media_url }}{{ cameradata.filename }}" type="video/mp4" playsinline></video>
+    <video height="50%" width="100%" id="video" src="{{ media_url }}{{ cameradata.filename }}" type="video/mp4"
+           playsinline></video>
     <!-- Play Controls -->
     <div id="play-controls" class="playControls">
       <button id="play-pause" class="controlButtonL"><i class="material-icons">play_arrow</i></button>
-      <label for="seek-bar"></label><input type="range" id="seek-bar" class="seekBar" style="width:50%;margin:5px 0 0 5px;" min="0" value="0" step="1">
-      <span id="video-time" class="timestamp">00:00</span><span class="timestamp">/</span><span id="video-duration" class="timestamp">00:00</span>
+      <label for="seek-bar"></label><input type="range" id="seek-bar" class="seekBar"
+                                           style="width:50%;margin:5px 0 0 5px;" min="0" value="0" step="1">
+      <span id="video-time" class="timestamp">00:00</span><span class="timestamp">/</span><span id="video-duration"
+                                                                                                class="timestamp">00:00</span>
       <button id="mute" class="controlButtonL" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Toggle mute"><i class="material-icons">volume_up</i></button>
-      <label for="volume-bar"></label><input type="range" id="volume-bar" class="volumeBar" style="width:9%;margin:5px 0 0 5px;" min="0" max="1" step="0.1" value="1"/>
+      <label for="volume-bar"></label><input type="range" id="volume-bar" class="volumeBar"
+                                             style="width:9%;margin:5px 0 0 5px;" min="0" max="1" step="0.1" value="1"/>
     </div>
     <!-- Hidden div for camera data FPS -->
     <div hidden>
@@ -49,7 +56,8 @@
         {% csrf_token %}
         <!-- Seek Controls -->
         <div class="seekControls">
-          <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip" data-placement="bottom"
+          <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip"
+                 data-placement="bottom"
                  title="Frame to jump back to">
           <button type="button" id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
                   data-trigger="hover" title="Jump back to frame"><i class="material-icons">skip_previous</i></button>
@@ -101,13 +109,18 @@
             <label for="id-frame"><i class="material-icons buttonIconM">play_arrow</i>Frame:</label>
             <input type="text" id="id-frame" value=0 class="currentFrameText" readonly>
             <span class="vert-divider">|</span>
-            <label for="id-timestamp"><i class="material-icons buttonIconM">play_arrow</i>Timestamp (hh:mm:ss:ff):</label>
+            <label for="id-timestamp"><i class="material-icons buttonIconM">play_arrow</i>Timestamp
+              (hh:mm:ss:ff):</label>
             <input type="text" id="id-timestamp" value="00:00:00:00" class="currentTimeText" readonly>
             <span class="vert-divider">|</span>
             <button type="button" id="set-begin" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
-                    data-trigger="hover" title="Set beginning timestamp"><i class="material-icons buttonIconS">create</i> Set Begin</button>
+                    data-trigger="hover" title="Set beginning timestamp"><i
+                class="material-icons buttonIconS">create</i> Set Begin
+            </button>
             <button type="button" id="set-end" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
-                    data-trigger="hover" title="Set ending timestamp"><i class="material-icons buttonIconS">create</i> Set End</button>
+                    data-trigger="hover" title="Set ending timestamp"><i class="material-icons buttonIconS">create</i>
+              Set End
+            </button>
           </div>
           <div class="frameStatusTimestamps">
             <label for="form-time-begin">Beginning timestamp:</label>
@@ -116,8 +129,10 @@
             <label for="form-time-end"> Ending timestamp:</label>
             {{ form.time_end }}
             <span class="vert-divider">|</span>
-            <button type="submit" id="annotate" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-                    title="Add annotation"><i class="material-icons buttonIconS">add</i> Annotate</button>
+            <button type="submit" id="annotate" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
+                    data-trigger="hover"
+                    title="Add annotation"><i class="material-icons buttonIconS">add</i> Annotate
+            </button>
           </div>
         </div>
         <!-- Hidden div for non-displayed form elements -->
@@ -150,8 +165,10 @@
       <ul id="annotation-objects-list">
         {% for annotation in cameradata.c_annotations.all %}
           <li class="annotationDetails">
-            <span class="annotationTimestamp">{{ annotation.time_begin }}</span> – <span class="annotationTimestamp">{{ annotation.time_end }}</span>
-            <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS" name="{{ annotation.time_begin }}">
+            <span class="annotationTimestamp">{{ annotation.time_begin }}</span> – <span
+              class="annotationTimestamp">{{ annotation.time_end }}</span>
+            <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS"
+                    name="{{ annotation.time_begin }}">
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation begin">skip_previous</i>
             </button>
@@ -160,18 +177,21 @@
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation end">skip_next</i>
             </button>
-            {{ annotation.get_annotation_display }}{% if annotation.get_annotation_display == 'Other' %}: {{ annotation.note }}{% endif %}
+            {{ annotation.get_annotation_display }}{% if annotation.get_annotation_display == 'Other' %}:
+              {{ annotation.note }}{% endif %}
             <em>({{ annotation.annotator }})</em>
             {% if user.is_authenticated %}
               {% if annotation.annotator == user %}
                 <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
                         name="{% url 'edit-camera-annotation' cameradata.id annotation.id|stringformat:"i" %}">
-                  <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+                  <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom"
+                     data-trigger="hover"
                      title="Edit annotation">edit</i>
                 </button>
               {% endif %}
             {% endif %}
-            <em><a href="{{ annotation.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            <em><a href="{{ annotation.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+                   data-trigger="hover"
                    title="Link to discussion page">({{ annotation.comments.count }}
               comment{% if annotation.comments.count != 1 %}s{% endif %})</a></em>
           </li>
