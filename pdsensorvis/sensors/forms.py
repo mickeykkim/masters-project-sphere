@@ -227,27 +227,27 @@ class CameraAnnotationEditForm(forms.ModelForm):
             'time_begin': forms.TextInput(attrs={
                 'id': 'form-time-begin',
                 'required': True,
-                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'text-align: left; display: table-cell; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 14%; min-width: 190px; '
                          'background-color: #f8f8f8;',
             }),
             'time_end': forms.TextInput(attrs={
                 'id': 'form-time-end',
                 'required': True,
-                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'text-align: left; display: table-cell; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 14%; min-width: 190px; '
                          'background-color: #f8f8f8;',
             }),
             'annotation': forms.Select(attrs={
                 'id': 'form-annotation',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25.5%; min-width: 190px;',
             }),
             'note': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': False,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px;'
                          'background-color: #f8f8f8;',
             })
@@ -270,27 +270,27 @@ class WearableAnnotationCreateForm(forms.ModelForm):
             'frame_begin': forms.TextInput(attrs={
                 'id': 'form-time-begin',
                 'required': True,
-                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'text-align: left; display: table-cell; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 250px; '
                          'background-color: #f8f8f8;',
             }),
             'frame_end': forms.TextInput(attrs={
                 'id': 'form-time-end',
                 'required': True,
-                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'text-align: left; display: table-cell; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 250px; '
                          'background-color: #f8f8f8;',
             }),
             'annotation': forms.Select(attrs={
                 'id': 'form-annotation',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 250px;',
             }),
             'note': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': False,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 250px;'
                          'background-color: #f8f8f8;',
             })
@@ -313,27 +313,27 @@ class WearableAnnotationEditForm(forms.ModelForm):
             'frame_begin': forms.TextInput(attrs={
                 'id': 'form-time-begin',
                 'required': True,
-                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; '
+                'style': 'text-align: left; display: table-cell; border: 1px solid #D3D3D3; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px; '
                          'background-color: #f8f8f8;',
             }),
             'frame_end': forms.TextInput(attrs={
                 'id': 'form-time-end',
                 'required': True,
-                'style': 'text-align: left; display: table-cell; border: 1px solid #a0a0a0; border-radius: 3px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; '
+                'style': 'text-align: left; display: table-cell; border: 1px solid #D3D3D3; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px; '
                          'background-color: #f8f8f8;',
             }),
             'annotation': forms.Select(attrs={
                 'id': 'form-annotation',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25.5%; min-width: 190px;',
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px;',
             }),
             'note': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': False,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px;'
                          'background-color: #f8f8f8;',
             })
@@ -349,7 +349,7 @@ class CameraAnnotationCommentCreateForm(forms.ModelForm):
                 'id': 'form-text',
                 'required': True,
                 'style': 'border: 1px solid #a0a0a0; border-radius: 3px; '
-                         'height: 150px; width: 90%; box-sizing: border-box; background-color: #f8f8f8;',
+                         'height: 150px; width: 70%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
         }
 
@@ -363,7 +363,7 @@ class CameraAnnotationCommentEditForm(forms.ModelForm):
                 'id': 'form-text',
                 'required': True,
                 'style': 'border: 1px solid #a0a0a0; border-radius: 3px; '
-                         'height: 150px; width: 90%; box-sizing: border-box; background-color: #f8f8f8;',
+                         'height: 150px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
         }
 

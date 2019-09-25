@@ -58,6 +58,7 @@
         <li>
           <a href="{% url 'wearableannotation-detail' wearabledata.id annotation.id %}">
             Frames {{ annotation.frame_begin }}-{{ annotation.frame_end }}: {{ annotation.get_annotation_display }}
+            <em>({{ annotation.annotator }})</em>
           </a>
           {% if user.is_authenticated %}
             {% if annotation.annotator == user %}

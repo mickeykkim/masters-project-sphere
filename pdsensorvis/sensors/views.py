@@ -563,7 +563,7 @@ class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
 
 def export_annotations_csv(request, pk):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="annotations.csv"'
+    response['Content-Disposition'] = 'attachment; filename="' + pk + ".csv"''
 
     writer = csv.writer(response)
     writer.writerow(['Session ID:', pk])
@@ -588,7 +588,7 @@ def export_annotations_csv(request, pk):
 
 def export_annotations_xls(request, pk):
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="annotations.xls"'
+    response['Content-Disposition'] = 'attachment; filename="' + pk + ".xls"''
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Users')

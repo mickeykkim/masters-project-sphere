@@ -10,9 +10,19 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Patient:
-    <a href="{{ wearableannotation.wearable.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
-       data-trigger="hover" title="Link to patient data page">{{ wearableannotation.wearable.patient }}</a></h1>
+  <div class="titleText">
+    <h1>Patient:
+      <a href="{{ wearableannotation.wearable.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+         data-trigger="hover" title="Link to patient data page">{{ wearableannotation.wearable.patient }}</a>
+    </h1>
+    {% if perms.sensors.can_alter_wearabledata %}
+      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
+              data-trigger="hover" title="Edit Wearable Data"
+              onclick='window.location.href="{% url 'edit-wearabledata' wearableannotation.wearable.id %}"'>
+        <i class="material-icons buttonIconS">create</i> Edit
+      </button>
+    {% endif %}
+  </div>
   <p><em>Session Time:</em>
     <a href="{{ wearableannotation.wearable.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
        data-trigger="hover" title="Link to wearable data page">{{ wearableannotation.wearable.time }}</a>
