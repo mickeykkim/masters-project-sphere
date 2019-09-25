@@ -18,7 +18,7 @@
     {% if perms.sensors.can_alter_wearabledata %}
       <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Edit Wearable Data"
-              onclick='window.location.href="{% url 'edit-wearabledata' wearableannotation.wearable.id %}"'>
+              onclick='window.location.href="{% url 'edit-wearable-annotation' wearableannotation.wearable.id wearableannotation.id %}"'>
         <i class="material-icons buttonIconS">create</i> Edit
       </button>
     {% endif %}

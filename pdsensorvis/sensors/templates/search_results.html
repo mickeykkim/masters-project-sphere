@@ -4,27 +4,27 @@
   <h1>Search Results</h1>
   <hr>
     <div class="annotation-objects">
-      <h5>Camera Data:</h5>
-      <ul>
-      {% for item in cameradata %}
-        <li>
-          <a href="{{ item.get_absolute_url }}">
-            {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
-        </li>
-      {% empty %}
-        <p>No camera data found.</p>
-      {% endfor %}
-      </ul>
-      <h5>Wearable Data:</h5>
-      <ul>
-      {% for item in wearabledata %}
-        <li>
-          <a href="{{ item.get_absolute_url }}">
-            {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
-        </li>
-      {% empty %}
-        <p>No wearable data found.</p>
-      {% endfor %}
-      </ul>
+      {% if cameradata %}
+        <h5>Camera Data:</h5>
+        <ul>
+        {% for item in cameradata %}
+          <li>
+            <a href="{{ item.get_absolute_url }}">
+              {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+      {% if wearabledata %}
+        <h5>Wearable Data:</h5>
+        <ul>
+        {% for item in wearabledata %}
+          <li>
+            <a href="{{ item.get_absolute_url }}">
+              {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
     </div>
 {% endblock %}

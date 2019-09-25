@@ -81,9 +81,15 @@ def search_results(request):
                 lookups = Q(pk=query)
             else:
                 lookups = Q(patient__first_name__icontains=query) | Q(patient__last_name__icontains=query)
+
             camera_results = CameraData.objects.filter(lookups)
             wearable_results = WearableData.objects.filter(lookups)
-            context = {'cameradata': camera_results, 'wearabledata': wearable_results}
+
+            context = {
+                'cameradata': camera_results,
+                'wearabledata': wearable_results
+            }
+
             return render(request, "search_results.html", context)
         else:
             return render(request, "search_results.html")
