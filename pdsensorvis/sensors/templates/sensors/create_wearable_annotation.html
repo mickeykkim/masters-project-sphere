@@ -7,7 +7,7 @@
          data-trigger="hover" title="Link to patient data page">{{ wearable.patient }}</a></h1>
   </div>
   <p><em>Session Time:</em>
-    <a href="{{ camera.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
+    <a href="{{ wearable.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
        data-trigger="hover" title="Link to wearable data page">{{ wearable.time }}</a>
     <span class="vert-divider">|</span> <em>Note:</em> {{ wearable.note }}
   </p>
