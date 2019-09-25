@@ -39,8 +39,8 @@
       <strong>{{ comment.author }}</strong> <em>(Posted on: {{ comment.timestamp }})</em>
       {% if user.is_authenticated %}
         {% if comment.author == user %}
-          <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
-                  onclick="window.location.href=''">
+          <button id="annotation_{{ cameraannotation.id }}_edit" class="controlButtonXS"
+                  onclick='window.location.href="{% url 'edit-cameraannotation-comment' cameraannotation.camera.id cameraannotation.id comment.id %}"'>
             <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                title="Edit comment">edit</i>
           </button>

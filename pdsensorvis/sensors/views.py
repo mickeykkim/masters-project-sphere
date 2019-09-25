@@ -12,8 +12,8 @@ from django.contrib.auth.decorators import permission_required
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
     CameraAnnotationComment, WearableDataPoint
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
-    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, PatientDataEditForm, \
-    WearableDataEditForm
+    CameraAnnotationCommentEditForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, \
+    PatientDataEditForm, WearableDataEditForm, WearableAnnotationEditForm, CameraDataEditForm
 from uuid import UUID
 
 User = get_user_model()
@@ -216,8 +216,47 @@ def delete_wearabledata(request, uuid):
         'wearabledata': existing_wearable,
     }
 
-    return render(request, 'sensors/edit_patientdata.html', context)
+    return render(request, 'sensors/edit_wearabledata.html', context)
 
+
+@permission_required('sensors.can_alter_wearableannotation')
+def edit_wearable_annotation(request, uuid, pk):
+    existing_annotation = get_object_or_404(WearableAnnotation, pk=pk)
+    existing_wearable = get_object_or_404(WearableData, pk=uuid)
+
+    if request.method == 'POST':
+        form = WearableAnnotationEditForm(request.POST, instance=existing_annotation)
+        if form.is_valid():
+            existing_annotation = form.save(commit=False)
+            existing_annotation.annotation = form.cleaned_data['annotation']
+            return redirect('wearabledata-detail', pk=uuid)
+    else:
+        form = WearableAnnotationEditForm(instance=existing_annotation)
+
+    context = {
+        'form': form,
+        'wearableannotation': existing_annotation,
+    }
+
+    return render(request, 'sensors/edit_wearable_annotation.html', context)
+
+
+@permission_required('sensors.can_alter_wearableannotation')
+def delete_wearable_annotation(request, uuid, pk):
+    existing_annotation = get_object_or_404(WearableAnnotation, pk=pk)
+
+    if request.method == 'POST':
+        existing_annotation.delete()
+        return redirect('wearabledata-detail', pk=uuid)
+    else:
+        form = WearableAnnotationEditForm(instance=existing_annotation)
+
+    context = {
+        'form': form,
+        'cameraannotation': existing_annotation,
+    }
+
+    return render(request, 'sensors/edit_wearable_annotation.html', context)
 
 
 @permission_required('sensors.can_alter_cameradata')
@@ -242,6 +281,47 @@ def create_cameradata(request, pk):
     }
 
     return render(request, 'sensors/camera_upload.html', context)
+
+
+@permission_required('sensors.can_alter_cameradata')
+def edit_cameradata(request, uuid):
+    existing_camera = get_object_or_404(CameraData, pk=uuid)
+
+    if request.method == 'POST':
+        form = CameraDataEditForm(request.POST, instance=existing_camera)
+        if form.is_valid():
+            existing_camera = form.save(commit=False)
+            existing_camera.save()
+            return redirect('cameradata-detail', pk=uuid)
+        else:
+            print(form.errors)
+    else:
+        form = CameraDataEditForm(instance=existing_camera)
+
+    context = {
+        'form': form,
+        'cameradata': existing_camera,
+    }
+
+    return render(request, 'sensors/edit_cameradata.html', context)
+
+
+@permission_required('sensors.can_alter_cameradata')
+def delete_cameradata(request, uuid):
+    existing_camera = get_object_or_404(CameraData, pk=uuid)
+
+    if request.method == 'POST':
+        existing_camera.delete()
+        return redirect('cameradata')
+    else:
+        form = CameraDataEditForm(instance=existing_camera)
+
+    context = {
+        'form': form,
+        'cameradata': existing_camera,
+    }
+
+    return render(request, 'sensors/edit_cameradata.html', context)
 
 
 @permission_required('sensors.can_alter_cameraannotation')
@@ -289,6 +369,54 @@ def delete_camera_annotation(request, uuid, pk):
 
     return render(request, 'sensors/edit_camera_annotation.html', context)
 
+
+@permission_required('sensors.can_alter_cameraannotationcomment')
+def edit_cameraannotation_comment(request, uuid, pk, cid):
+    existing_camera = get_object_or_404(CameraData, pk=uuid)
+    existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+    existing_comment = get_object_or_404(CameraAnnotationComment, pk=cid)
+
+    if request.method == 'POST':
+        form = CameraAnnotationCommentEditForm(request.POST, instance=existing_comment)
+        if form.is_valid():
+            existing_comment = form.save(commit=False)
+            existing_comment.save()
+            return redirect('cameraannotation-detail', uuid=uuid, pk=pk)
+        else:
+            print(form.errors)
+    else:
+        form = CameraAnnotationCommentEditForm(instance=existing_comment)
+
+    context = {
+        'form': form,
+        'camera': existing_camera,
+        'annotation': existing_annotation,
+        'comment': existing_comment,
+    }
+
+    return render(request, 'sensors/edit_cameraannotation_comment.html', context)
+
+
+@permission_required('sensors.can_alter_cameraannotationcomment')
+def delete_cameraannotation_comment(request, uuid, pk, cid):
+    existing_camera = get_object_or_404(CameraData, pk=uuid)
+    existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+    existing_comment = get_object_or_404(CameraAnnotationComment, pk=cid)
+
+    if request.method == 'POST':
+        existing_comment.delete()
+        return redirect('cameradata-detail', pk=uuid)
+    else:
+        form = CameraAnnotationCommentEditForm(instance=existing_comment)
+
+    context = {
+        'form': form,
+        'camera': existing_camera,
+        'annotation': existing_annotation,
+        'comment': existing_comment,
+    }
+
+    return render(request, 'sensors/edit_cameraannotation_comment.html', context)
 
 
 class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):

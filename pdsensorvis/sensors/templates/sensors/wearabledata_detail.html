@@ -17,8 +17,8 @@
     </h1>
     {% if perms.sensors.can_alter_wearabledata %}
       <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
-              data-trigger="hover"
-              title="Edit Wearable Data" onclick='window.location.href="{% url 'edit-wearable-data' wearabledata.id %}"'>
+              data-trigger="hover" title="Edit Wearable Data"
+              onclick='window.location.href="{% url 'edit-wearabledata' wearabledata.id %}"'>
         <i class="material-icons buttonIconS">create</i> Edit
       </button>
     {% endif %}
@@ -46,7 +46,7 @@
           {% if user.is_authenticated %}
             {% if annotation.annotator == user %}
               <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
-                      name="">
+                      onclick='window.location.href="{% url 'edit-wearable-annotation' wearabledata.id annotation.id %}"'>
                 <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                    title="Edit annotation">edit</i>
               </button>
