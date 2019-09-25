@@ -21,7 +21,7 @@
 {% block content %}
   <h1>Create New Patient Data</h1>
   <hr>
-  <form action="" method="post" enctype="multipart/form-data">
+  <form action="" method="post" class="form-group">
     {% csrf_token %}
     <table>
       <div><strong>{{ form.first_name.help_text }}:</strong><p>{{ form.first_name }}</p></div>
@@ -37,7 +37,7 @@
         <strong>{{ form.notes.help_text }}:</strong><p>{{ form.notes }}</p>
       </div>
     </table>
-    <div class="buttons" style="margin-top: 10px">
+    <div class="buttons" style="margin-top: -5px">
       <input type="submit" value="Create" class="saveButton" />
       <input type="button" value="Cancel" class="cancelButton" onclick="window.history.back()" />
     </div>

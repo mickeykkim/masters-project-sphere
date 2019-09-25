@@ -43,6 +43,7 @@ let stepForwardBox = document.getElementById("forward-increment");
 // Framerate and Export Elements
 /*
 let stdFrameRates = {
+   NTSC_Film: 23.98,
    FILM: 24,
    NTSC: 29.97,
    NTSC_HD: 59.94,

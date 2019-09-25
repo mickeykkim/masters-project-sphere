@@ -29,8 +29,94 @@ class PatientDataCreateForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': False,
-                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 10px 0 0 0; '
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 2px 0 0 0; '
                          'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
+            }),
+        }
+
+
+class PatientDataEditForm(forms.ModelForm):
+    class Meta:
+        model = PatientData
+        fields = ['first_name', 'last_name', 'date_of_birth', 'notes']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'id': 'form-note',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'id': 'form-note',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;',
+            }),
+            'date_of_birth': forms.DateInput(attrs={
+                'id': 'form-note',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;',
+            }),
+            'notes': forms.Textarea(attrs={
+                'id': 'form-text',
+                'required': False,
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 2px 0 0 0; '
+                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
+            }),
+        }
+
+
+class WearableDataCreateForm(forms.ModelForm):
+    class Meta:
+        model = WearableData
+        fields = ['filename', 'note', 'time']
+        widgets = {
+            'filename': forms.FileInput(attrs={
+                'class': 'form-control-file',
+                'required': True,
+            }),
+            'note': forms.Textarea(attrs={
+                'id': 'form-text',
+                'required': True,
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 3px 0 0 0; '
+                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
+            }),
+            'time': forms.DateTimeInput(attrs={
+                'class': 'form-control datetimepicker-input',
+                'required': True,
+                'data-target': '#datetimepicker1',
+            })
+        }
+
+
+class CameraDataCreateForm(forms.ModelForm):
+    class Meta:
+        model = CameraData
+        fields = ['filename', 'note', 'time', 'framerate']
+        widgets = {
+            'filename': forms.FileInput(attrs={
+                'id': 'form-file-select',
+                'class': 'form-control-file',
+                'required': True,
+            }),
+            'note': forms.Textarea(attrs={
+                'id': 'form-note',
+                'required': True,
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 3px 0 0 0; '
+                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
+            }),
+            'time': forms.DateTimeInput(attrs={
+                'class': 'form-control datetimepicker-input',
+                'required': True,
+                'data-target': '#datetimepicker1',
+            }),
+            'framerate': forms.Select(attrs={
+                'id': 'form-framerate',
+                'default': 'Film',
+                'required': True,
+                'style': 'display: table-cell; vertical-align: middle; border: 1px solid #D3D3D3; border-radius: 6px; '
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 5%; min-width: 45px;',
             }),
         }
 
@@ -55,7 +141,7 @@ class CameraAnnotationCreateForm(forms.ModelForm):
                 'default': '00:00:00:00',
                 'readonly': True,
                 'style': 'font-family: "Roboto Mono", serif; text-align: center; display: table-cell; vertical-align: '
-                         'top; border: 1px solid #D3D3D3; border-radius: 3px; height: 30px; line-height: 30px; '
+                         'top; border: 1px solid #a0a0a0; border-radius: 3px; height: 30px; line-height: 30px; '
                          'margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; background-color: #f8f8f8;',
             }),
             'time_end': forms.TextInput(attrs={
@@ -64,27 +150,21 @@ class CameraAnnotationCreateForm(forms.ModelForm):
                 'default': '00:00:00:00',
                 'readonly': True,
                 'style': 'font-family: "Roboto Mono", serif; text-align: center; display: table-cell; vertical-align: '
-                         'top; border: 1px solid #D3D3D3; border-radius: 3px; height: 30px; line-height: 30px; '
+                         'top; border: 1px solid #a0a0a0; border-radius: 3px; height: 30px; line-height: 30px; '
                          'margin: 0px 0px 0px 0px; width: 14%; min-width: 150px; background-color: #f8f8f8;',
             }),
             'annotation': forms.Select(attrs={
                 'id': 'form-annotation',
                 'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25.5%; min-width: 190px;',
             }),
             'note': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': False,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
+                'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
                          'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px;',
-            }),
-            'status': forms.Select(attrs={
-                'id': 'form-annotation',
-                'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 5%; min-width: 45px;',
-            }),
+            })
         }
 
 
@@ -110,7 +190,7 @@ class CameraAnnotationCommentCreateForm(forms.ModelForm):
             'text': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': True,
-                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; '
+                'style': 'border: 1px solid #a0a0a0; border-radius: 3px; '
                          'height: 150px; width: 90%; box-sizing: border-box; background-color: #f8f8f8;',
             }),
         }
@@ -122,47 +202,3 @@ class UploadFileForm(forms.Form):
         label='Select a file',
         help_text='max. 42 megabytes'
     )
-
-
-class WearableDataCreateForm(forms.ModelForm):
-    class Meta:
-        model = WearableData
-        fields = ['filename', 'note', 'time']
-        widgets = {
-            'note': forms.Textarea(attrs={
-                'id': 'form-text',
-                'required': True,
-                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 10px 0 0 0; '
-                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
-            }),
-            'time': forms.DateTimeInput(attrs={
-                'class': 'form-control datetimepicker-input',
-                'required': True,
-                'data-target': '#datetimepicker1',
-            }),
-            'framerate': forms.Select(attrs={
-                'id': 'form-framerate',
-                'required': True,
-                'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 6px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 5%; min-width: 45px;',
-            }),
-        }
-
-
-class CameraDataCreateForm(forms.ModelForm):
-    class Meta:
-        model = CameraData
-        fields = ['filename', 'note', 'time', 'framerate']
-        widgets = {
-            'note': forms.Textarea(attrs={
-                'id': 'form-text',
-                'required': True,
-                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 10px 0 0 0; '
-                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
-            }),
-            'time': forms.DateTimeInput(attrs={
-                'class': 'form-control datetimepicker-input',
-                'required': True,
-                'data-target': '#datetimepicker1',
-            }),
-        }

@@ -12,10 +12,13 @@ from django.contrib.auth.decorators import permission_required
 from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
     CameraAnnotationComment, WearableDataPoint
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
-    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm
+    UploadFileForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, PatientDataEditForm
 from uuid import UUID
 
 User = get_user_model()
+
+annotation_fields = ['Time Begin (h:m:s:f)', 'Time Begin (h:m:s,ms)', 'Frame Begin', 'Time End (h:m:s:f)',
+                     'Time End (h:m:s,ms)', 'Frame End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
 
 
 def is_valid_uuid(uuid_to_test, version=4):
@@ -26,6 +29,25 @@ def is_valid_uuid(uuid_to_test, version=4):
         return False
 
     return str(uuid_obj) == uuid_to_test
+
+
+def convert_smpte_to_frames(smpte, framerate):
+    components = smpte.split(":")
+    frames = int(components[0]) * (framerate * 60 * 60) + \
+             int(components[1]) * (framerate * 60) + \
+             int(components[2]) * framerate + \
+             int(components[3])
+    return frames
+
+
+def convert_smpte_to_ms_time(smpte, framerate):
+    components = smpte.split(":")
+    print(str(int(components[3])))
+    ms = str(round(int(components[3]) * 1000 / framerate)).zfill(3)
+    ms_time = str(components[0]) + ":" + \
+              str(components[1]) + ":" + \
+              str(components[2]) + "," + ms
+    return ms_time
 
 
 def index(request):
@@ -89,6 +111,47 @@ def create_patientdata(request):
     return render(request, 'sensors/patient_upload.html', context)
 
 
+@permission_required('sensors.can_alter_patientdata')
+def edit_patientdata(request, pk):
+    existing_patientdata = get_object_or_404(PatientData, pk=pk)
+
+    if request.method == 'POST':
+        form = PatientDataEditForm(request.POST, instance=existing_patientdata)
+        if form.is_valid():
+            existing_patientdata = form.save(commit=False)
+            existing_patientdata.save()
+            return redirect('patientdata-detail', pk)
+        else:
+            print(form.errors)
+    else:
+        form = PatientDataEditForm(instance=existing_patientdata)
+
+    context = {
+        'form': form,
+        'patientdata': existing_patientdata,
+    }
+
+    return render(request, 'sensors/edit_patientdata.html', context)
+
+
+@permission_required('sensors.can_alter_patientdata')
+def delete_patientdata(request, pk):
+    existing_patientdata = get_object_or_404(PatientData, pk=pk)
+
+    if request.method == 'POST':
+        existing_patientdata.delete()
+        return redirect('patientdata')
+    else:
+        form = PatientDataEditForm(instance=existing_patientdata)
+
+    context = {
+        'form': form,
+        'patientdata': existing_patientdata,
+    }
+
+    return render(request, 'sensors/delete_patientdata.html', context)
+
+
 @permission_required('sensors.can_alter_wearabledata')
 def create_wearabledata(request, pk):
     patient_id = get_object_or_404(PatientData, pk=pk)
@@ -138,25 +201,6 @@ def create_cameradata(request, pk):
     return render(request, 'sensors/camera_upload.html', context)
 
 
-def convert_smpte_to_frames(smpte, framerate):
-    components = smpte.split(":")
-    frames = int(components[0]) * (framerate * 60 * 60) + \
-             int(components[1]) * (framerate * 60) + \
-             int(components[2]) * framerate + \
-             int(components[3])
-    return frames
-
-
-def convert_smpte_to_ms_time(smpte, framerate):
-    components = smpte.split(":")
-    print(str(int(components[3])))
-    ms = str(round(int(components[3]) * 1000 / framerate)).zfill(3)
-    ms_time = str(components[0]) + ":" + \
-              str(components[1]) + ":" + \
-              str(components[2]) + "," + ms
-    return ms_time
-
-
 @permission_required('sensors.can_alter_cameraannotation')
 def edit_camera_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
@@ -203,8 +247,121 @@ def delete_camera_annotation(request, uuid, pk):
     return render(request, 'sensors/edit_camera_annotation.html', context)
 
 
-annotation_fields = ['Time Begin (h:m:s:f)', 'Time Begin (h:m:s,ms)', 'Frame Begin', 'Time End (h:m:s:f)',
-                     'Time End (h:m:s,ms)', 'Frame End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
+class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):
+    model = CameraData
+    permission_required = 'catalog.sensors.can_alter_cameradata'
+
+    def get_context_data(self, **kwargs):
+        context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
+        context['form'] = CameraAnnotationCreateForm(initial=self.request.session.get('form_data'))
+        return context
+
+
+class CameraDataDetailView(LoginRequiredMixin, generic.View):
+    def get(self, request, *args, **kwargs):
+        view = CameraDataDetailGet.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, pk):
+        current_camera = get_object_or_404(CameraData, pk=pk)
+
+        form = CameraAnnotationCreateForm(request.POST)
+
+        if form.is_valid():
+            self.request.session['form_data'] = form.cleaned_data
+            new_annotation = form.save(commit=False)
+            new_annotation.camera = current_camera
+            new_annotation.annotator = request.user
+            new_annotation.annotation = form.cleaned_data['annotation']
+            new_annotation.save()
+            return redirect('cameradata-detail', pk=pk)
+        else:
+            print(form.errors)
+
+        context = {
+            'form': form,
+            'cameradata': current_camera
+        }
+
+        return render(request, 'sensors/cameradata_detail.html', context)
+
+
+class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):
+    """View to get annotations."""
+    model = CameraAnnotation
+
+    def get_context_data(self, **kwargs):
+        context = super(CameraAnnotationDetailGet, self).get_context_data(**kwargs)
+        context['form'] = CameraAnnotationCommentCreateForm()
+        return context
+
+
+class CameraAnnotationDetailView(LoginRequiredMixin, generic.View):
+    """Combined get and post for camera annotations and comments."""
+
+    def get(self, request, *args, **kwargs):
+        view = CameraAnnotationDetailGet.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, uuid, pk):
+        current_annotation = get_object_or_404(CameraAnnotation, pk=pk)
+
+        form = CameraAnnotationCommentCreateForm(request.POST)
+
+        if form.is_valid():
+            # self.request.session['form_data'] = form.cleaned_data
+            new_comment = form.save(commit=False)
+            new_comment.annotation = current_annotation
+            new_comment.author = request.user
+            new_comment.text = form.cleaned_data['text']
+            new_comment.save()
+            return redirect('cameraannotation-detail', uuid=uuid, pk=pk)
+        else:
+            print(form.errors)
+
+        context = {
+            'form': form,
+            'cameraannotation': current_annotation
+        }
+
+        return render(request, 'sensors/cameraannotation_detail.html', context)
+
+
+class PatientDataListView(LoginRequiredMixin, generic.ListView):
+    model = PatientData
+    paginate_by = 10
+
+
+class PatientDataDetailView(LoginRequiredMixin, generic.DetailView):
+    model = PatientData
+
+
+class WearableDataListView(LoginRequiredMixin, generic.ListView):
+    model = WearableData
+    paginate_by = 10
+
+
+class WearableDataDetailView(LoginRequiredMixin, generic.DetailView):
+    model = WearableData
+
+
+class WearableAnnotationDetailView(LoginRequiredMixin, generic.DetailView):
+    model = WearableAnnotation
+
+
+class CameraDataListView(LoginRequiredMixin, generic.ListView):
+    model = CameraData
+    paginate_by = 10
+
+
+class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
+    """Generic class-based view listing annotations by current user."""
+    model = CameraAnnotation
+    template_name = 'sensors/cameraannotation_list_annotated_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('camera', 'time_begin')
 
 
 def export_annotations_csv(request, pk):
@@ -313,130 +470,13 @@ def import_wearableannotation_csv(pk, path):
     """
     wearabledata = get_object_or_404(WearableData, pk=pk)
     with open(path) as import_file:
-        reader = csv.DictReader(import_file, fieldnames=annotation_fields)
+        reader = csv.DictReader(import_file, fieldnames=['Frame Begin', 'Frame End', 'Annotation', 'Note'])
         for row in reader:
             _, created = WearableAnnotation.objects.get_or_create(
                 wearable=wearabledata,
                 annotator=User,
-                frame_begin=row['frame_begin'],
-                frame_end=row['frame_end'],
-                annotation=row['annotation'],
-                note=row['note'],
+                frame_begin=row['Frame Begin'],
+                frame_end=row['Frame End'],
+                annotation=row['Annotation'],
+                note=row['Note'],
             )
-
-
-class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):
-    model = CameraData
-    permission_required = 'catalog.sensors.can_alter_cameradata'
-
-    def get_context_data(self, **kwargs):
-        context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
-        context['form'] = CameraAnnotationCreateForm(initial=self.request.session.get('form_data'))
-        return context
-
-
-class CameraDataDetailView(LoginRequiredMixin, generic.View):
-    def get(self, request, *args, **kwargs):
-        view = CameraDataDetailGet.as_view()
-        return view(request, *args, **kwargs)
-
-    def post(self, request, pk):
-        current_camera = get_object_or_404(CameraData, pk=pk)
-
-        form = CameraAnnotationCreateForm(request.POST)
-
-        if form.is_valid():
-            self.request.session['form_data'] = form.cleaned_data
-            new_annotation = form.save(commit=False)
-            new_annotation.camera = current_camera
-            new_annotation.annotator = request.user
-            new_annotation.annotation = form.cleaned_data['annotation']
-            new_annotation.save()
-            return redirect('cameradata-detail', pk=pk)
-        else:
-            print(form.errors)
-
-        context = {
-            'form': form,
-            'cameradata': current_camera
-        }
-
-        return render(request, 'sensors/cameradata_detail.html', context)
-
-
-class PatientDataListView(LoginRequiredMixin, generic.ListView):
-    model = PatientData
-    paginate_by = 10
-
-
-class PatientDataDetailView(LoginRequiredMixin, generic.DetailView):
-    model = PatientData
-
-
-class WearableDataListView(LoginRequiredMixin, generic.ListView):
-    model = WearableData
-    paginate_by = 10
-
-
-class WearableDataDetailView(LoginRequiredMixin, generic.DetailView):
-    model = WearableData
-
-
-class WearableAnnotationDetailView(LoginRequiredMixin, generic.DetailView):
-    model = WearableAnnotation
-
-
-class CameraDataListView(LoginRequiredMixin, generic.ListView):
-    model = CameraData
-    paginate_by = 10
-
-
-class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
-    """Generic class-based view listing annotations by current user."""
-    model = CameraAnnotation
-    template_name = 'sensors/cameraannotation_list_annotated_user.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('camera', 'time_begin')
-
-
-class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):
-    """View to get annotations."""
-    model = CameraAnnotation
-
-    def get_context_data(self, **kwargs):
-        context = super(CameraAnnotationDetailGet, self).get_context_data(**kwargs)
-        context['form'] = CameraAnnotationCommentCreateForm()
-        return context
-
-
-class CameraAnnotationDetailView(LoginRequiredMixin, generic.View):
-    """Combined get and post for camera annotations and comments."""
-
-    def get(self, request, *args, **kwargs):
-        view = CameraAnnotationDetailGet.as_view()
-        return view(request, *args, **kwargs)
-
-    def post(self, request, uuid, pk):
-        current_annotation = get_object_or_404(CameraAnnotation, pk=pk)
-
-        form = CameraAnnotationCommentCreateForm(request.POST)
-
-        if form.is_valid():
-            # self.request.session['form_data'] = form.cleaned_data
-            new_comment = form.save(commit=False)
-            new_comment.annotation = current_annotation
-            new_comment.author = request.user
-            new_comment.text = form.cleaned_data['text']
-            new_comment.save()
-            return redirect('cameraannotation-detail', uuid=uuid, pk=pk)
-        else:
-            print(form.errors)
-
-        context = {
-            'form': form,
-            'cameraannotation': current_annotation
-        }
-
-        return render(request, 'sensors/cameraannotation_detail.html', context)

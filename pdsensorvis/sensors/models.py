@@ -15,6 +15,7 @@ ANNOTATION = (
 )
 
 FRAME_RATES = (
+    ('NTSC_Film', 23.98),
     ('Film', 24),
     ('PAL', 25),
     ('NTSC', 29.97),
@@ -46,7 +47,7 @@ class PatientData(models.Model):
 class WearableData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='wearables')
-    filename = models.FileField(upload_to='wearable/', help_text='Data file')
+    filename = models.FileField(upload_to='wearable/', help_text='Wearable data file')
     time = models.DateTimeField(help_text='Session date & time')
     note = models.CharField(max_length=500, help_text='Note regarding wearable data')
 
@@ -64,9 +65,9 @@ class WearableData(models.Model):
 class CameraData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this wearable data')
     patient = models.ForeignKey('PatientData', on_delete=models.CASCADE, null=True, related_name='cameras')
-    filename = models.FileField(upload_to='camera/', help_text='Data file')
+    filename = models.FileField(upload_to='camera/', help_text='Camera video file')
     framerate = models.CharField(
-        max_length=7,
+        max_length=9,
         choices=FRAME_RATES,
         default='Film',
         help_text='Video framerate',

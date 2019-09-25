@@ -31,4 +31,6 @@ urlpatterns = [
     re_path(r'^wearabledata/(?P<pk>[\w-]+)/import/annotation/$', views.upload_csv_annotation,
             name='upload_csv_annotation'),
     re_path(r'^patientdata/create/$', views.create_patientdata, name='create_patientdata'),
+    re_path(r'^patientdata/(?P<pk>[\w-]+)/edit/$', views.edit_patientdata, name='edit-patientdata'),
+    re_path(r'^patientdata/(?P<pk>[\w-]+)/delete/$', views.delete_patientdata, name='delete-patientdata'),
 ]

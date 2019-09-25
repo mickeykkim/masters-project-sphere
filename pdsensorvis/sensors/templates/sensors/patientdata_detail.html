@@ -5,7 +5,9 @@
     <h1>Patient: {{ patientdata }}</h1>
     {% if perms.sensors.can_alter_patientdata %}
       <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-            title="Edit Patient Data"><i class="material-icons buttonIconS">create</i> Edit</button>
+              title="Edit Patient Data" onclick='window.location.href="{% url 'edit-patientdata' patientdata.id %}"'>
+        <i class="material-icons buttonIconS">create</i> Edit
+      </button>
     {% endif %}
   </div>
   <hr>
