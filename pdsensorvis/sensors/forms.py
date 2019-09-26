@@ -97,14 +97,14 @@ class WearableDataEditForm(forms.ModelForm):
             'note': forms.Textarea(attrs={
                 'id': 'form-text',
                 'required': True,
-                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 3px 0 0 0; '
-                         'height: 100px; width: 100%; box-sizing: border-box; background-color: #f8f8f8;',
+                'style': 'border: 1px solid #D3D3D3; border-radius: 3px; margin: 3px 0 0 0; height: 100px; '
+                         'width: 100%; min-width: 190px; box-sizing: border-box; background-color: #f8f8f8;',
             }),
             'time': forms.DateTimeInput(attrs={
                 'id': 'form-note',
                 'required': True,
                 'style': 'display: table-cell; vertical-align: top; border: 1px solid #D3D3D3; border-radius: 3px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 50%; min-width: 190px;'
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 100%; min-width: 190px;'
                          'background-color: #f8f8f8;',
             }),
         }
