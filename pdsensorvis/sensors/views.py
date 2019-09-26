@@ -14,13 +14,15 @@ from .models import PatientData, WearableData, CameraData, WearableAnnotation, C
 from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
     CameraAnnotationCommentEditForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, \
     PatientDataEditForm, WearableDataEditForm, WearableAnnotationCreateForm, WearableAnnotationEditForm, \
-    CameraDataEditForm
+    CameraDataEditForm, UploadFileForm
 from uuid import UUID
+from io import TextIOWrapper
 
 User = get_user_model()
 
 annotation_fields = ['Time Begin (h:m:s:f)', 'Time Begin (h:m:s,ms)', 'Frame Begin', 'Time End (h:m:s:f)',
-                     'Time End (h:m:s,ms)', 'Frame End', 'Annotation', 'Note', 'Annotator', 'Comments', ]
+                     'Time End (h:m:s,ms)', 'Frame End', 'Annotation Code', 'Annotation', 'Note', 'Annotator',
+                     'Comments']
 
 
 def is_valid_uuid(uuid_to_test, version=4):
@@ -96,6 +98,115 @@ def search_results(request):
 
     else:
         return render(request, "search_results.html")
+
+
+def import_wearabledata_csv(uuid, path):
+    """
+    Method for importing wearable data points. Requires csv file with acceleration magnitudes in the first column.
+    WARNING: Does not do any validation.
+    """
+    wearabledata = get_object_or_404(WearableData, pk=uuid)
+    with open(path) as import_file:
+        reader = csv.reader(import_file)
+        frame_num = 1
+        for row in reader:
+            _, created = WearableDataPoint.objects.get_or_create(
+                wearable=wearabledata,
+                frame=frame_num,
+                magnitude=row[0],
+            )
+            frame_num += 1
+
+
+def export_annotations_csv(request, pk):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="' + pk + ".csv"''
+
+    writer = csv.writer(response)
+    writer.writerow(annotation_fields)
+
+    annotations = CameraAnnotation.objects.filter(camera_id=pk)
+
+    for annotation in annotations:
+        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
+        discussion = ""
+
+        for comment in comment_list:
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
+                          comment.text + "\n"
+
+        writer.writerow([annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
+                         annotation.ms_time_end, annotation.frame_end, annotation.annotation,
+                         annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
+                         discussion])
+
+    return response
+
+
+def export_annotations_xls(request, pk):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="' + pk + ".xls"''
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet title w/Session ID
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = annotation_fields
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+    annotations = CameraAnnotation.objects.filter(camera_id=pk)
+
+    for annotation in annotations:
+        row_num += 1
+        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
+        discussion = ""
+
+        for comment in comment_list:
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
+                          comment.text + "\n"
+        items = [annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin,
+                 annotation.time_end, annotation.ms_time_end, annotation.frame_end, annotation.annotation,
+                 annotation.get_annotation_display(), annotation.note, annotation.annotator.username, discussion]
+
+        for col_num in range(len(items)):
+            ws.write(row_num, col_num, items[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+
+def upload_wearable_annotations(request, uuid):
+    form = UploadFileForm(request.POST)
+    wearabledata = get_object_or_404(WearableData, pk=uuid)
+
+    context = {
+        'form': form,
+        'wearable': wearabledata
+    }
+
+    if request.method == 'GET':
+        return render(request, "sensors/upload_csv.html", context)
+    # if not GET then proceed
+
+    csv_file = TextIOWrapper(request.FILES['filename'].file, encoding=request.encoding)
+    reader = csv.DictReader(csv_file)
+    for row in reader:
+        _, created = WearableAnnotation.objects.get_or_create(
+            wearable=wearabledata,
+            annotator=request.user,
+            frame_begin=row['Frame Begin'],
+            frame_end=row['Frame End'],
+            annotation=row['Annotation Code'],
+            note=row['Note']
+        )
+
+    return redirect('wearabledata-detail', pk=uuid)
 
 
 @permission_required('sensors.can_alter_patientdata')
@@ -565,121 +676,3 @@ class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('camera', 'time_begin')
-
-
-def export_annotations_csv(request, pk):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="' + pk + ".csv"''
-
-    writer = csv.writer(response)
-    writer.writerow(['Session ID:', pk])
-    writer.writerow(annotation_fields)
-
-    annotations = CameraAnnotation.objects.filter(camera_id=pk)
-
-    for annotation in annotations:
-        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
-        discussion = ""
-
-        for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
-                          comment.text + "\n"
-
-        writer.writerow([annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
-                         annotation.ms_time_end, annotation.frame_end, annotation.get_annotation_display(),
-                         annotation.note, annotation.annotator.username, discussion, ])
-
-    return response
-
-
-def export_annotations_xls(request, pk):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="' + pk + ".xls"''
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Users')
-
-    # Sheet title w/Session ID
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Session ID:', pk, ]
-
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    # Sheet headers
-    row_num = 1
-    columns = annotation_fields
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
-    annotations = CameraAnnotation.objects.filter(camera_id=pk)
-
-    for annotation in annotations:
-        row_num += 1
-        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
-        discussion = ""
-
-        for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
-                          comment.text + "\n"
-        items = [annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
-                 annotation.ms_time_end, annotation.frame_end, annotation.get_annotation_display(),
-                 annotation.note, annotation.annotator.username, discussion, ]
-
-        for col_num in range(len(items)):
-            ws.write(row_num, col_num, items[col_num], font_style)
-
-    wb.save(response)
-    return response
-
-
-def upload_csv_annotation(request, pk):
-    context = {}
-    if "GET" == request.method:
-        return render(request, "sensors/upload_csv.html", context)
-    # if not GET, then proceed
-    csv_file = request.FILES["csv_file"]
-    import_wearableannotation_csv(pk, csv_file)
-
-    return render(request, 'sensors/upload_csv.html', context)
-
-
-def import_wearabledata_csv(pk, path):
-    """
-    Method for importing wearable data points. Requires csv file with acceleration magnitudes in the first column.
-    WARNING: Does not do any validation.
-    """
-    wearabledata = get_object_or_404(WearableData, pk=pk)
-    with open(path) as import_file:
-        reader = csv.reader(import_file)
-        frame_num = 1
-        for row in reader:
-            _, created = WearableDataPoint.objects.get_or_create(
-                wearable=wearabledata,
-                frame=frame_num,
-                magnitude=row[0],
-            )
-            frame_num += 1
-
-
-def import_wearableannotation_csv(pk, path):
-    """
-    Method for importing wearable data annotations. Requires csv file with appropriate headers.
-    WARNING: Does not do any validation.
-    """
-    wearabledata = get_object_or_404(WearableData, pk=pk)
-    with open(path) as import_file:
-        reader = csv.DictReader(import_file, fieldnames=['Frame Begin', 'Frame End', 'Annotation', 'Note'])
-        for row in reader:
-            _, created = WearableAnnotation.objects.get_or_create(
-                wearable=wearabledata,
-                annotator=User,
-                frame_begin=row['Frame Begin'],
-                frame_end=row['Frame End'],
-                annotation=row['Annotation'],
-                note=row['Note'],
-            )

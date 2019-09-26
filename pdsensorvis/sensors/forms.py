@@ -369,8 +369,5 @@ class CameraAnnotationCommentEditForm(forms.ModelForm):
 
 
 class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
-    filename = forms.FileField(
-        label='Select a file',
-        help_text='max. 42 megabytes'
-    )
+    filename = forms.FileField(help_text='Filename (.csv only; max size: 42MB)')
+
