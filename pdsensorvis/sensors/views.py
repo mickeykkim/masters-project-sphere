@@ -181,6 +181,31 @@ def export_annotations_xls(request, pk):
     return response
 
 
+def export_annotations_srt(request, pk):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="' + pk + ".srt"''
+
+    writer = csv.writer(response)
+    writer.writerow(annotation_fields)
+
+    annotations = CameraAnnotation.objects.filter(camera_id=pk)
+
+    for annotation in annotations:
+        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
+        discussion = ""
+
+        for comment in comment_list:
+            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
+                          comment.text + "\n"
+
+        writer.writerow([annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
+                         annotation.ms_time_end, annotation.frame_end, annotation.annotation,
+                         annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
+                         discussion])
+
+    return response
+
+
 def upload_wearable_annotations(request, uuid):
     form = UploadFileForm(request.POST)
     wearabledata = get_object_or_404(WearableData, pk=uuid)
