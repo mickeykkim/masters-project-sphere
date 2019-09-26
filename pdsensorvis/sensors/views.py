@@ -182,26 +182,18 @@ def export_annotations_xls(request, pk):
 
 
 def export_annotations_srt(request, pk):
-    response = HttpResponse(content_type='application/ms-excel')
+    response = HttpResponse(content_type='text/plain; charset=utf8')
     response['Content-Disposition'] = 'attachment; filename="' + pk + ".srt"''
 
-    writer = csv.writer(response)
-    writer.writerow(annotation_fields)
-
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
+    row_num = 1
 
     for annotation in annotations:
-        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
-        discussion = ""
-
-        for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
-                          comment.text + "\n"
-
-        writer.writerow([annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
-                         annotation.ms_time_end, annotation.frame_end, annotation.annotation,
-                         annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
-                         discussion])
+        response.write(str(row_num) + '\n')
+        response.write(str(annotation.ms_time_begin + ' --> ' + annotation.ms_time_end) + '\n')
+        response.write(str(annotation.get_annotation_display() + ' (' + annotation.annotator.username + ')') + '\n')
+        response.write('\n')
+        row_num += 1
 
     return response
 
