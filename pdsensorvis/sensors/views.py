@@ -401,7 +401,7 @@ def delete_camera_annotation(request, uuid, pk):
     return render(request, 'sensors/edit_camera_annotation.html', context)
 
 
-@permission_required('sensors.can_alter_cameraannotationcomment')
+@permission_required('sensors.can_alter_cameraannotation_comment')
 def edit_cameraannotation_comment(request, uuid, pk, cid):
     existing_camera = get_object_or_404(CameraData, pk=uuid)
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
