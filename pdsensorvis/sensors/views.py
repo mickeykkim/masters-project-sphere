@@ -1,11 +1,16 @@
 import csv
 import xlwt
+import os
 
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
+from uuid import UUID
+from io import TextIOWrapper
+from django.http import HttpResponse
 from django.views import generic
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+from django.db.models.signals import post_delete, pre_save
+from django.dispatch.dispatcher import receiver
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
@@ -15,8 +20,6 @@ from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraA
     CameraAnnotationCommentEditForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, \
     PatientDataEditForm, WearableDataEditForm, WearableAnnotationCreateForm, WearableAnnotationEditForm, \
     CameraDataEditForm, UploadFileForm
-from uuid import UUID
-from io import TextIOWrapper
 
 User = get_user_model()
 
@@ -46,7 +49,6 @@ def convert_smpte_to_frames(smpte, framerate):
 
 def convert_smpte_to_ms_time(smpte, framerate):
     components = smpte.split(":")
-    print(str(int(components[3])))
     ms = str(round(int(components[3]) * 1000 / framerate)).zfill(3)
     ms_time = str(components[0]) + ":" + \
               str(components[1]) + ":" + \
@@ -354,6 +356,36 @@ def delete_wearabledata(request, uuid):
     return render(request, 'sensors/edit_wearabledata.html', context)
 
 
+@receiver(post_delete, sender=WearableData)
+def auto_delete_wearabledata_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem when corresponding `WearableData` object is deleted.
+    """
+    if instance.filename:
+        if os.path.isfile(instance.filename.path):
+            os.remove(instance.filename.path)
+
+
+@receiver(pre_save, sender=WearableData)
+def auto_delete_wearabledata_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem when corresponding `WearableData` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = WearableData.objects.get(pk=instance.pk).filename
+    except WearableData.DoesNotExist:
+        return False
+
+    new_file = instance.filename
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
+
+
 @permission_required('sensors.can_alter_wearableannotation')
 def create_wearable_annotation(request, uuid):
     existing_wearable = get_object_or_404(WearableData, pk=uuid)
@@ -481,6 +513,36 @@ def delete_cameradata(request, uuid):
     }
 
     return render(request, 'sensors/edit_cameradata.html', context)
+
+
+@receiver(post_delete, sender=CameraData)
+def auto_delete_cameradata_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem when corresponding `CameraData` object is deleted.
+    """
+    if instance.filename:
+        if os.path.isfile(instance.filename.path):
+            os.remove(instance.filename.path)
+
+
+@receiver(pre_save, sender=CameraData)
+def auto_delete_cameradata_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem when corresponding `CameraData` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = CameraData.objects.get(pk=instance.pk).filename
+    except CameraData.DoesNotExist:
+        return False
+
+    new_file = instance.filename
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
 
 
 @permission_required('sensors.can_alter_cameraannotation')
