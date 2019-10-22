@@ -6,7 +6,9 @@
   <div class="titleText">
     <h1>Patient:
       <a href="{{ cameraannotation.camera.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
-         data-trigger="hover" title="Link to patient data page">{{ cameraannotation.camera.patient }}</a></h1>
+         data-trigger="hover" title="Link to patient data page">{{ cameraannotation.camera.patient }}</a>
+      (Annotation)
+    </h1>
     {% if perms.sensors.can_alter_cameradata %}
       <button id="edit" class="titleButton controlButtonXL"
               onclick="window.location.href='{% url 'edit-camera-annotation' cameraannotation.camera.id cameraannotation.id|stringformat:'i' %}'"

@@ -45,7 +45,7 @@ urlpatterns = [
             name='edit-cameraannotation-comment'),
     re_path(r'^cameradata/(?P<uuid>[\w-]+)/(?P<pk>\d+)/(?P<cid>\d+)/delete/$', views.delete_cameraannotation_comment,
             name='delete-cameraannotation-comment'),
-    url(r'^data/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    url(r'^data/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_URL}),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_URL}),
     path('myannotations/', views.CameraAnnotationByUserListView.as_view(), name='my-annotations'),
 ]
