@@ -91,7 +91,8 @@ def search_results(request):
 
             context = {
                 'cameradata': camera_results,
-                'wearabledata': wearable_results
+                'wearabledata': wearable_results,
+                'query': query
             }
 
             return render(request, "search_results.html", context)

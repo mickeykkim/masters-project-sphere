@@ -45,8 +45,8 @@
           <li><a href="{% url 'index' %}">Sensors Home</a></li>
           {% if user.is_authenticated %}
             <li><a href="{% url 'patientdata' %}">Patient Data</a></li>
-            <li><a href="{% url 'wearabledata' %}">Wearable Data</a></li>
-            <li><a href="{% url 'cameradata' %}">Camera Data</a></li>
+            <li><a href="{% url 'wearabledata' %}">Wearable List</a></li>
+            <li><a href="{% url 'cameradata' %}">Camera List</a></li>
             <hr>
             <li>User: {{ user.get_username }}</li>
             <li><a href="{% url 'my-annotations' %}">My Camera Annotations</a></li>

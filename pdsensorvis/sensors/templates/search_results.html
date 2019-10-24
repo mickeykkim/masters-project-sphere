@@ -4,7 +4,7 @@
   <h1>Search Results</h1>
   <hr>
     <div class="annotation-objects">
-      {% if cameradata %}
+      {% if cameradata or wearabledata %}
         <h5>Camera Data:</h5>
         <ul>
         {% for item in cameradata %}
@@ -12,10 +12,10 @@
             <a href="{{ item.get_absolute_url }}">
               {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
           </li>
+        {% empty %}
+          No camera data found.
         {% endfor %}
         </ul>
-      {% endif %}
-      {% if wearabledata %}
         <h5>Wearable Data:</h5>
         <ul>
         {% for item in wearabledata %}
@@ -23,8 +23,12 @@
             <a href="{{ item.get_absolute_url }}">
               {{ item.patient }} ({{ item.time }}) - {{ item.note }}</a>
           </li>
+        {% empty %}
+          No wearable data found.
         {% endfor %}
         </ul>
+      {% else %}
+        No data found for "{{ query }}".
       {% endif %}
     </div>
 {% endblock %}
