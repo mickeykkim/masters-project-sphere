@@ -1,4 +1,4 @@
-#!/Users/mickeykim/Developer/MScProject/webapp-pdsensors/pdsensorvis/venv/bin/python3
+#!/Users/mickeykim/Developer/MScProject/webapp-pdsensors/pdsensorvis/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

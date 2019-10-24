@@ -1,4 +1,4 @@
-#!/Users/mickeykim/Developer/MScProject/webapp-pdsensors/pdsensorvis/venv/bin/python3
+#!/Users/mickeykim/Developer/MScProject/webapp-pdsensors/pdsensorvis/venv/bin/python
 from django.core import management
 
 if __name__ == "__main__":
