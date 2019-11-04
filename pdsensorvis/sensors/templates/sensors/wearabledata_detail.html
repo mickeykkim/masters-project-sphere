@@ -87,7 +87,7 @@
      data: {
         labels: [{% for data in wearabledata.data_point.all %}{{ data.frame }}, {% endfor %}],
         datasets: [{
-           label: 'Wearable Data Visualization',
+           label: 'Magnitude',
            fill: true, // Set to false to only display line
            data: [{% for data in wearabledata.data_point.all %}{{ data.magnitude }}, {% endfor %}],
            backgroundColor: [

@@ -20,10 +20,12 @@ let annotateButton = document.getElementById("annotate");
 // Form elements
 let setBeginFormText = document.getElementById("form-time-begin");
 let setEndFormText = document.getElementById("form-time-end");
+/* // deprecated
 let setBeginFrameFormText = document.getElementById("id_frame_begin");
 let setEndFrameFormText = document.getElementById("id_frame_end");
 let setBeginMsTimeFormText = document.getElementById("id_ms_time_begin");
 let setEndMsTimeFormText = document.getElementById("id_ms_time_end");
+*/
 
 // Export functionality
 let downloadButton = document.getElementById("export-all");
@@ -37,8 +39,10 @@ let volumeBar = document.getElementById("volume-bar");
 let rewindTextBox = document.getElementById("rewind-value");
 let stepBackwardBox = document.getElementById("backward-increment");
 let stepForwardBox = document.getElementById("forward-increment");
-// let copyFrameNumber = document.getElementById("copy-frame");
-// let copyTimeStamp = document.getElementById("copy-time");
+/* // deprecated
+let copyFrameNumber = document.getElementById("copy-frame");
+let copyTimeStamp = document.getElementById("copy-time");
+*/
 
 // Framerate and Export Elements
 /*
@@ -212,16 +216,16 @@ function adjustFramerate() {
 }
 
 function updateHiddenFormElements(selection) {
-   let ms_frame = currentTimeText.value.slice(-2);
-   let ms_time = video.toTime() + "," + ('00' + Math.round(ms_frame*1000/currentFramerate)).slice(-3);
+   // let ms_frame = currentTimeText.value.slice(-2);
+   // let ms_time = video.toTime() + "," + ('00' + Math.round(ms_frame*1000/currentFramerate)).slice(-3);
    if (selection === 'begin') {
       setBeginFormText.value = currentTimeText.value;
-      setBeginFrameFormText.value = currentFrameText.value;
-      setBeginMsTimeFormText.value = ms_time;
+      // setBeginFrameFormText.value = currentFrameText.value;
+      // setBeginMsTimeFormText.value = ms_time;
    } else if (selection === 'end') {
       setEndFormText.value = currentTimeText.value;
-      setEndFrameFormText.value = currentFrameText.value;
-      setEndMsTimeFormText.value = ms_time;
+      // setEndFrameFormText.value = currentFrameText.value;
+      // setEndMsTimeFormText.value = ms_time;
    }
 }
 

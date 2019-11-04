@@ -129,6 +129,7 @@ def export_annotations_csv(request, pk):
     writer.writerow(annotation_fields)
 
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
+    fps = get_object_or_404(CameraData, pk=pk).get_framerate_display()
 
     for annotation in annotations:
         comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
@@ -138,10 +139,13 @@ def export_annotations_csv(request, pk):
             discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
 
-        writer.writerow([annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin, annotation.time_end,
-                         annotation.ms_time_end, annotation.frame_end, annotation.annotation,
-                         annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
-                         discussion])
+        writer.writerow(
+            [annotation.time_begin, convert_smpte_to_ms_time(annotation.time_begin, fps),
+             convert_smpte_to_frames(annotation.time_begin, fps),
+             annotation.time_end, convert_smpte_to_ms_time(annotation.time_end, fps),
+             convert_smpte_to_frames(annotation.time_end, fps), annotation.annotation,
+             annotation.get_annotation_display(), annotation.note, annotation.annotator.username, discussion]
+        )
 
     return response
 
@@ -164,6 +168,7 @@ def export_annotations_xls(request, pk):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
+    fps = get_object_or_404(CameraData, pk=pk).get_framerate_display()
 
     for annotation in annotations:
         row_num += 1
@@ -173,8 +178,10 @@ def export_annotations_xls(request, pk):
         for comment in comment_list:
             discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
-        items = [annotation.time_begin, annotation.ms_time_begin, annotation.frame_begin,
-                 annotation.time_end, annotation.ms_time_end, annotation.frame_end, annotation.annotation,
+        items = [annotation.time_begin, convert_smpte_to_ms_time(annotation.time_begin, fps),
+                 convert_smpte_to_frames(annotation.time_begin, fps),
+                 annotation.time_end, convert_smpte_to_ms_time(annotation.time_end, fps),
+                 convert_smpte_to_frames(annotation.time_end, fps), annotation.annotation,
                  annotation.get_annotation_display(), annotation.note, annotation.annotator.username, discussion]
 
         for col_num in range(len(items)):
@@ -187,13 +194,14 @@ def export_annotations_xls(request, pk):
 def export_annotations_srt(request, pk):
     response = HttpResponse(content_type='text/plain; charset=utf8')
     response['Content-Disposition'] = 'attachment; filename="' + pk + ".srt"''
-
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
+    fps = get_object_or_404(CameraData, pk=pk).get_framerate_display()
     row_num = 1
 
     for annotation in annotations:
         response.write(str(row_num) + '\n')
-        response.write(str(annotation.ms_time_begin + ' --> ' + annotation.ms_time_end) + '\n')
+        response.write(str(convert_smpte_to_ms_time(annotation.time_begin, fps) + ' --> ' +
+                           convert_smpte_to_ms_time(annotation.time_end, fps)) + '\n')
         response.write(str(annotation.get_annotation_display() + ' (' + annotation.annotator.username + ')') + '\n')
         response.write('\n')
         row_num += 1
@@ -660,6 +668,7 @@ class CameraDataDetailView(LoginRequiredMixin, generic.View):
         current_camera = get_object_or_404(CameraData, pk=pk)
 
         form = CameraAnnotationCreateForm(request.POST)
+        fps = current_camera.get_framerate_display()
 
         if form.is_valid():
             self.request.session['form_data'] = form.cleaned_data
@@ -667,6 +676,10 @@ class CameraDataDetailView(LoginRequiredMixin, generic.View):
             new_annotation.camera = current_camera
             new_annotation.annotator = request.user
             new_annotation.annotation = form.cleaned_data['annotation']
+            new_annotation.frame_begin = convert_smpte_to_frames(new_annotation.time_begin, fps)
+            new_annotation.frame_end = convert_smpte_to_frames(new_annotation.time_end, fps)
+            new_annotation.ms_time_begin = convert_smpte_to_ms_time(new_annotation.time_begin, fps)
+            new_annotation.ms_time_end = convert_smpte_to_ms_time(new_annotation.time_end, fps)
             new_annotation.save()
             return redirect('cameradata-detail', pk=pk)
         else:
