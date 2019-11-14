@@ -200,10 +200,15 @@ def export_annotations_srt(request, pk):
     row_num = 1
 
     for annotation in annotations:
+        if annotation.annotation == "oth":
+            annotation_text = annotation.get_annotation_display() + ': ' + annotation.note
+        else:
+            annotation_text = annotation.get_annotation_display()
+
         response.write(str(row_num) + '\n')
         response.write(str(convert_smpte_to_ms_time(annotation.time_begin, fps) + ' --> ' +
                            convert_smpte_to_ms_time(annotation.time_end, fps)) + '\n')
-        response.write(str(annotation.get_annotation_display() + ' (' + annotation.annotator.username + ')') + '\n')
+        response.write(str(annotation_text + ' (' + annotation.annotator.username + ')') + '\n')
         response.write('\n')
         row_num += 1
 
