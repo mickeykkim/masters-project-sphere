@@ -14,19 +14,22 @@
       <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Edit Camera Data"
               onclick='window.location.href="{% url 'edit-cameradata' cameradata.id %}"'>
-        <i class="material-icons buttonIconS">create</i> Edit
+        <i class="material-icons buttonIconS">create</i>
+        <span class="buttonText">Edit</span>
       </button>
     {% endif %}
   </div>
-  <p><em>Session Time:</em> {{ cameradata.time }}
-    <span class="vert-divider">|</span>
-    <em>Note:</em> {{ cameradata.note }}
+  <div><em>Session Time:</em> {{ cameradata.time }}
     <span class="vert-divider">|</span>
     <em>Framerate:</em> {{ cameradata.get_framerate_display }} fps
     <span class="vert-divider">|</span>
-    <button id="help" class="controlButtonM" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
-            title="Display shortcut keys"><i class="material-icons">keyboard</i></button>
-  </p>
+    <button id="help" class="controlButtonS" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+            title="Display shortcut keys"><i class="material-icons">keyboard</i>
+      <span class="buttonText">Shortcut Keys</span>
+    </button>
+    <span class="vert-divider">|</span>
+    <em>Note:</em> {{ cameradata.note }}
+  </div>
 
   <hr>
 
@@ -50,88 +53,101 @@
     <div hidden>
       <input type="text" id="camera-framerate" value="{{ cameradata.get_framerate_display }}" readonly>
     </div>
+
+    <hr>
+
     <!-- Form  -->
     <div id="form-controls" class="formControls">
       <form method="POST" class="post-form">
         {% csrf_token %}
         <!-- Seek Controls -->
         <div class="seekControls">
-          <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip"
-                 data-placement="bottom"
-                 title="Frame to jump back to">
-          <button type="button" id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
-                  data-trigger="hover" title="Jump back to frame"><i class="material-icons">skip_previous</i></button>
-          <span class="vert-divider">|</span>
-          <span class="selectBox">
-            <select id="backward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom"
-                    data-trigger="hover" title="# of frames to step back">
-              <option value="1">1</option>
-              <option value="2">5</option>
-              <option value="3">10</option>
-              <option value="4">25</option>
-              <option value="5">50</option>
-              <option value="6">100</option>
-            </select>
-          </span>
-          <button type="button" id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
-                  data-trigger="hover" title="Step backwards"><i class="material-icons">fast_rewind</i></button>
-          <span class="vert-divider">|</span>
-          <span class="selectBox">
-            <select id="forward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom"
-                    data-trigger="hover" title="# of frames to step forward">
-              <option value="1">1</option>
-              <option value="2">5</option>
-              <option value="3">10</option>
-              <option value="4">25</option>
-              <option value="5">50</option>
-              <option value="6">100</option>
-            </select>
-          </span>
-          <button type="button" id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
-                  data-trigger="hover" title="Step forwards"><i class="material-icons">fast_forward</i></button>
-          <span class="vert-divider">|</span>
-          <!-- Form Controls -->
-          <span class="selectBox" data-toggle="tooltip" data-placement="bottom"
-                data-trigger="hover" title="Annotation activity category">
-            {{ form.annotation }}
-          </span>
-          <span data-toggle="tooltip" data-placement="bottom" title="Annotation Note">
-            {{ form.note }}
-          </span>
-          <span class="selectBox" data-toggle="tooltip" data-placement="bottom"
-                data-trigger="hover" title="Activity begin (+) or end (-)">
-            {{ form.status }}
-          </span>
-        </div>
-        <!-- Frame Details -->
-        <div class="frameDetails">
-          <div class="frameStatusText">
-            <label for="id-frame"><i class="material-icons buttonIconM">play_arrow</i>Frame:</label>
+          <!-- Frame Rewind, Step Backwards, Step Forwards controls -->
+          <div class="seekControls">
+            <label for="rewind-value">Rewind To Frame: </label>
+            <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="Frame to jump back to">
+            <button type="button" id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+                    data-trigger="hover" title="Jump back to frame"><i class="material-icons">skip_previous</i></button>
+            <span class="vert-divider">|</span>
+            <label for="backward-increment">Step Backwards By: </label>
+            <span class="selectBox">
+              <select id="backward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom"
+                      data-trigger="hover" title="# of frames to step back">
+                <option value="1">1</option>
+                <option value="2">5</option>
+                <option value="3">10</option>
+                <option value="4">25</option>
+                <option value="5">50</option>
+                <option value="6">100</option>
+              </select>
+            </span>
+            <button type="button" id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+                    data-trigger="hover" title="Step backwards"><i class="material-icons">fast_rewind</i></button>
+            <span class="vert-divider">|</span>
+            <label for="forward-increment">Step Forwards By: </label>
+            <span class="selectBox">
+              <select id="forward-increment" class="dropDown" data-toggle="tooltip" data-placement="bottom"
+                      data-trigger="hover" title="# of frames to step forward">
+                <option value="1">1</option>
+                <option value="2">5</option>
+                <option value="3">10</option>
+                <option value="4">25</option>
+                <option value="5">50</option>
+                <option value="6">100</option>
+              </select>
+            </span>
+            <button type="button" id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+                    data-trigger="hover" title="Step forwards"><i class="material-icons">fast_forward</i></button>
+          </div>
+          <!-- Frame Indicator, Timestamp, Set Begin & Set End Buttons -->
+          <div class="seekControls">
+            <label for="id-frame">Frame:</label>
             <input type="text" id="id-frame" value=0 class="currentFrameText" readonly>
             <span class="vert-divider">|</span>
-            <label for="id-timestamp"><i class="material-icons buttonIconM">play_arrow</i>Timestamp
-              (hh:mm:ss:ff):</label>
+            <label for="id-timestamp">Timestamp (hh:mm:ss:ff):</label>
             <input type="text" id="id-timestamp" value="00:00:00:00" class="currentTimeText" readonly>
             <span class="vert-divider">|</span>
             <button type="button" id="set-begin" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Set beginning timestamp"><i
-                class="material-icons buttonIconS">create</i> Set Begin
+                class="material-icons buttonIconS">create</i>
+              <span class="buttonText">Set Beginning</span>
             </button>
             <button type="button" id="set-end" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Set ending timestamp"><i class="material-icons buttonIconS">create</i>
-              Set End
+              <span class="buttonText">Set Ending</span>
             </button>
           </div>
-          <div class="frameStatusTimestamps">
+          <!-- Annotation Selection and Activity Note Text Box -->
+          <div class="seekControls">
+            <label for="form-annotation">Annotation Selection: </label>
+            <span class="selectBox" data-toggle="tooltip" data-placement="bottom"
+                  data-trigger="hover" title="Annotation activity category">
+              {{ form.annotation }}
+            </span>
+            <span class="vert-divider">|</span>
+            <label for="form-note">Activity/Note: </label>
+            <span data-toggle="tooltip" data-placement="bottom" title="Annotation Note">
+              {{ form.note }}
+            </span>
+            <span class="selectBox" data-toggle="tooltip" data-placement="bottom"
+                  data-trigger="hover" title="Activity begin (+) or end (-)">
+              {{ form.status }}
+            </span>
+          </div>
+          <!-- Beginning & End Timestamp, Annotate Button -->
+          <div class="seekControls">
             <label for="form-time-begin">Beginning timestamp:</label>
             {{ form.time_begin }}
             <span class="vert-divider">|</span>
             <label for="form-time-end"> Ending timestamp:</label>
             {{ form.time_end }}
             <span class="vert-divider">|</span>
-            <button type="submit" id="annotate" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
+            <button type="submit" id="annotate" class="controlButtonL3" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover"
-                    title="Add annotation"><i class="material-icons buttonIconS">add</i> Annotate
+                    title="Add annotation"><i class="material-icons buttonIconS">add</i>
+              <span class="buttonText">Annotate</span>
             </button>
           </div>
         </div>
@@ -146,15 +162,17 @@
   <div class="annotation-container">
     <h4>Camera Annotations
       <button id="export-all" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
-              name="{% url 'export-annotations-xls' cameradata.id %}"
-              value="{% url 'export-annotations-csv' cameradata.id %}"
+              name="{% url 'export-annotations-csv' cameradata.id %}"
+              value="{% url 'export-annotations-xls' cameradata.id %}"
               data-subtitle="{% url 'export-annotations-srt' cameradata.id %}"
-              data-trigger="hover" title="Download annotations"><i class="material-icons">save_alt</i></button>
+              data-trigger="hover" title="Download annotations"><i class="material-icons">save_alt</i>
+        <span class="buttonText">Download As:</span>
+      </button>
       <select id="export-format" class="downloadFormatDropDown" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Download format">
-        <option value="1">Excel (.xls)</option>
-        <option value="2">Comma-separated Values (.csv)</option>
-        <option value="3">Subtitle (.srt)</option>
+        <option value="1">Comma-Separated Values (.csv)</option>
+        <option value="2">Excel Spreadsheet (.xls)</option>
+        <option value="3">Subtitle File (.srt)</option>
       </select>
     </h4>
     <div class="annotation-objects">
@@ -173,7 +191,7 @@
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation end">skip_next</i>
             </button>
-            {{ annotation.get_annotation_display }}{% if annotation.get_annotation_display == 'Other' %}:
+            {{ annotation.get_annotation_display }}{% if annotation.annotation == 'oth' %}:
               {{ annotation.note }}{% endif %}
             <em>({{ annotation.annotator }})</em>
             {% if user.is_authenticated %}

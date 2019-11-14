@@ -6,7 +6,8 @@
     {% if perms.sensors.can_alter_patientdata %}
       <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
               title="Edit Patient Data" onclick='window.location.href="{% url 'edit-patientdata' patientdata.id %}"'>
-        <i class="material-icons buttonIconS">create</i> Edit
+        <i class="material-icons buttonIconS">create</i>
+        <span class="buttonText">Edit</span>
       </button>
     {% endif %}
   </div>
@@ -14,7 +15,7 @@
   <p><strong>Last Name: </strong>{{ patientdata.last_name }}</p>
   <p><strong>First Name: </strong>{{ patientdata.first_name }}</p>
   <p><strong>Date of Birth: </strong>{{ patientdata.date_of_birth }}</p>
-  <p><strong>Notes: </strong>{{ patientdata.notes }}</p>
+  <p><strong>Patient Note: </strong>{{ patientdata.notes }}</p>
 
   <div style="margin-left:20px;margin-top:40px">
     <div class="titleText">
@@ -22,16 +23,17 @@
       {% if perms.sensors.can_alter_wearabledata %}
         <button type='button' class="createNewSessionButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                 title="Create Wearable Data" onclick='window.location.href="{% url 'create-wearabledata' patientdata.id %}"'>
-          <i class="material-icons buttonIconS">add</i> Create New
+          <i class="material-icons buttonIconS">add</i>
+          <span class="buttonText">Create New</span>
         </button>
       {% endif %}
     </div>
     {% for wearable in patientdata.wearables.all %}
       <hr>
-      <p><strong>Session: </strong><a href="{% url 'wearabledata-detail' wearable.id %}">{{ wearable.time }}</a></p>
-      <p><strong>File: </strong><a href="{{ media_url }}{{ wearable.filename }}">{{ wearable.filename }}</a></p>
-      <p><strong>Note: </strong>{{wearable.note}}</p>
-      <p class='text-muted'><strong>Id: </strong>{{wearable.id}}</p>
+      <p><strong>View Session Data: </strong><a href="{% url 'wearabledata-detail' wearable.id %}">{{ wearable.time }}</a></p>
+      <p><strong>Download File: </strong><a href="{{ media_url }}{{ wearable.filename }}">{{ wearable.filename }}</a></p>
+      <p><strong>Session Note: </strong>{{wearable.note}}</p>
+      <p class='text-muted'><strong>Session Id: </strong>{{wearable.id}}</p>
     {% empty %}
       <hr>
       <p><em>No data.</em></p>
@@ -44,15 +46,17 @@
       {% if perms.sensors.can_alter_cameradata %}
         <button type='button' class="createNewSessionButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                 title="Create Camera Data" onclick='window.location.href="{% url 'create-cameradata' patientdata.id %}"'>
-          <i class="material-icons buttonIconS">add</i> Create New</button>
+          <i class="material-icons buttonIconS">add</i>
+          <span class="buttonText">Create New</span>
+        </button>
       {% endif %}
     </div>
     {% for camera in patientdata.cameras.all %}
       <hr>
-      <p><strong>Session: </strong><a href="{% url 'cameradata-detail' camera.id %}">{{ camera.time }}</a></p>
-      <p><strong>File: </strong><a href="{{ media_url }}{{ camera.filename }}">{{ camera.filename }}</a></p>
-      <p><strong>Note: </strong>{{camera.note}}</p>
-      <p class='text-muted'><strong>Id: </strong>{{camera.id}}</p>
+      <p><strong>View Session Data: </strong><a href="{% url 'cameradata-detail' camera.id %}">{{ camera.time }}</a></p>
+      <p><strong>Download File: </strong><a href="{{ media_url }}{{ camera.filename }}">{{ camera.filename }}</a></p>
+      <p><strong>Session Note: </strong>{{camera.note}}</p>
+      <p class='text-muted'><strong>Session Id: </strong>{{camera.id}}</p>
     {% empty %}
       <hr>
       <p><em>No data.</em></p>

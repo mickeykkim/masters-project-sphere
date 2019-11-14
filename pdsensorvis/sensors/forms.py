@@ -199,13 +199,13 @@ class CameraAnnotationCreateForm(forms.ModelForm):
                 'id': 'form-annotation',
                 'required': True,
                 'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 6px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25.5%; min-width: 190px;',
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 26%; min-width: 190px;',
             }),
             'note': forms.TextInput(attrs={
                 'id': 'form-note',
                 'required': False,
                 'style': 'display: table-cell; vertical-align: top; border: 1px solid #a0a0a0; border-radius: 3px; '
-                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 25%; min-width: 190px;',
+                         'height: 30px; line-height: 30px; margin: 0px 0px 0px 0px; width: 36%; min-width: 250px;',
             })
         }
 

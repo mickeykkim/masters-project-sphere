@@ -6,7 +6,8 @@
     {% if perms.sensors.can_alter_patientdata %}
       <button type='button' class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
             title="Create Patient Data" onclick='window.location.href="{% url 'create-patientdata' %}"'>
-        <i class="material-icons buttonIconS">add</i> Create New
+        <i class="material-icons buttonIconS">add</i>
+        <span class="buttonText">Create New</span>
       </button>
     {% endif %}
   </div>

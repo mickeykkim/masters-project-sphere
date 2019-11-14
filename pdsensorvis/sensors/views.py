@@ -139,13 +139,12 @@ def export_annotations_csv(request, pk):
             discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
 
-        writer.writerow(
-            [annotation.time_begin, convert_smpte_to_ms_time(annotation.time_begin, fps),
-             convert_smpte_to_frames(annotation.time_begin, fps),
-             annotation.time_end, convert_smpte_to_ms_time(annotation.time_end, fps),
-             convert_smpte_to_frames(annotation.time_end, fps), annotation.annotation,
-             annotation.get_annotation_display(), annotation.note, annotation.annotator.username, discussion]
-        )
+        writer.writerow([annotation.time_begin, convert_smpte_to_ms_time(annotation.time_begin, fps),
+                         convert_smpte_to_frames(annotation.time_begin, fps),
+                         annotation.time_end, convert_smpte_to_ms_time(annotation.time_end, fps),
+                         convert_smpte_to_frames(annotation.time_end, fps), annotation.annotation,
+                         annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
+                         discussion])
 
     return response
 
@@ -178,11 +177,13 @@ def export_annotations_xls(request, pk):
         for comment in comment_list:
             discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
                           comment.text + "\n"
+            
         items = [annotation.time_begin, convert_smpte_to_ms_time(annotation.time_begin, fps),
                  convert_smpte_to_frames(annotation.time_begin, fps),
                  annotation.time_end, convert_smpte_to_ms_time(annotation.time_end, fps),
                  convert_smpte_to_frames(annotation.time_end, fps), annotation.annotation,
-                 annotation.get_annotation_display(), annotation.note, annotation.annotator.username, discussion]
+                 annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
+                 discussion]
 
         for col_num in range(len(items)):
             ws.write(row_num, col_num, items[col_num], font_style)
@@ -239,7 +240,6 @@ def upload_wearable_annotations(request, uuid):
 
 @permission_required('sensors.can_alter_patientdata')
 def create_patientdata(request):
-
     if request.method == 'POST':
         form = PatientDataCreateForm(request.POST)
         if form.is_valid():
@@ -422,13 +422,14 @@ def create_wearable_annotation(request, uuid):
 @permission_required('sensors.can_alter_wearableannotation')
 def edit_wearable_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(WearableAnnotation, pk=pk)
-    existing_wearable = get_object_or_404(WearableData, pk=uuid)
+    # existing_wearable = get_object_or_404(WearableData, pk=uuid)
 
     if request.method == 'POST':
         form = WearableAnnotationEditForm(request.POST, instance=existing_annotation)
         if form.is_valid():
             existing_annotation = form.save(commit=False)
             existing_annotation.annotation = form.cleaned_data['annotation']
+            existing_annotation.save()
             return redirect('wearabledata-detail', pk=uuid)
     else:
         form = WearableAnnotationEditForm(instance=existing_annotation)
@@ -564,11 +565,6 @@ def edit_camera_annotation(request, uuid, pk):
         if form.is_valid():
             existing_annotation = form.save(commit=False)
             existing_annotation.annotation = form.cleaned_data['annotation']
-            fps = existing_camera.get_framerate_display()
-            existing_annotation.frame_begin = convert_smpte_to_frames(existing_annotation.time_begin, fps)
-            existing_annotation.frame_end = convert_smpte_to_frames(existing_annotation.time_end, fps)
-            existing_annotation.ms_time_begin = convert_smpte_to_ms_time(existing_annotation.time_begin, fps)
-            existing_annotation.ms_time_end = convert_smpte_to_ms_time(existing_annotation.time_end, fps)
             existing_annotation.save()
             return redirect('cameradata-detail', pk=uuid)
     else:
@@ -668,7 +664,6 @@ class CameraDataDetailView(LoginRequiredMixin, generic.View):
         current_camera = get_object_or_404(CameraData, pk=pk)
 
         form = CameraAnnotationCreateForm(request.POST)
-        fps = current_camera.get_framerate_display()
 
         if form.is_valid():
             self.request.session['form_data'] = form.cleaned_data
@@ -676,10 +671,6 @@ class CameraDataDetailView(LoginRequiredMixin, generic.View):
             new_annotation.camera = current_camera
             new_annotation.annotator = request.user
             new_annotation.annotation = form.cleaned_data['annotation']
-            new_annotation.frame_begin = convert_smpte_to_frames(new_annotation.time_begin, fps)
-            new_annotation.frame_end = convert_smpte_to_frames(new_annotation.time_end, fps)
-            new_annotation.ms_time_begin = convert_smpte_to_ms_time(new_annotation.time_begin, fps)
-            new_annotation.ms_time_end = convert_smpte_to_ms_time(new_annotation.time_end, fps)
             new_annotation.save()
             return redirect('cameradata-detail', pk=pk)
         else:

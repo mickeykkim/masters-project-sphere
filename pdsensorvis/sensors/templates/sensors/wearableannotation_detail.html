@@ -139,13 +139,14 @@
            mode: 'nearest',
            intersect: true
         },
-        /*
-        elements: { d
-          line: {
+        elements: {
+           point: {
+              radius: 0 // disables circles around points
+           },
+           line: {
               tension: 0 // disables bezier curves for better performance with large amounts of data
-          }
+           }
         },
-        */
         scales: {
            xAxes: [{
               display: true,
