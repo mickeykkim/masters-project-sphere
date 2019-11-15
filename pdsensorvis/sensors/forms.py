@@ -175,7 +175,7 @@ class CameraAnnotationCreateForm(forms.ModelForm):
 
     class Meta:
         model = CameraAnnotation
-        fields = ['time_begin', 'time_end', 'annotation', 'note', ] # 'frame_begin', 'frame_end', 'ms_time_begin', 'ms_time_end']
+        fields = ['time_begin', 'time_end', 'annotation', 'note', ]
         widgets = {
             'time_begin': forms.TextInput(attrs={
                 'id': 'form-time-begin',
@@ -368,5 +368,5 @@ class CameraAnnotationCommentEditForm(forms.ModelForm):
 
 
 class UploadFileForm(forms.Form):
-    filename = forms.FileField(help_text='Filename (.csv only; max size: 42MB)')
+    filename = forms.FileField(help_text='Filename (.csv in camera annotation export format only)')
 

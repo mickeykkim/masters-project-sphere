@@ -7,7 +7,6 @@
     <h1>Patient:
       <a href="{{ cameraannotation.camera.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
          data-trigger="hover" title="Link to patient data page">{{ cameraannotation.camera.patient }}</a>
-      (Annotation)
     </h1>
     {% if perms.sensors.can_alter_cameradata %}
       <button id="edit" class="titleButton controlButtonXL"
@@ -15,7 +14,7 @@
               data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
               title="Edit Camera Annotation">
         <i class="material-icons buttonIconS">create</i>
-        <span class="buttonText">Edit</span>
+        <span class="buttonText">Annotation</span>
       </button>
     {% endif %}
   </div>

@@ -14,13 +14,13 @@
     <h1>Patient:
       <a href="{{ wearableannotation.wearable.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
          data-trigger="hover" title="Link to patient data page">{{ wearableannotation.wearable.patient }}</a>
-    (Annotation)
     </h1>
     {% if perms.sensors.can_alter_wearabledata %}
       <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Edit Wearable Annotation"
               onclick='window.location.href="{% url 'edit-wearable-annotation' wearableannotation.wearable.id wearableannotation.id %}"'>
-        <i class="material-icons buttonIconS">create</i> Edit
+        <i class="material-icons buttonIconS">create</i>
+        <span class="buttonText">Annotation</span>
       </button>
     {% endif %}
   </div>
@@ -35,6 +35,7 @@
       <button type="button" class="controlButtonS" data-toggle="tooltip"
               data-placement="bottom" data-trigger="hover" title="Download Visualization"
               onClick="download()"><i class="material-icons">save_alt</i>
+        <span class="buttonText">Download</span>
       </button>
     </a>
   </h4>
