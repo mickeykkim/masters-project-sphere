@@ -183,7 +183,7 @@ function copyToClipboard(selection) {
 
 function displayHelpAlert() {
    const newLine = "\r\n";
-   let helpMessage = "Spacebar : Play/pause video.";
+   let helpMessage = "Shift + Spacebar : Play/pause video.";
    helpMessage += newLine;
    helpMessage += "Shift + Right Arrow : Step frames forward by selected amount.";
    helpMessage += newLine;
@@ -193,13 +193,13 @@ function displayHelpAlert() {
    helpMessage += newLine;
    helpMessage += "Shift + Down Arrow : Decrease frame step amount.";
    helpMessage += newLine;
-   helpMessage += "Shift + / : Reset video to specified frame.";
+   helpMessage += "Control + / : Reset video to specified frame.";
    helpMessage += newLine;
-   helpMessage += "Shift + [ : Set beginning timestamp for annotation.";
+   helpMessage += "Control + [ : Set beginning timestamp for annotation.";
    helpMessage += newLine;
-   helpMessage += "Shift + ] : Set ending timestamp for annotation.";
+   helpMessage += "Control + ] : Set ending timestamp for annotation.";
    helpMessage += newLine;
-   helpMessage += "Shift + \\ : Annotate with the selected annotation and timestamps.";
+   helpMessage += "Control + \\ : Annotate with the selected annotation and timestamps.";
    alert(helpMessage);
 }
 
@@ -338,10 +338,11 @@ copyTimeStamp.addEventListener("click", function () {
  */
 
 // Keycodes for keypress event listeners
-// 16 = shift, 32 = space, 37 = l arrow, 38 = up, 39 = right,
+// 16 = shift, 17 = control, 32 = space, 37 = l arrow, 38 = up, 39 = right,
 // 40 = down, 191 = forward slash, 219 = [, 221 = ], 220 = back slash
 let keyCodeMap = {
    16: false,
+   17: false,
    32: false,
    37: false,
    38: false,
@@ -360,31 +361,30 @@ $(document).keydown(function (e) {
          keyCodeMap[e.keyCode] = true;
          let backOption = stepBackwardBox.selectedIndex;
          let forwardOption = stepForwardBox.selectedIndex;
-         if (keyCodeMap[16] && keyCodeMap[191]) {
+         if (keyCodeMap[17] && keyCodeMap[191]) {
             rewindFromInput();
+         } else if (keyCodeMap[17] && keyCodeMap[219]) {
+            setBeginButton.click();
+         } else if (keyCodeMap[17] && keyCodeMap[221]) {
+            setEndButton.click();
+         } else if (keyCodeMap[17] && keyCodeMap[220]) {
+            annotateButton.click();
          } else if (keyCodeMap[16] && keyCodeMap[37]) {
             stepBack();
          } else if (keyCodeMap[16] && keyCodeMap[39]) {
             stepForward();
-         } else if (keyCodeMap[16] && keyCodeMap[219]) {
-            setBeginButton.click();
-         } else if (keyCodeMap[16] && keyCodeMap[221]) {
-            setEndButton.click();
-         } else if (keyCodeMap[16] && keyCodeMap[220]) {
-            annotateButton.click();
          } else if (keyCodeMap[16] && keyCodeMap[38]) {
             stepBackwardBox.options[parseInt(backOption) + 1].selected = true;
             stepForwardBox.options[parseInt(forwardOption) + 1].selected = true;
          } else if (keyCodeMap[16] && keyCodeMap[40]) {
             stepBackwardBox.options[parseInt(backOption) - 1].selected = true;
             stepForwardBox.options[parseInt(forwardOption) - 1].selected = true;
+         } else if (keyCodeMap[16] && keyCodeMap[32]) {
+            // Video play toggle should not repeat on key hold
+            if (keyIsDown) return;
+            keyIsDown = true;
+            toggleVideoPlayback();
          }
-      }
-      // Video play toggle should not repeat on key hold
-      if (keyIsDown) return;
-      keyIsDown = true;
-      if (e.which === 32) {
-         toggleVideoPlayback();
       }
    }
 }).keyup(function (e) {
