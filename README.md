@@ -3,8 +3,8 @@ University of Bristol Master's Project (Computer Science) - SPHERE House Parkins
 
 This is my work-in-progress master's project for analyzing Parkinson's Disease symptoms in a residential environment.
 
-![Home Screen](https://i.imgur.com/NtRGZO6.png)
+![Home Screen](https://i.imgur.com/bJiVRM3.png)
 
-![Camera Annotation](https://i.imgur.com/PfGkYDw.png)
+![Camera Annotation](https://i.imgur.com/sewu94n.png)
 
-![Wearable Annotation](https://i.imgur.com/IClDRRq.png)
+![Wearable Annotation](https://i.imgur.com/EFfJqw1.png)
