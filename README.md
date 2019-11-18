@@ -7,4 +7,4 @@ This is my work-in-progress master's project for analyzing Parkinson's Disease s
 
 ![Camera Annotation](https://i.imgur.com/sewu94n.png)
 
-![Wearable Annotation](https://i.imgur.com/O1irj1Y.png)
+![Wearable Annotation](https://i.imgur.com/EFfJqw1.png)
