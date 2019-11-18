@@ -110,24 +110,49 @@
 }
 
 .saveButton {
-    background-color: forestgreen;
+    background-color: mediumseagreen;
     color: white;
     height: 30px;
     border-radius: 6px;
 }
 
 .cancelButton {
-    background-color: lightsteelblue;
+    background-color: lightslategrey;
     color: white;
     height: 30px;
     border-radius: 6px;
 }
 
 .deleteButton {
-    background-color: indianred;
+    background-color: red;
     color: white;
     height: 30px;
     border-radius: 6px;
+}
+
+.editButton {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.miscButton {
+    background-color: mediumpurple;
+    color: white;
+}
+
+.downloadButton {
+    background-color: indianred;
+    color: white;
+}
+
+.setBeginButton {
+    background-color: darkseagreen;
+    color: white;
+}
+
+.setEndButton {
+    background-color: orange;
+    color: white;
 }
 
 .controlButtonXL {
@@ -161,7 +186,6 @@
 }
 
 .controlButtonXS {
-    background-color: white;
     width: 5%;
     height: 26px;
     min-width: 38px;

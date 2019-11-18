@@ -5,12 +5,14 @@ from django.utils import timezone
 import uuid
 
 ANNOTATION = (
-    ('pos', 'Stooped Posture'),
     ('asm', 'Asymmetry'),
+    ('dst', 'Dystonia'),
+    ('dsk', 'Dyskensia'),
     ('ebt', 'En Bloc Turning'),
-    ('dys', 'Dystonia/Dyskensia'),
-    ('mov', 'Slow/Hesitant Movement'),
     ('str', 'Short Stride Length'),
+    ('mov', 'Slow/Hesitant Movement'),
+    ('pos', 'Stooped Posture'),
+    ('trm', 'Tremor'),
     ('oth', 'Other/Activity')
 )
 

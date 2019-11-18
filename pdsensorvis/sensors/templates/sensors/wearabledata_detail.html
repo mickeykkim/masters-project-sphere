@@ -16,7 +16,7 @@
       </a>
     </h1>
     {% if perms.sensors.can_alter_wearabledata %}
-      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
+      <button id="edit" class="titleButton controlButtonXL editButton" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Edit Wearable Data"
               onclick='window.location.href="{% url 'edit-wearabledata' wearabledata.id %}"'>
         <i class="material-icons buttonIconS">create</i>
@@ -30,7 +30,7 @@
   <hr>
   <h4>Wearable Data Visualization
     <a id="download" download="{{ wearabledata.id }}.png">
-      <button type="button" class="controlButtonS" data-toggle="tooltip"
+      <button type="button" class="controlButtonS downloadButton" data-toggle="tooltip"
               data-placement="bottom" data-trigger="hover" title="Download Visualization"
               onClick="download()"><i class="material-icons">save_alt</i>
         <span class="buttonText">Download</span>
@@ -42,13 +42,13 @@
   <div style="margin-left:20px;margin-top:20px">
     <h4>Wearable Annotations
       {% if perms.sensors.can_alter_wearableannotation %}
-        <button type='button' class="controlButtonS" data-toggle="tooltip"
+        <button type='button' class="controlButtonS saveButton" data-toggle="tooltip"
                 data-placement="bottom" data-trigger="hover" title="Manually Create Annotation"
                 onclick='window.location.href="{% url 'create-wearable-annotation' wearabledata.id %}"'>
           <i class="material-icons">add</i>
           <span class="buttonText">Create</span>
         </button>
-        <button id="import" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
+        <button id="import" class="controlButtonS miscButton" data-toggle="tooltip" data-placement="bottom"
                 onclick='window.location.href="{% url 'upload-wearable-annotations' wearabledata.id %}"'
                 data-trigger="hover" title="Import Camera Annotations"><i class="material-icons">cloud_upload</i>
           <span class="buttonText">Import</span>
@@ -66,7 +66,7 @@
           </a>
           {% if user.is_authenticated %}
             {% if annotation.annotator == user %}
-              <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
+              <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS editButton"
                       onclick='window.location.href="{% url 'edit-wearable-annotation' wearabledata.id annotation.id %}"'>
                 <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                    title="Edit annotation">edit</i>

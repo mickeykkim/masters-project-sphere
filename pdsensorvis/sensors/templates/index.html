@@ -4,16 +4,16 @@
   <h1>PD Sensors Home</h1>
   <hr>
   {% if user.is_authenticated %}
-  <h6>Look Up Sensor Data by Patient First or Last Name or by Sensor ID:</h6>
+  <h6>Look Up Session Data by Patient First or Last Name or by Session ID:</h6>
   <form action="{% url 'search-results' %}" method="get" style="margin-top:15px">
-    <input type="text" class="searchText" name="q" placeholder="Patient First/Last Name or Sensor ID" />
-    <input type="submit" class="controlButtonL" value="Search" />
+    <input type="text" class="searchText" name="q" placeholder="Patient First/Last Name or Session ID" />
+    <input type="submit" class="controlButtonL miscButton" value="Search" />
   </form>
 
   {% endif %}
   <h4 style="margin-top:25px">Data Overview
       {% if perms.sensors.can_alter_patientdata and user.is_authenticated %}
-      <button type='button' class="controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+      <button type='button' class="controlButtonXL saveButton" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
               title="Create Patient Data" onclick='window.location.href="{% url 'create-patientdata' %}"'
               style='margin: 0 0 0 10px; width:auto; font-size:16px'>
         <i class="material-icons buttonIconS">add</i>

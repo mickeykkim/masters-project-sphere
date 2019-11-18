@@ -16,7 +16,7 @@
          data-trigger="hover" title="Link to patient data page">{{ wearableannotation.wearable.patient }}</a>
     </h1>
     {% if perms.sensors.can_alter_wearabledata %}
-      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
+      <button id="edit" class="titleButton controlButtonXL editButton" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Edit Wearable Annotation"
               onclick='window.location.href="{% url 'edit-wearable-annotation' wearableannotation.wearable.id wearableannotation.id %}"'>
         <i class="material-icons buttonIconS">create</i>
@@ -32,7 +32,7 @@
   <hr>
   <h4>Wearable Data Visualization
     <a id="download" download="{{ wearableannotation.wearable.id }}.highlight.png">
-      <button type="button" class="controlButtonS" data-toggle="tooltip"
+      <button type="button" class="controlButtonS downloadButton" data-toggle="tooltip"
               data-placement="bottom" data-trigger="hover" title="Download Visualization"
               onClick="download()"><i class="material-icons">save_alt</i>
         <span class="buttonText">Download</span>
@@ -48,7 +48,7 @@
   {% if wearableannotation.note %}
     <p><strong>Note:</strong> {{ wearableannotation.note }}</p>
   {% endif %}
-  <input type="button" value="Back" class="controlButtonL" onclick="window.history.back()" />
+  <input type="button" value="Back" class="controlButtonL cancelButton" onclick="window.history.back()" />
 {% endblock %}
 
 {% block jquery %}

@@ -4,7 +4,7 @@
   <div class="titleText">
     <h1>Patient Data</h1>
     {% if perms.sensors.can_alter_patientdata %}
-      <button type='button' class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
+      <button type='button' class="titleButton controlButtonXL saveButton" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
             title="Create Patient Data" onclick='window.location.href="{% url 'create-patientdata' %}"'>
         <i class="material-icons buttonIconS">add</i>
         <span class="buttonText">Create New</span>

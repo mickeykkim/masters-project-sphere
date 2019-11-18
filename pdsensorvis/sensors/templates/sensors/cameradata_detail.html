@@ -11,7 +11,7 @@
     <h1>Patient: <a href="{{ cameradata.patient.get_absolute_url }}" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Link to patient data page">{{ cameradata.patient }}</a></h1>
     {% if perms.sensors.can_alter_cameradata %}
-      <button id="edit" class="titleButton controlButtonXL" data-toggle="tooltip" data-placement="bottom"
+      <button id="edit" class="titleButton controlButtonXL editButton" data-toggle="tooltip" data-placement="bottom"
               data-trigger="hover" title="Edit Camera Data"
               onclick='window.location.href="{% url 'edit-cameradata' cameradata.id %}"'>
         <i class="material-icons buttonIconS">create</i>
@@ -68,7 +68,7 @@
             <input type="text" id="rewind-value" class="rewindTextValue" value=0 data-toggle="tooltip"
                    data-placement="bottom"
                    title="Frame to jump back to">
-            <button type="button" id="rewind-video" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+            <button type="button" id="rewind-video" class="controlButtonM miscButton" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Jump back to frame"><i class="material-icons">skip_previous</i></button>
             <span class="vert-divider">|</span>
             <label for="backward-increment">Step Backwards By: </label>
@@ -83,7 +83,7 @@
                 <option value="6">100</option>
               </select>
             </span>
-            <button type="button" id="seek-backward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+            <button type="button" id="seek-backward" class="controlButtonM miscButton" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Step backwards"><i class="material-icons">fast_rewind</i></button>
             <span class="vert-divider">|</span>
             <label for="forward-increment">Step Forwards By: </label>
@@ -98,7 +98,7 @@
                 <option value="6">100</option>
               </select>
             </span>
-            <button type="button" id="seek-forward" class="controlButtonM" data-toggle="tooltip" data-placement="bottom"
+            <button type="button" id="seek-forward" class="controlButtonM miscButton" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Step forwards"><i class="material-icons">fast_forward</i></button>
           </div>
           <!-- Frame Indicator, Timestamp, Set Begin & Set End Buttons -->
@@ -109,12 +109,12 @@
             <label for="id-timestamp">Timestamp (hh:mm:ss:ff):</label>
             <input type="text" id="id-timestamp" value="00:00:00:00" class="currentTimeText" readonly>
             <span class="vert-divider">|</span>
-            <button type="button" id="set-begin" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
+            <button type="button" id="set-begin" class="controlButtonL2 setBeginButton" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Set beginning timestamp"><i
                 class="material-icons buttonIconS">create</i>
               <span class="buttonText">Set Beginning</span>
             </button>
-            <button type="button" id="set-end" class="controlButtonL2" data-toggle="tooltip" data-placement="bottom"
+            <button type="button" id="set-end" class="controlButtonL2 setEndButton" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover" title="Set ending timestamp"><i class="material-icons buttonIconS">create</i>
               <span class="buttonText">Set Ending</span>
             </button>
@@ -144,7 +144,7 @@
             <label for="form-time-end"> Ending timestamp:</label>
             {{ form.time_end }}
             <span class="vert-divider">|</span>
-            <button type="submit" id="annotate" class="controlButtonL3" data-toggle="tooltip" data-placement="bottom"
+            <button type="submit" id="annotate" class="controlButtonL3 saveButton" data-toggle="tooltip" data-placement="bottom"
                     data-trigger="hover"
                     title="Add annotation"><i class="material-icons buttonIconS">add</i>
               <span class="buttonText">Annotate</span>
@@ -161,7 +161,7 @@
   <!-- Camera Annotation List -->
   <div class="annotation-container">
     <h4>Camera Annotations
-      <button id="export-all" class="controlButtonS" data-toggle="tooltip" data-placement="bottom"
+      <button id="export-all" class="controlButtonS downloadButton" data-toggle="tooltip" data-placement="bottom"
               name="{% url 'export-annotations-csv' cameradata.id %}"
               value="{% url 'export-annotations-xls' cameradata.id %}"
               data-subtitle="{% url 'export-annotations-srt' cameradata.id %}"
@@ -181,13 +181,13 @@
           <li class="annotationDetails">
             <span class="annotationTimestamp">{{ annotation.time_begin }}</span> – <span
               class="annotationTimestamp">{{ annotation.time_end }}</span>
-            <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS"
+            <button id="annotation_{{ annotation.id }}_rewind" class="controlButtonXS miscButton"
                     name="{{ annotation.time_begin }}">
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation begin">skip_previous</i>
             </button>
-            <button id="annotation_{{ annotation.id }}_end" class="controlButtonXS" name="{{ annotation.time_end }}"
-                    style="margin-left:-6px">
+            <button id="annotation_{{ annotation.id }}_end" class="controlButtonXS miscButton"
+                    name="{{ annotation.time_end }}"  style="margin-left:-6px">
               <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                  title="Jump to annotation end">skip_next</i>
             </button>
@@ -196,7 +196,7 @@
             <em>({{ annotation.annotator }})</em>
             {% if user.is_authenticated %}
               {% if annotation.annotator == user %}
-                <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS"
+                <button id="annotation_{{ annotation.id }}_edit" class="controlButtonXS editButton"
                         name="{% url 'edit-camera-annotation' cameradata.id annotation.id|stringformat:"i" %}">
                   <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom"
                      data-trigger="hover"

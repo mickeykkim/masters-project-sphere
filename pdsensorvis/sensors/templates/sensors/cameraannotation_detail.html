@@ -9,7 +9,7 @@
          data-trigger="hover" title="Link to patient data page">{{ cameraannotation.camera.patient }}</a>
     </h1>
     {% if perms.sensors.can_alter_cameradata %}
-      <button id="edit" class="titleButton controlButtonXL"
+      <button id="edit" class="titleButton controlButtonXL editButton"
               onclick="window.location.href='{% url 'edit-camera-annotation' cameraannotation.camera.id cameraannotation.id|stringformat:'i' %}'"
               data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
               title="Edit Camera Annotation">
@@ -39,7 +39,7 @@
       <strong>{{ comment.author }}</strong> <em>(Posted on: {{ comment.timestamp }})</em>
       {% if user.is_authenticated %}
         {% if comment.author == user %}
-          <button id="annotation_{{ cameraannotation.id }}_edit" class="controlButtonXS"
+          <button id="annotation_{{ cameraannotation.id }}_edit" class="controlButtonXS editButton"
                   onclick='window.location.href="{% url 'edit-cameraannotation-comment' cameraannotation.camera.id cameraannotation.id comment.id %}"'>
             <i class="material-icons buttonIcon" data-toggle="tooltip" data-placement="bottom" data-trigger="hover"
                title="Edit comment">edit</i>
@@ -57,8 +57,8 @@
     <h6>Post new comment:</h6>
     {{ form.text }}
     <div>
-      <button type="submit" id="post" class="controlButtonL">Post</button>
-      <input type="button" value="Back to Video" class="controlButtonXL"
+      <button type="submit" id="post" class="controlButtonL saveButton">Post</button>
+      <input type="button" value="Back to Video" class="controlButtonXL cancelButton"
              onclick="window.location.href='{{ cameraannotation.camera.get_absolute_url }}'" />
     </div>
   </form>
