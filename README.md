@@ -14,8 +14,8 @@ Documentation is forthcoming, but the following are some screenshots:
 
 # To Install:
 
-1. Make sure you have pip installed: https://pip.pypa.io/en/stable/installing/
-2. Make sure you have python 3 installed: https://www.python.org/downloads/
+1. Make sure you have python 3 installed: https://www.python.org/downloads/
+2. Make sure you have pip installed: https://pip.pypa.io/en/stable/installing/
 3. Clone this repository to your local drive and navigate to the folder.
 
 ### Install requirements:
