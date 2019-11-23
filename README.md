@@ -12,11 +12,9 @@ This is my work-in-progress master's project for analyzing Parkinson's Disease s
 
 # To Install:
 
-### Make sure you have pip installed: 
-```
-sudo apt-get install python-pip python-dev
-sudo pip install –upgrade pip
-```
+1. Make sure you have pip installed: https://pip.pypa.io/en/stable/installing/
+2. Make sure you have python 3 installed: https://www.python.org/downloads/
+3. Clone this repository to your local drive and navigate to the folder.
 
 ### Install requirements:
 ```
@@ -24,12 +22,12 @@ cd pdsensorvis
 pip install -r requirements.txt
 ```
 
-### Create new admin user
+### Create new superadmin user:
 ```
 python3 manage.py createsuperuser
 ```
 
-### Run project:
+### Start app:
 ```
 python3 manage.py runserver
 ```
