@@ -1,5 +1,6 @@
-# masters-project-sphere
-University of Bristol Master's Project (Computer Science) - SPHERE House Parkinson's Disease Sensors Web App
+# SPHERE House Parkinson's Disease Sensors Web App
+
+University of Bristol Master's Project (Computer Science)
 
 This is my work-in-progress master's project for analyzing Parkinson's Disease symptoms in a residential environment.
 
@@ -25,7 +26,7 @@ pip install -r requirements.txt
 
 ### Create new admin user
 ```
-python manage.py createsuperuser
+python3 manage.py createsuperuser
 ```
 
 ### Run project:
@@ -35,4 +36,4 @@ python3 manage.py runserver
 
 Navigate browser to: http://127.0.0.1:8000/
 
-Admin panel at: http://127.0.0.1:8000/admin
+Admin panel at: http://127.0.0.1:8000/admin/
