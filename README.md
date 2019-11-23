@@ -24,7 +24,7 @@ cd pdsensorvis
 pip install -r requirements.txt
 ```
 
-### Create new superadmin user:
+### Create new admin superuser:
 ```
 python3 manage.py createsuperuser
 ```
@@ -37,3 +37,5 @@ python3 manage.py runserver
 Navigate browser to: http://127.0.0.1:8000/
 
 Admin panel at: http://127.0.0.1:8000/admin/
+
+Log in with your created admin details.
