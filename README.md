@@ -23,6 +23,11 @@ cd pdsensorvis
 pip install -r requirements.txt
 ```
 
+### Create new admin user
+```
+python manage.py createsuperuser
+```
+
 ### Run project:
 ```
 python3 manage.py runserver
