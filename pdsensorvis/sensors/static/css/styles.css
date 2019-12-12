@@ -3,6 +3,7 @@
     margin-left: 10px;
     padding: 0;
     list-style: none;
+    font-size:14px;
 }
 
 .titleText {
@@ -157,12 +158,12 @@
 
 .controlButtonXL {
     width: 17%;
-    min-width: 120px;
+    min-width: 135px;
 }
 
 .controlButtonL2 {
     width: 18%;
-    min-width: 135px;
+    min-width: 145px;
 }
 
 .controlButtonL3 {
