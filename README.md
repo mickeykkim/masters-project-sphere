@@ -2,9 +2,8 @@
 
 University of Bristol Master's Project (Computer Science)
 
-This is my work-in-progress master's project for analyzing Parkinson's Disease symptoms in a residential environment.
+This is my master's project for analyzing Parkinson's Disease symptoms in a residential environment.
 
-Documentation is forthcoming, but the following are some screenshots:
 
 ![Home Screen](https://i.imgur.com/bJiVRM3.png)
 
