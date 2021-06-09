@@ -3,7 +3,7 @@ certifi==2019.6.16
 cffi==1.12.3
 chardet==3.0.4
 cryptography==2.7
-Django==2.2.13
+Django==2.2.22
 django-chartjs==1.4.0
 django-contrib-comments==1.9.1
 django-filter==2.1.0
