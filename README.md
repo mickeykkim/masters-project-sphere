@@ -23,19 +23,20 @@ cd pdsensorvis
 pip install -r requirements.txt
 ```
 
-### Start app:
-(On first run must migrate database:)
+### Migrate database:
+(On first run)
 ```
 python3 manage.py migrate
-```
-
-```
-python3 manage.py runserver
 ```
 
 ### Create new admin superuser:
 ```
 python3 manage.py createsuperuser
+```
+
+### Start app:
+```
+python3 manage.py runserver
 ```
 
 Navigate browser to: http://127.0.0.1:8000/
