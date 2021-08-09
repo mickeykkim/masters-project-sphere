@@ -18,13 +18,16 @@ This is my master's project for analyzing Parkinson's Disease symptoms in a resi
 3. Clone this repository to your local drive and navigate to the folder.
 
 ### Install requirements:
+(Managed by [Poetry](https://python-poetry.org/))
+
 ```
 cd pdsensorvis
-pip install -r requirements.txt
+poetry install
+poetry shell
 ```
 
 ### Migrate database:
-(On first run)
+(Required on first run)
 ```
 python3 manage.py migrate
 ```
