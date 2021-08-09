@@ -13,21 +13,17 @@ This is my master's project for analyzing Parkinson's Disease symptoms in a resi
 
 # To Install:
 
-1. Make sure you have python 3 installed: https://www.python.org/downloads/
-2. Make sure you have pip installed: https://pip.pypa.io/en/stable/installing/
-3. Clone this repository to your local drive and navigate to the folder.
+1. Make sure you have Poetry installed: https://python-poetry.org/
+2. Clone this repository to your local drive and navigate to the folder.
 
 ### Install requirements:
-(Managed by [Poetry](https://python-poetry.org/))
-
 ```
 cd pdsensorvis
 poetry install
 poetry shell
 ```
 
-### Migrate database:
-(Required on first run)
+### Migrate database (required on first run):
 ```
 python3 manage.py migrate
 ```
