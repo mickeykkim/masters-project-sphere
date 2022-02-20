@@ -6,24 +6,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sensors', '0004_auto_20190925_0809'),
+        ("sensors", "0004_auto_20190925_0809"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='cameraannotation',
-            name='frame_begin',
+            model_name="cameraannotation",
+            name="frame_begin",
         ),
         migrations.RemoveField(
-            model_name='cameraannotation',
-            name='frame_end',
+            model_name="cameraannotation",
+            name="frame_end",
         ),
         migrations.RemoveField(
-            model_name='cameraannotation',
-            name='ms_time_begin',
+            model_name="cameraannotation",
+            name="ms_time_begin",
         ),
         migrations.RemoveField(
-            model_name='cameraannotation',
-            name='ms_time_end',
+            model_name="cameraannotation",
+            name="ms_time_end",
         ),
     ]

@@ -6,32 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sensors', '0001_initial'),
+        ("sensors", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cameraannotation',
-            name='frame_begin',
+            model_name="cameraannotation",
+            name="frame_begin",
             field=models.PositiveIntegerField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='cameraannotation',
-            name='frame_end',
+            model_name="cameraannotation",
+            name="frame_end",
             field=models.PositiveIntegerField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='cameraannotation',
-            name='ms_time_begin',
-            field=models.CharField(default=1, help_text='hh:mm:ss:msec', max_length=12),
+            model_name="cameraannotation",
+            name="ms_time_begin",
+            field=models.CharField(default=1, help_text="hh:mm:ss:msec", max_length=12),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='cameraannotation',
-            name='ms_time_end',
-            field=models.CharField(default=1, help_text='hh:mm:ss:msec', max_length=12),
+            model_name="cameraannotation",
+            name="ms_time_end",
+            field=models.CharField(default=1, help_text="hh:mm:ss:msec", max_length=12),
             preserve_default=False,
         ),
     ]

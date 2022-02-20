@@ -16,17 +16,17 @@ class TestViews(TestCase):
 
     def test_convert_smpte_to_ms_time(self):
         print("Method: test_convert_smpte_to_ms_time.")
-        result1 = convert_smpte_to_ms_time('00:00:37:23', 24)
-        result2 = convert_smpte_to_ms_time('00:00:00:01', 24)
-        self.assertEquals(result1, '00:00:37,958')
-        self.assertEquals(result2, '00:00:00,042')
+        result1 = convert_smpte_to_ms_time("00:00:37:23", 24)
+        result2 = convert_smpte_to_ms_time("00:00:00:01", 24)
+        self.assertEquals(result1, "00:00:37,958")
+        self.assertEquals(result2, "00:00:00,042")
 
     def test_convert_smpte_to_frames(self):
         print("Method: test_convert_smpte_to_frames.")
-        result1 = convert_smpte_to_frames('01:00:00:00', 24)
-        result2 = convert_smpte_to_frames('01:01:00:00', 24)
-        result3 = convert_smpte_to_frames('01:01:01:00', 24)
-        result4 = convert_smpte_to_frames('01:01:01:01', 24)
+        result1 = convert_smpte_to_frames("01:00:00:00", 24)
+        result2 = convert_smpte_to_frames("01:01:00:00", 24)
+        result3 = convert_smpte_to_frames("01:01:01:00", 24)
+        result4 = convert_smpte_to_frames("01:01:01:01", 24)
         self.assertEquals(result1, 86400)
         self.assertEquals(result2, 87840)
         self.assertEquals(result3, 87864)

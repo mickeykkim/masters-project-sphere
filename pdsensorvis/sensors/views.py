@@ -14,18 +14,46 @@ from django.dispatch.dispatcher import receiver
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
-from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
-    CameraAnnotationComment, WearableDataPoint
-from .forms import CameraAnnotationCreateForm, CameraAnnotationEditForm, CameraAnnotationCommentCreateForm, \
-    CameraAnnotationCommentEditForm, WearableDataCreateForm, CameraDataCreateForm, PatientDataCreateForm, \
-    PatientDataEditForm, WearableDataEditForm, WearableAnnotationCreateForm, WearableAnnotationEditForm, \
-    CameraDataEditForm, UploadFileForm
+from .models import (
+    PatientData,
+    WearableData,
+    CameraData,
+    WearableAnnotation,
+    CameraAnnotation,
+    CameraAnnotationComment,
+    WearableDataPoint,
+)
+from .forms import (
+    CameraAnnotationCreateForm,
+    CameraAnnotationEditForm,
+    CameraAnnotationCommentCreateForm,
+    CameraAnnotationCommentEditForm,
+    WearableDataCreateForm,
+    CameraDataCreateForm,
+    PatientDataCreateForm,
+    PatientDataEditForm,
+    WearableDataEditForm,
+    WearableAnnotationCreateForm,
+    WearableAnnotationEditForm,
+    CameraDataEditForm,
+    UploadFileForm,
+)
 
 User = get_user_model()
 
-annotation_fields = ['Time Begin (h:m:s:f)', 'Time Begin (h:m:s,ms)', 'Frame Begin', 'Time End (h:m:s:f)',
-                     'Time End (h:m:s,ms)', 'Frame End', 'Annotation Code', 'Annotation', 'Note', 'Annotator',
-                     'Comments']
+annotation_fields = [
+    "Time Begin (h:m:s:f)",
+    "Time Begin (h:m:s,ms)",
+    "Frame Begin",
+    "Time End (h:m:s:f)",
+    "Time End (h:m:s,ms)",
+    "Frame End",
+    "Annotation Code",
+    "Annotation",
+    "Note",
+    "Annotator",
+    "Comments",
+]
 
 
 def is_valid_uuid(uuid_to_test, version=4):
@@ -40,19 +68,27 @@ def is_valid_uuid(uuid_to_test, version=4):
 
 def convert_smpte_to_frames(smpte, framerate):
     components = smpte.split(":")
-    frames = int(components[0]) * (framerate * 60 * 60) + \
-             int(components[1]) * (framerate * 60) + \
-             int(components[2]) * framerate + \
-             int(components[3])
+    frames = (
+        int(components[0]) * (framerate * 60 * 60)
+        + int(components[1]) * (framerate * 60)
+        + int(components[2]) * framerate
+        + int(components[3])
+    )
     return frames
 
 
 def convert_smpte_to_ms_time(smpte, framerate):
     components = smpte.split(":")
     ms = str(round(int(components[3]) * 1000 / framerate)).zfill(3)
-    ms_time = str(components[0]) + ":" + \
-              str(components[1]) + ":" + \
-              str(components[2]) + "," + ms
+    ms_time = (
+        str(components[0])
+        + ":"
+        + str(components[1])
+        + ":"
+        + str(components[2])
+        + ","
+        + ms
+    )
     return ms_time
 
 
@@ -65,34 +101,36 @@ def index(request):
     num_camera_annotations = CameraAnnotation.objects.all().count()
 
     context = {
-        'num_patients': num_patients,
-        'num_wearables': num_wearables,
-        'num_cameras': num_cameras,
-        'num_wearable_annotations': num_wearable_annotations,
-        'num_camera_annotations': num_camera_annotations,
+        "num_patients": num_patients,
+        "num_wearables": num_wearables,
+        "num_cameras": num_cameras,
+        "num_wearable_annotations": num_wearable_annotations,
+        "num_camera_annotations": num_camera_annotations,
     }
 
     # Render the HTML template index.html with the data in the context variable
-    return render(request, 'index.html', context=context)
+    return render(request, "index.html", context=context)
 
 
 def search_results(request):
-    if request.method == 'GET':
-        query = request.GET.get('q')
+    if request.method == "GET":
+        query = request.GET.get("q")
 
         if query and query.strip():
             if is_valid_uuid(query):
                 lookups = Q(pk=query)
             else:
-                lookups = Q(patient__first_name__icontains=query) | Q(patient__last_name__icontains=query)
+                lookups = Q(patient__first_name__icontains=query) | Q(
+                    patient__last_name__icontains=query
+                )
 
             camera_results = CameraData.objects.filter(lookups)
             wearable_results = WearableData.objects.filter(lookups)
 
             context = {
-                'cameradata': camera_results,
-                'wearabledata': wearable_results,
-                'query': query
+                "cameradata": camera_results,
+                "wearabledata": wearable_results,
+                "query": query,
             }
 
             return render(request, "search_results.html", context)
@@ -122,8 +160,8 @@ def import_wearabledata_csv(uuid, path):
 
 
 def export_annotations_csv(request, pk):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="' + pk + ".csv"''
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="' + pk + ".csv" ""
 
     writer = csv.writer(response)
     writer.writerow(annotation_fields)
@@ -132,29 +170,46 @@ def export_annotations_csv(request, pk):
     fps = get_object_or_404(CameraData, pk=pk).get_framerate_display()
 
     for annotation in annotations:
-        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
+        comment_list = CameraAnnotationComment.objects.filter(
+            annotation_id=annotation.id
+        )
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
-                          comment.text + "\n"
+            discussion += (
+                comment.author.username
+                + " ("
+                + comment.timestamp.strftime("%d/%m/%Y %H:%M")
+                + "): "
+                + comment.text
+                + "\n"
+            )
 
-        writer.writerow([annotation.time_begin, convert_smpte_to_ms_time(annotation.time_begin, fps),
-                         convert_smpte_to_frames(annotation.time_begin, fps),
-                         annotation.time_end, convert_smpte_to_ms_time(annotation.time_end, fps),
-                         convert_smpte_to_frames(annotation.time_end, fps), annotation.annotation,
-                         annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
-                         discussion])
+        writer.writerow(
+            [
+                annotation.time_begin,
+                convert_smpte_to_ms_time(annotation.time_begin, fps),
+                convert_smpte_to_frames(annotation.time_begin, fps),
+                annotation.time_end,
+                convert_smpte_to_ms_time(annotation.time_end, fps),
+                convert_smpte_to_frames(annotation.time_end, fps),
+                annotation.annotation,
+                annotation.get_annotation_display(),
+                annotation.note,
+                annotation.annotator.username,
+                discussion,
+            ]
+        )
 
     return response
 
 
 def export_annotations_xls(request, pk):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="' + pk + ".xls"''
+    response = HttpResponse(content_type="application/ms-excel")
+    response["Content-Disposition"] = 'attachment; filename="' + pk + ".xls" ""
 
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Users')
+    wb = xlwt.Workbook(encoding="utf-8")
+    ws = wb.add_sheet("Users")
 
     # Sheet title w/Session ID
     row_num = 0
@@ -171,19 +226,34 @@ def export_annotations_xls(request, pk):
 
     for annotation in annotations:
         row_num += 1
-        comment_list = CameraAnnotationComment.objects.filter(annotation_id=annotation.id)
+        comment_list = CameraAnnotationComment.objects.filter(
+            annotation_id=annotation.id
+        )
         discussion = ""
 
         for comment in comment_list:
-            discussion += comment.author.username + " (" + comment.timestamp.strftime('%d/%m/%Y %H:%M') + "): " + \
-                          comment.text + "\n"
-            
-        items = [annotation.time_begin, convert_smpte_to_ms_time(annotation.time_begin, fps),
-                 convert_smpte_to_frames(annotation.time_begin, fps),
-                 annotation.time_end, convert_smpte_to_ms_time(annotation.time_end, fps),
-                 convert_smpte_to_frames(annotation.time_end, fps), annotation.annotation,
-                 annotation.get_annotation_display(), annotation.note, annotation.annotator.username,
-                 discussion]
+            discussion += (
+                comment.author.username
+                + " ("
+                + comment.timestamp.strftime("%d/%m/%Y %H:%M")
+                + "): "
+                + comment.text
+                + "\n"
+            )
+
+        items = [
+            annotation.time_begin,
+            convert_smpte_to_ms_time(annotation.time_begin, fps),
+            convert_smpte_to_frames(annotation.time_begin, fps),
+            annotation.time_end,
+            convert_smpte_to_ms_time(annotation.time_end, fps),
+            convert_smpte_to_frames(annotation.time_end, fps),
+            annotation.annotation,
+            annotation.get_annotation_display(),
+            annotation.note,
+            annotation.annotator.username,
+            discussion,
+        ]
 
         for col_num in range(len(items)):
             ws.write(row_num, col_num, items[col_num], font_style)
@@ -193,23 +263,33 @@ def export_annotations_xls(request, pk):
 
 
 def export_annotations_srt(request, pk):
-    response = HttpResponse(content_type='text/plain; charset=utf8')
-    response['Content-Disposition'] = 'attachment; filename="' + pk + ".srt"''
+    response = HttpResponse(content_type="text/plain; charset=utf8")
+    response["Content-Disposition"] = 'attachment; filename="' + pk + ".srt" ""
     annotations = CameraAnnotation.objects.filter(camera_id=pk)
     fps = get_object_or_404(CameraData, pk=pk).get_framerate_display()
     row_num = 1
 
     for annotation in annotations:
         if annotation.annotation == "oth":
-            annotation_text = annotation.get_annotation_display() + ': ' + annotation.note
+            annotation_text = (
+                annotation.get_annotation_display() + ": " + annotation.note
+            )
         else:
             annotation_text = annotation.get_annotation_display()
 
-        response.write(str(row_num) + '\n')
-        response.write(str(convert_smpte_to_ms_time(annotation.time_begin, fps) + ' --> ' +
-                           convert_smpte_to_ms_time(annotation.time_end, fps)) + '\n')
-        response.write(str(annotation_text + ' (' + annotation.annotator.username + ')') + '\n')
-        response.write('\n')
+        response.write(str(row_num) + "\n")
+        response.write(
+            str(
+                convert_smpte_to_ms_time(annotation.time_begin, fps)
+                + " --> "
+                + convert_smpte_to_ms_time(annotation.time_end, fps)
+            )
+            + "\n"
+        )
+        response.write(
+            str(annotation_text + " (" + annotation.annotator.username + ")") + "\n"
+        )
+        response.write("\n")
         row_num += 1
 
     return response
@@ -219,155 +299,152 @@ def upload_wearable_annotations(request, uuid):
     form = UploadFileForm(request.POST)
     wearabledata = get_object_or_404(WearableData, pk=uuid)
 
-    context = {
-        'form': form,
-        'wearable': wearabledata
-    }
+    context = {"form": form, "wearable": wearabledata}
 
-    if request.method == 'GET':
+    if request.method == "GET":
         return render(request, "sensors/upload_csv.html", context)
     # if not GET then proceed
 
-    csv_file = TextIOWrapper(request.FILES['filename'].file, encoding=request.encoding)
+    csv_file = TextIOWrapper(request.FILES["filename"].file, encoding=request.encoding)
     reader = csv.DictReader(csv_file)
     for row in reader:
         _, created = WearableAnnotation.objects.get_or_create(
             wearable=wearabledata,
             annotator=request.user,
-            frame_begin=row['Frame Begin'],
-            frame_end=row['Frame End'],
-            annotation=row['Annotation Code'],
-            note=row['Note']
+            frame_begin=row["Frame Begin"],
+            frame_end=row["Frame End"],
+            annotation=row["Annotation Code"],
+            note=row["Note"],
         )
 
-    return redirect('wearabledata-detail', pk=uuid)
+    return redirect("wearabledata-detail", pk=uuid)
 
 
-@permission_required('sensors.can_alter_patientdata')
+@permission_required("sensors.can_alter_patientdata")
 def create_patientdata(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PatientDataCreateForm(request.POST)
         if form.is_valid():
             new_patient = form.save(commit=False)
             new_patient.save()
-            return redirect('patientdata')
+            return redirect("patientdata")
         else:
             print(form.errors)
     else:
         form = PatientDataCreateForm()
 
     context = {
-        'form': form,
+        "form": form,
     }
 
-    return render(request, 'sensors/patient_upload.html', context)
+    return render(request, "sensors/patient_upload.html", context)
 
 
-@permission_required('sensors.can_alter_patientdata')
+@permission_required("sensors.can_alter_patientdata")
 def edit_patientdata(request, pk):
     existing_patientdata = get_object_or_404(PatientData, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PatientDataEditForm(request.POST, instance=existing_patientdata)
         if form.is_valid():
             existing_patientdata = form.save(commit=False)
             existing_patientdata.save()
-            return redirect('patientdata-detail', pk)
+            return redirect("patientdata-detail", pk)
         else:
             print(form.errors)
     else:
         form = PatientDataEditForm(instance=existing_patientdata)
 
     context = {
-        'form': form,
-        'patientdata': existing_patientdata,
+        "form": form,
+        "patientdata": existing_patientdata,
     }
 
-    return render(request, 'sensors/edit_patientdata.html', context)
+    return render(request, "sensors/edit_patientdata.html", context)
 
 
-@permission_required('sensors.can_alter_patientdata')
+@permission_required("sensors.can_alter_patientdata")
 def delete_patientdata(request, pk):
     existing_patientdata = get_object_or_404(PatientData, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         existing_patientdata.delete()
-        return redirect('patientdata')
+        return redirect("patientdata")
     else:
         form = PatientDataEditForm(instance=existing_patientdata)
 
     context = {
-        'form': form,
-        'patientdata': existing_patientdata,
+        "form": form,
+        "patientdata": existing_patientdata,
     }
 
-    return render(request, 'sensors/edit_patientdata.html', context)
+    return render(request, "sensors/edit_patientdata.html", context)
 
 
-@permission_required('sensors.can_alter_wearabledata')
+@permission_required("sensors.can_alter_wearabledata")
 def create_wearabledata(request, pk):
     patient_id = get_object_or_404(PatientData, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = WearableDataCreateForm(request.POST, request.FILES)
         if form.is_valid():
             new_wearable = form.save(commit=False)
             new_wearable.patient = patient_id
             new_wearable.save()
             import_wearabledata_csv(new_wearable.id, new_wearable.filename.path)
-            return redirect('patientdata-detail', pk=pk)
+            return redirect("patientdata-detail", pk=pk)
         else:
             print(form.errors)
     else:
         form = WearableDataCreateForm()
 
     context = {
-        'form': form,
-        'patientdata': patient_id,
+        "form": form,
+        "patientdata": patient_id,
     }
 
-    return render(request, 'sensors/wearable_upload.html', context)
+    return render(request, "sensors/wearable_upload.html", context)
 
 
-@permission_required('sensors.can_alter_wearabledata')
+@permission_required("sensors.can_alter_wearabledata")
 def edit_wearabledata(request, uuid):
     existing_wearable = get_object_or_404(WearableData, pk=uuid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = WearableDataEditForm(request.POST, instance=existing_wearable)
         if form.is_valid():
             existing_wearable = form.save(commit=False)
             existing_wearable.save()
-            return redirect('wearabledata-detail', pk=uuid)
+            return redirect("wearabledata-detail", pk=uuid)
         else:
             print(form.errors)
     else:
         form = WearableDataEditForm(instance=existing_wearable)
 
     context = {
-        'form': form,
-        'wearabledata': existing_wearable,
+        "form": form,
+        "wearabledata": existing_wearable,
     }
 
-    return render(request, 'sensors/edit_wearabledata.html', context)
+    return render(request, "sensors/edit_wearabledata.html", context)
 
 
-@permission_required('sensors.can_alter_wearabledata')
+@permission_required("sensors.can_alter_wearabledata")
 def delete_wearabledata(request, uuid):
     existing_wearable = get_object_or_404(WearableData, pk=uuid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         existing_wearable.delete()
-        return redirect('wearabledata')
+        return redirect("wearabledata")
     else:
         form = WearableDataEditForm(instance=existing_wearable)
 
     context = {
-        'form': form,
-        'wearabledata': existing_wearable,
+        "form": form,
+        "wearabledata": existing_wearable,
     }
 
-    return render(request, 'sensors/edit_wearabledata.html', context)
+    return render(request, "sensors/edit_wearabledata.html", context)
 
 
 @receiver(post_delete, sender=WearableData)
@@ -400,134 +477,134 @@ def auto_delete_wearabledata_on_change(sender, instance, **kwargs):
             os.remove(old_file.path)
 
 
-@permission_required('sensors.can_alter_wearableannotation')
+@permission_required("sensors.can_alter_wearableannotation")
 def create_wearable_annotation(request, uuid):
     existing_wearable = get_object_or_404(WearableData, pk=uuid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = WearableAnnotationCreateForm(request.POST)
         if form.is_valid():
             new_annotation = form.save(commit=False)
             new_annotation.wearable = existing_wearable
             new_annotation.annotator = request.user
-            new_annotation.annotation = form.cleaned_data['annotation']
+            new_annotation.annotation = form.cleaned_data["annotation"]
             new_annotation.save()
-            return redirect('wearabledata-detail', pk=uuid)
+            return redirect("wearabledata-detail", pk=uuid)
     else:
         form = WearableAnnotationCreateForm()
 
     context = {
-        'form': form,
-        'wearable': existing_wearable,
+        "form": form,
+        "wearable": existing_wearable,
     }
 
-    return render(request, 'sensors/create_wearable_annotation.html', context)
+    return render(request, "sensors/create_wearable_annotation.html", context)
 
 
-@permission_required('sensors.can_alter_wearableannotation')
+@permission_required("sensors.can_alter_wearableannotation")
 def edit_wearable_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(WearableAnnotation, pk=pk)
     # existing_wearable = get_object_or_404(WearableData, pk=uuid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = WearableAnnotationEditForm(request.POST, instance=existing_annotation)
         if form.is_valid():
             existing_annotation = form.save(commit=False)
-            existing_annotation.annotation = form.cleaned_data['annotation']
+            existing_annotation.annotation = form.cleaned_data["annotation"]
             existing_annotation.save()
-            return redirect('wearabledata-detail', pk=uuid)
+            return redirect("wearabledata-detail", pk=uuid)
     else:
         form = WearableAnnotationEditForm(instance=existing_annotation)
 
     context = {
-        'form': form,
-        'wearableannotation': existing_annotation,
+        "form": form,
+        "wearableannotation": existing_annotation,
     }
 
-    return render(request, 'sensors/edit_wearable_annotation.html', context)
+    return render(request, "sensors/edit_wearable_annotation.html", context)
 
 
-@permission_required('sensors.can_alter_wearableannotation')
+@permission_required("sensors.can_alter_wearableannotation")
 def delete_wearable_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(WearableAnnotation, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         existing_annotation.delete()
-        return redirect('wearabledata-detail', pk=uuid)
+        return redirect("wearabledata-detail", pk=uuid)
     else:
         form = WearableAnnotationEditForm(instance=existing_annotation)
 
     context = {
-        'form': form,
-        'cameraannotation': existing_annotation,
+        "form": form,
+        "cameraannotation": existing_annotation,
     }
 
-    return render(request, 'sensors/edit_wearable_annotation.html', context)
+    return render(request, "sensors/edit_wearable_annotation.html", context)
 
 
-@permission_required('sensors.can_alter_cameradata')
+@permission_required("sensors.can_alter_cameradata")
 def create_cameradata(request, pk):
     patient_id = get_object_or_404(PatientData, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CameraDataCreateForm(request.POST, request.FILES)
         if form.is_valid():
             new_camera = form.save(commit=False)
             new_camera.patient = patient_id
             new_camera.save()
-            return redirect('patientdata-detail', pk=pk)
+            return redirect("patientdata-detail", pk=pk)
         else:
             print(form.errors)
     else:
         form = CameraDataCreateForm()
 
     context = {
-        'form': form,
-        'patientdata': patient_id,
+        "form": form,
+        "patientdata": patient_id,
     }
 
-    return render(request, 'sensors/camera_upload.html', context)
+    return render(request, "sensors/camera_upload.html", context)
 
 
-@permission_required('sensors.can_alter_cameradata')
+@permission_required("sensors.can_alter_cameradata")
 def edit_cameradata(request, uuid):
     existing_camera = get_object_or_404(CameraData, pk=uuid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CameraDataEditForm(request.POST, instance=existing_camera)
         if form.is_valid():
             existing_camera = form.save(commit=False)
             existing_camera.save()
-            return redirect('cameradata-detail', pk=uuid)
+            return redirect("cameradata-detail", pk=uuid)
         else:
             print(form.errors)
     else:
         form = CameraDataEditForm(instance=existing_camera)
 
     context = {
-        'form': form,
-        'cameradata': existing_camera,
+        "form": form,
+        "cameradata": existing_camera,
     }
 
-    return render(request, 'sensors/edit_cameradata.html', context)
+    return render(request, "sensors/edit_cameradata.html", context)
 
 
-@permission_required('sensors.can_alter_cameradata')
+@permission_required("sensors.can_alter_cameradata")
 def delete_cameradata(request, uuid):
     existing_camera = get_object_or_404(CameraData, pk=uuid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         existing_camera.delete()
-        return redirect('cameradata')
+        return redirect("cameradata")
     else:
         form = CameraDataEditForm(instance=existing_camera)
 
     context = {
-        'form': form,
-        'cameradata': existing_camera,
+        "form": form,
+        "cameradata": existing_camera,
     }
 
-    return render(request, 'sensors/edit_cameradata.html', context)
+    return render(request, "sensors/edit_cameradata.html", context)
 
 
 @receiver(post_delete, sender=CameraData)
@@ -560,103 +637,104 @@ def auto_delete_cameradata_on_change(sender, instance, **kwargs):
             os.remove(old_file.path)
 
 
-@permission_required('sensors.can_alter_cameraannotation')
+@permission_required("sensors.can_alter_cameraannotation")
 def edit_camera_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
-    existing_camera = get_object_or_404(CameraData, pk=uuid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CameraAnnotationEditForm(request.POST, instance=existing_annotation)
         if form.is_valid():
             existing_annotation = form.save(commit=False)
-            existing_annotation.annotation = form.cleaned_data['annotation']
+            existing_annotation.annotation = form.cleaned_data["annotation"]
             existing_annotation.save()
-            return redirect('cameradata-detail', pk=uuid)
+            return redirect("cameradata-detail", pk=uuid)
     else:
         form = CameraAnnotationEditForm(instance=existing_annotation)
 
     context = {
-        'form': form,
-        'cameraannotation': existing_annotation,
+        "form": form,
+        "cameraannotation": existing_annotation,
     }
 
-    return render(request, 'sensors/edit_camera_annotation.html', context)
+    return render(request, "sensors/edit_camera_annotation.html", context)
 
 
-@permission_required('sensors.can_alter_cameraannotation')
+@permission_required("sensors.can_alter_cameraannotation")
 def delete_camera_annotation(request, uuid, pk):
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         existing_annotation.delete()
-        return redirect('cameradata-detail', pk=uuid)
+        return redirect("cameradata-detail", pk=uuid)
     else:
         form = CameraAnnotationEditForm(instance=existing_annotation)
 
     context = {
-        'form': form,
-        'cameraannotation': existing_annotation,
+        "form": form,
+        "cameraannotation": existing_annotation,
     }
 
-    return render(request, 'sensors/edit_camera_annotation.html', context)
+    return render(request, "sensors/edit_camera_annotation.html", context)
 
 
-@permission_required('sensors.can_alter_cameraannotation_comment')
+@permission_required("sensors.can_alter_cameraannotation_comment")
 def edit_cameraannotation_comment(request, uuid, pk, cid):
     existing_camera = get_object_or_404(CameraData, pk=uuid)
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
     existing_comment = get_object_or_404(CameraAnnotationComment, pk=cid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CameraAnnotationCommentEditForm(request.POST, instance=existing_comment)
         if form.is_valid():
             existing_comment = form.save(commit=False)
             existing_comment.save()
-            return redirect('cameraannotation-detail', uuid=uuid, pk=pk)
+            return redirect("cameraannotation-detail", uuid=uuid, pk=pk)
         else:
             print(form.errors)
     else:
         form = CameraAnnotationCommentEditForm(instance=existing_comment)
 
     context = {
-        'form': form,
-        'camera': existing_camera,
-        'annotation': existing_annotation,
-        'comment': existing_comment,
+        "form": form,
+        "camera": existing_camera,
+        "annotation": existing_annotation,
+        "comment": existing_comment,
     }
 
-    return render(request, 'sensors/edit_cameraannotation_comment.html', context)
+    return render(request, "sensors/edit_cameraannotation_comment.html", context)
 
 
-@permission_required('sensors.can_alter_cameraannotationcomment')
+@permission_required("sensors.can_alter_cameraannotationcomment")
 def delete_cameraannotation_comment(request, uuid, pk, cid):
     existing_camera = get_object_or_404(CameraData, pk=uuid)
     existing_annotation = get_object_or_404(CameraAnnotation, pk=pk)
     existing_comment = get_object_or_404(CameraAnnotationComment, pk=cid)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         existing_comment.delete()
-        return redirect('cameradata-detail', pk=uuid)
+        return redirect("cameradata-detail", pk=uuid)
     else:
         form = CameraAnnotationCommentEditForm(instance=existing_comment)
 
     context = {
-        'form': form,
-        'camera': existing_camera,
-        'annotation': existing_annotation,
-        'comment': existing_comment,
+        "form": form,
+        "camera": existing_camera,
+        "annotation": existing_annotation,
+        "comment": existing_comment,
     }
 
-    return render(request, 'sensors/edit_cameraannotation_comment.html', context)
+    return render(request, "sensors/edit_cameraannotation_comment.html", context)
 
 
 class CameraDataDetailGet(LoginRequiredMixin, generic.DetailView):
     model = CameraData
-    permission_required = 'catalog.sensors.can_alter_cameradata'
+    permission_required = "catalog.sensors.can_alter_cameradata"
 
     def get_context_data(self, **kwargs):
         context = super(CameraDataDetailGet, self).get_context_data(**kwargs)
-        context['form'] = CameraAnnotationCreateForm(initial=self.request.session.get('form_data'))
+        context["form"] = CameraAnnotationCreateForm(
+            initial=self.request.session.get("form_data")
+        )
         return context
 
 
@@ -671,31 +749,29 @@ class CameraDataDetailView(LoginRequiredMixin, generic.View):
         form = CameraAnnotationCreateForm(request.POST)
 
         if form.is_valid():
-            self.request.session['form_data'] = form.cleaned_data
+            self.request.session["form_data"] = form.cleaned_data
             new_annotation = form.save(commit=False)
             new_annotation.camera = current_camera
             new_annotation.annotator = request.user
-            new_annotation.annotation = form.cleaned_data['annotation']
+            new_annotation.annotation = form.cleaned_data["annotation"]
             new_annotation.save()
-            return redirect('cameradata-detail', pk=pk)
+            return redirect("cameradata-detail", pk=pk)
         else:
             print(form.errors)
 
-        context = {
-            'form': form,
-            'cameradata': current_camera
-        }
+        context = {"form": form, "cameradata": current_camera}
 
-        return render(request, 'sensors/cameradata_detail.html', context)
+        return render(request, "sensors/cameradata_detail.html", context)
 
 
 class CameraAnnotationDetailGet(LoginRequiredMixin, generic.DetailView):
     """View to get annotations."""
+
     model = CameraAnnotation
 
     def get_context_data(self, **kwargs):
         context = super(CameraAnnotationDetailGet, self).get_context_data(**kwargs)
-        context['form'] = CameraAnnotationCommentCreateForm()
+        context["form"] = CameraAnnotationCommentCreateForm()
         return context
 
 
@@ -716,18 +792,15 @@ class CameraAnnotationDetailView(LoginRequiredMixin, generic.View):
             new_comment = form.save(commit=False)
             new_comment.annotation = current_annotation
             new_comment.author = request.user
-            new_comment.text = form.cleaned_data['text']
+            new_comment.text = form.cleaned_data["text"]
             new_comment.save()
-            return redirect('cameraannotation-detail', uuid=uuid, pk=pk)
+            return redirect("cameraannotation-detail", uuid=uuid, pk=pk)
         else:
             print(form.errors)
 
-        context = {
-            'form': form,
-            'cameraannotation': current_annotation
-        }
+        context = {"form": form, "cameraannotation": current_annotation}
 
-        return render(request, 'sensors/cameraannotation_detail.html', context)
+        return render(request, "sensors/cameraannotation_detail.html", context)
 
 
 class PatientDataListView(LoginRequiredMixin, generic.ListView):
@@ -759,9 +832,12 @@ class CameraDataListView(LoginRequiredMixin, generic.ListView):
 
 class CameraAnnotationByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing annotations by current user."""
+
     model = CameraAnnotation
-    template_name = 'sensors/cameraannotation_list_annotated_user.html'
+    template_name = "sensors/cameraannotation_list_annotated_user.html"
     paginate_by = 10
 
     def get_queryset(self):
-        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by('camera', 'time_begin')
+        return CameraAnnotation.objects.filter(annotator=self.request.user).order_by(
+            "camera", "time_begin"
+        )

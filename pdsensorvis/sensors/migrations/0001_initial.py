@@ -17,109 +17,310 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='CameraAnnotation',
+            name="CameraAnnotation",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('time_begin', models.CharField(help_text='hh:mm:ss:ff', max_length=11)),
-                ('time_end', models.CharField(help_text='hh:mm:ss:ff', max_length=11)),
-                ('annotation', models.CharField(choices=[('pos', 'Stooped Posture'), ('asm', 'Asymmetry'), ('ebt', 'En Bloc Turning'), ('dys', 'Dystonia/Dyskensia'), ('mov', 'Slow/Hesitant Movement'), ('str', 'Short Stride Length'), ('oth', 'Other')], default='oth', help_text='PD Symptom', max_length=3)),
-                ('note', models.CharField(blank=True, help_text='Note regarding annotation', max_length=500, null=True)),
-                ('annotator', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "time_begin",
+                    models.CharField(help_text="hh:mm:ss:ff", max_length=11),
+                ),
+                ("time_end", models.CharField(help_text="hh:mm:ss:ff", max_length=11)),
+                (
+                    "annotation",
+                    models.CharField(
+                        choices=[
+                            ("pos", "Stooped Posture"),
+                            ("asm", "Asymmetry"),
+                            ("ebt", "En Bloc Turning"),
+                            ("dys", "Dystonia/Dyskensia"),
+                            ("mov", "Slow/Hesitant Movement"),
+                            ("str", "Short Stride Length"),
+                            ("oth", "Other"),
+                        ],
+                        default="oth",
+                        help_text="PD Symptom",
+                        max_length=3,
+                    ),
+                ),
+                (
+                    "note",
+                    models.CharField(
+                        blank=True,
+                        help_text="Note regarding annotation",
+                        max_length=500,
+                        null=True,
+                    ),
+                ),
+                (
+                    "annotator",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['camera', 'time_begin'],
-                'permissions': (('can_alter_cameraannotation', 'Can create or edit camera annotations.'),),
+                "ordering": ["camera", "time_begin"],
+                "permissions": (
+                    (
+                        "can_alter_cameraannotation",
+                        "Can create or edit camera annotations.",
+                    ),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='PatientData',
+            name="PatientData",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('first_name', models.CharField(help_text='Patient first name', max_length=50)),
-                ('last_name', models.CharField(help_text='Patient last name', max_length=50)),
-                ('date_of_birth', models.DateField()),
-                ('notes', models.CharField(help_text='Notes regarding patient', max_length=500)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "first_name",
+                    models.CharField(help_text="Patient first name", max_length=50),
+                ),
+                (
+                    "last_name",
+                    models.CharField(help_text="Patient last name", max_length=50),
+                ),
+                ("date_of_birth", models.DateField()),
+                (
+                    "notes",
+                    models.CharField(
+                        help_text="Notes regarding patient", max_length=500
+                    ),
+                ),
             ],
             options={
-                'ordering': ['last_name'],
-                'permissions': (('can_alter_patientdata', 'Can create or edit patient data entries.'),),
+                "ordering": ["last_name"],
+                "permissions": (
+                    (
+                        "can_alter_patientdata",
+                        "Can create or edit patient data entries.",
+                    ),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='WearableData',
+            name="WearableData",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, help_text='Unique ID for this wearable data', primary_key=True, serialize=False)),
-                ('filename', models.FileField(upload_to='wearable/')),
-                ('time', models.DateTimeField(help_text='Session date & time')),
-                ('note', models.CharField(help_text='Note regarding wearable data', max_length=500)),
-                ('patient', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='wearables', to='sensors.PatientData')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        help_text="Unique ID for this wearable data",
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("filename", models.FileField(upload_to="wearable/")),
+                ("time", models.DateTimeField(help_text="Session date & time")),
+                (
+                    "note",
+                    models.CharField(
+                        help_text="Note regarding wearable data", max_length=500
+                    ),
+                ),
+                (
+                    "patient",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="wearables",
+                        to="sensors.PatientData",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['patient', '-time'],
-                'permissions': (('can_alter_wearabledata', 'Can create or edit wearable data entries.'),),
+                "ordering": ["patient", "-time"],
+                "permissions": (
+                    (
+                        "can_alter_wearabledata",
+                        "Can create or edit wearable data entries.",
+                    ),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='WearableDataPoint',
+            name="WearableDataPoint",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('frame', models.PositiveIntegerField()),
-                ('magnitude', models.FloatField()),
-                ('wearable', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='data_point', to='sensors.WearableData')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("frame", models.PositiveIntegerField()),
+                ("magnitude", models.FloatField()),
+                (
+                    "wearable",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="data_point",
+                        to="sensors.WearableData",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['frame'],
-                'permissions': (('can_alter_wearabledata_point', 'Can create or edit wearable data point.'),),
+                "ordering": ["frame"],
+                "permissions": (
+                    (
+                        "can_alter_wearabledata_point",
+                        "Can create or edit wearable data point.",
+                    ),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='WearableAnnotation',
+            name="WearableAnnotation",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('frame_begin', models.PositiveIntegerField()),
-                ('frame_end', models.PositiveIntegerField()),
-                ('annotation', models.CharField(choices=[('pos', 'Stooped Posture'), ('asm', 'Asymmetry'), ('ebt', 'En Bloc Turning'), ('dys', 'Dystonia/Dyskensia'), ('mov', 'Slow/Hesitant Movement'), ('str', 'Short Stride Length'), ('oth', 'Other')], default='oth', help_text='PD Symptom', max_length=3)),
-                ('note', models.CharField(blank=True, help_text='Note regarding annotation', max_length=500, null=True)),
-                ('annotator', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('wearable', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='w_annotations', to='sensors.WearableData')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("frame_begin", models.PositiveIntegerField()),
+                ("frame_end", models.PositiveIntegerField()),
+                (
+                    "annotation",
+                    models.CharField(
+                        choices=[
+                            ("pos", "Stooped Posture"),
+                            ("asm", "Asymmetry"),
+                            ("ebt", "En Bloc Turning"),
+                            ("dys", "Dystonia/Dyskensia"),
+                            ("mov", "Slow/Hesitant Movement"),
+                            ("str", "Short Stride Length"),
+                            ("oth", "Other"),
+                        ],
+                        default="oth",
+                        help_text="PD Symptom",
+                        max_length=3,
+                    ),
+                ),
+                (
+                    "note",
+                    models.CharField(
+                        blank=True,
+                        help_text="Note regarding annotation",
+                        max_length=500,
+                        null=True,
+                    ),
+                ),
+                (
+                    "annotator",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "wearable",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="w_annotations",
+                        to="sensors.WearableData",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['frame_begin'],
-                'permissions': (('can_alter_wearableannotation', 'Can create or edit wearable annotations.'),),
+                "ordering": ["frame_begin"],
+                "permissions": (
+                    (
+                        "can_alter_wearableannotation",
+                        "Can create or edit wearable annotations.",
+                    ),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='CameraData',
+            name="CameraData",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, help_text='Unique ID for this wearable data', primary_key=True, serialize=False)),
-                ('filename', models.FileField(upload_to='camera/')),
-                ('framerate', models.CharField(choices=[('Film', 24), ('PAL', 25), ('NTSC', 29.97), ('Web', 30), ('PAL_HD', 50), ('NTSC_HD', 59.94), ('High', 60)], default='Film', help_text='Video framerate', max_length=7)),
-                ('time', models.DateTimeField(help_text='Session date & time')),
-                ('note', models.CharField(help_text='Note regarding camera data', max_length=500)),
-                ('patient', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='cameras', to='sensors.PatientData')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        help_text="Unique ID for this wearable data",
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("filename", models.FileField(upload_to="camera/")),
+                (
+                    "framerate",
+                    models.CharField(
+                        choices=[
+                            ("Film", 24),
+                            ("PAL", 25),
+                            ("NTSC", 29.97),
+                            ("Web", 30),
+                            ("PAL_HD", 50),
+                            ("NTSC_HD", 59.94),
+                            ("High", 60),
+                        ],
+                        default="Film",
+                        help_text="Video framerate",
+                        max_length=7,
+                    ),
+                ),
+                ("time", models.DateTimeField(help_text="Session date & time")),
+                (
+                    "note",
+                    models.CharField(
+                        help_text="Note regarding camera data", max_length=500
+                    ),
+                ),
+                (
+                    "patient",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="cameras",
+                        to="sensors.PatientData",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['patient', '-time'],
-                'permissions': (('can_alter_cameradata', 'Can create or edit camera data entries.'),),
+                "ordering": ["patient", "-time"],
+                "permissions": (
+                    ("can_alter_cameradata", "Can create or edit camera data entries."),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='CameraAnnotationComment',
+            name="CameraAnnotationComment",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('timestamp', models.DateTimeField(default=django.utils.timezone.now)),
-                ('text', models.TextField()),
-                ('annotation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='sensors.CameraAnnotation')),
-                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("timestamp", models.DateTimeField(default=django.utils.timezone.now)),
+                ("text", models.TextField()),
+                (
+                    "annotation",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="comments",
+                        to="sensors.CameraAnnotation",
+                    ),
+                ),
+                (
+                    "author",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['annotation', 'timestamp'],
-                'permissions': (('can_alter_cameraannotation_comment', 'Can create or edit camera annotation comments.'),),
+                "ordering": ["annotation", "timestamp"],
+                "permissions": (
+                    (
+                        "can_alter_cameraannotation_comment",
+                        "Can create or edit camera annotation comments.",
+                    ),
+                ),
             },
         ),
         migrations.AddField(
-            model_name='cameraannotation',
-            name='camera',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='c_annotations', to='sensors.CameraData'),
+            model_name="cameraannotation",
+            name="camera",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="c_annotations",
+                to="sensors.CameraData",
+            ),
         ),
     ]

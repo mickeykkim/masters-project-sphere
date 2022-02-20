@@ -1,12 +1,19 @@
 from django.contrib import admin
-from .models import PatientData, WearableData, CameraData, WearableAnnotation, CameraAnnotation, \
-    CameraAnnotationComment, WearableDataPoint
+from .models import (
+    PatientData,
+    WearableData,
+    CameraData,
+    WearableAnnotation,
+    CameraAnnotation,
+    CameraAnnotationComment,
+    WearableDataPoint,
+)
 
 
 # Register your models here.
 @admin.register(PatientData)
 class PatientAdmin(admin.ModelAdmin):
-    list_display = ('last_name', 'first_name', 'notes')
+    list_display = ("last_name", "first_name", "notes")
 
 
 class WearableAnnotationInline(admin.TabularInline):
@@ -27,7 +34,7 @@ class WearableDataAdmin(admin.ModelAdmin):
     def data_points(self):
         return self.data_point.count()
 
-    list_display = ('patient', 'time', 'id', annotations, data_points)
+    list_display = ("patient", "time", "id", annotations, data_points)
     inlines = [WearableAnnotationInline]
     extra = 0
 
@@ -42,14 +49,14 @@ class CameraDataAdmin(admin.ModelAdmin):
     def annotations(self):
         return self.c_annotations.count()
 
-    list_display = ('patient', 'time', 'id', annotations)
+    list_display = ("patient", "time", "id", annotations)
     inlines = [CameraAnnotationInline]
     extra = 0
 
 
 @admin.register(WearableAnnotation)
 class WearableAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('wearable', 'frame_begin', 'frame_end', 'annotation')
+    list_display = ("wearable", "frame_begin", "frame_end", "annotation")
 
 
 class CameraAnnotationCommentInline(admin.TabularInline):
@@ -66,16 +73,16 @@ class CameraAnnotationAdmin(admin.ModelAdmin):
         else:
             return ""
 
-    list_display = ('camera', 'time_begin', 'time_end', 'annotation', comment)
+    list_display = ("camera", "time_begin", "time_end", "annotation", comment)
     inlines = [CameraAnnotationCommentInline]
     extra = 0
 
 
 @admin.register(CameraAnnotationComment)
 class CameraAnnotationCommentAdmin(admin.ModelAdmin):
-    list_display = ('annotation', 'author', 'timestamp', 'text')
+    list_display = ("annotation", "author", "timestamp", "text")
 
 
 @admin.register(WearableDataPoint)
 class WearableDataPointAdmin(admin.ModelAdmin):
-    list_display = ('wearable', 'frame', 'magnitude')
+    list_display = ("wearable", "frame", "magnitude")

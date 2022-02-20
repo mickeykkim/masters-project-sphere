@@ -6,18 +6,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sensors', '0005_auto_20191104_1651'),
+        ("sensors", "0005_auto_20191104_1651"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='cameraannotation',
-            name='annotation',
-            field=models.CharField(choices=[('pos', 'Stooped Posture'), ('asm', 'Asymmetry'), ('ebt', 'En Bloc Turning'), ('dst', 'Dystonia'), ('dsk', 'Dyskensia'), ('trm', 'Tremor'), ('mov', 'Slow/Hesitant Movement'), ('str', 'Short Stride Length'), ('oth', 'Other/Activity')], default='oth', help_text='PD Symptom', max_length=3),
+            model_name="cameraannotation",
+            name="annotation",
+            field=models.CharField(
+                choices=[
+                    ("pos", "Stooped Posture"),
+                    ("asm", "Asymmetry"),
+                    ("ebt", "En Bloc Turning"),
+                    ("dst", "Dystonia"),
+                    ("dsk", "Dyskensia"),
+                    ("trm", "Tremor"),
+                    ("mov", "Slow/Hesitant Movement"),
+                    ("str", "Short Stride Length"),
+                    ("oth", "Other/Activity"),
+                ],
+                default="oth",
+                help_text="PD Symptom",
+                max_length=3,
+            ),
         ),
         migrations.AlterField(
-            model_name='wearableannotation',
-            name='annotation',
-            field=models.CharField(choices=[('pos', 'Stooped Posture'), ('asm', 'Asymmetry'), ('ebt', 'En Bloc Turning'), ('dst', 'Dystonia'), ('dsk', 'Dyskensia'), ('trm', 'Tremor'), ('mov', 'Slow/Hesitant Movement'), ('str', 'Short Stride Length'), ('oth', 'Other/Activity')], default='oth', help_text='PD Symptom', max_length=3),
+            model_name="wearableannotation",
+            name="annotation",
+            field=models.CharField(
+                choices=[
+                    ("pos", "Stooped Posture"),
+                    ("asm", "Asymmetry"),
+                    ("ebt", "En Bloc Turning"),
+                    ("dst", "Dystonia"),
+                    ("dsk", "Dyskensia"),
+                    ("trm", "Tremor"),
+                    ("mov", "Slow/Hesitant Movement"),
+                    ("str", "Short Stride Length"),
+                    ("oth", "Other/Activity"),
+                ],
+                default="oth",
+                help_text="PD Symptom",
+                max_length=3,
+            ),
         ),
     ]

@@ -3,8 +3,8 @@ import csv
 import math
 from django.conf import settings
 
-NEWLINE = ''
-DELIMITER = ' '
+NEWLINE = ""
+DELIMITER = " "
 TRIM_RANGE = 7
 
 
@@ -18,7 +18,9 @@ class Preprocess:
     def process_data(self, file_name, start_frame, end_frame):
         sample_list = []
 
-        with open(os.path.join(settings.MEDIA_ROOT, file_name), newline=NEWLINE) as sensor_data:
+        with open(
+            os.path.join(settings.MEDIA_ROOT, file_name), newline=NEWLINE
+        ) as sensor_data:
             sensor_reader = csv.reader(sensor_data, delimiter=DELIMITER)
             for sample in sensor_reader:
                 sample_list.append(sample)
@@ -30,7 +32,12 @@ class Preprocess:
 
         for item in trun_list:
             self.time_stamp.append(int(item[0]))
-            self.avg_magnitude.append(math.sqrt((float(item[1]) ** 2 + float(item[2]) ** 2 + float(item[3]) ** 2) / 3))
+            self.avg_magnitude.append(
+                math.sqrt(
+                    (float(item[1]) ** 2 + float(item[2]) ** 2 + float(item[3]) ** 2)
+                    / 3
+                )
+            )
 
     @staticmethod
     def get_magnitudes(self):
